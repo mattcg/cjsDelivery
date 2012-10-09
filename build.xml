@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="cjsDelivery" default="tests" basedir=".">
+	<description>Build tests for cjsDelivery</description>
+
+	<property name="test.dir" value="_tests" />
+	<property name="script.dir" value="${test.dir}/scripts" />
+	<property name="build.dir" value="build" />
+	<property name="output.dir" value="${build.dir}/output" />
+	<property name="doc.dir" value="${build.dir}/docs" />
+	<property name="log.dir" value="${build.dir}/logs" />
+
+	<!-- Clear the build directory -->
+	<target name="clean">
+		<echo message="Cleaning build directory..." />
+		<delete dir="${build.dir}" />
+	</target>
+
+	<!-- Prepare subfolders in the build directory -->
+	<target name="prepare" depends="clean">
+		<echo message="Preparing build directory..." />
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${log.dir}" />
+		<mkdir dir="${log.dir}/coverage" />
+		<mkdir dir="${build.dir}/cache" />
+		<mkdir dir="${output.dir}" />
+	</target>
+
+	<!-- PHP unit tests -->
+	<target name="phpunit">
+		<echo message="Running PHPUnit tests..." />
+		<exec dir="${basedir}" executable="phpunit" failonerror="true">
+			<arg value="-c" />
+			<arg value="${test.dir}/phpunit.xml" />
+		</exec>
+	</target>
+
+	<!-- Define rhinounit -->
+	<scriptdef name="rhinounit" src="${script.dir}/rhinounit/rhinoUnitAnt.js" language="javascript">
+		<attribute name="options" />
+		<attribute name="ignoredglobalvars" />
+		<attribute name="haltOnFirstFailure" />
+		<attribute name="rhinoUnitUtilPath" />
+		<element name="fileset" type="fileset" />
+	</scriptdef>
+
+	<!-- Define jslintant -->
+	<scriptdef name="jslintant" src="${script.dir}/rhinounit/jslintant.js" language="javascript">
+		<attribute name="options" />
+		<element name="fileset" type="fileset" />
+	</scriptdef>
+
+	<!-- JS output unit tests -->
+	<target name="jstest">
+		<echo message="Building output to test..." />
+		<exec dir="${basedir}" executable="php" failonerror="true">
+			<arg value="${script.dir}/buildOutput.php" />
+		</exec>
+		<!--<echo message="Running JS Lint on output..." />
+		<jslintant options="{white: true, evil: true, forin: true, sloppy: true}">
+			<fileset dir="${output.dir}">
+				<include name="**/*.js" />
+			</fileset>
+		</jslintant>-->
+		<echo message="Running rhinounit on output..." />
+		<rhinounit options="{verbose:true, stackTrace:true}" haltOnFirstFailure="true"  ignoredglobalvars="rhinounit" rhinoUnitUtilPath="${script.dir}/rhinounit/rhinoUnitUtil.js">
+			<fileset dir="${output.dir}">
+				<include name="*.js" />
+			</fileset>
+		</rhinounit>
+	</target>
+
+	<!-- Run all the tests -->
+	<target name="tests" depends="prepare, phpunit, jstest"></target>
+
+	<!-- Generate documentation -->
+	<target name="phpdocs">
+		<echo message="Generating documentation..." />
+		<delete dir="${doc.dir}" />
+		<exec dir="${basedir}" executable="phpdoc" failonerror="true">
+			<arg value="-d" />
+			<arg value="lib" />
+			<arg value="-t" />
+			<arg value="${doc.dir}" />
+			<arg value="-ti" />
+			<arg value="cjsDelivery Documentation" />	
+		</exec>
+	</target>
+</project>

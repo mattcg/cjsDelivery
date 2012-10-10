@@ -108,6 +108,10 @@ class cjsDelivery implements hookManager\client {
 	 * @return string Complete output
 	 */
 	public function getOutput() {
+		if (empty($this->mainmodule)) {
+			throw new cjsDeliveryException('Main module not set', cjsDeliveryException::NO_MAIN);
+		}
+
 		$namemanager = $this->resolver->getNameManager();
 		$mainmodule  = $namemanager->getResolvedName($this->mainmodule);
 		$allmodules  = $this->resolver->getAllDependencies();

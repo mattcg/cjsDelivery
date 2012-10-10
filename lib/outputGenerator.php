@@ -43,20 +43,10 @@ class outputGenerator implements hookManager\client {
 			return $output;
 		}
 
-		$concat  = '';
-		$hasmain = false;
-
 		// Loop through the modules, render and look for the main module
+		$concat = '';
 		foreach ($modules as $realpath => &$module) {
 			$concat .= $this->renderer->renderModule($module['name'], $module['code']);
-			if (!$hasmain and $main === $module['name']) {
-				$hasmain = true;
-			}
-		}
-
-		// Output can't be built without a main module
-		if (!$hasmain) {
-			throw new cjsDeliveryException("Main module '$main' not found in module list", cjsDeliveryException::NO_MAIN);
 		}
 
 		$output = $this->renderer->renderOutput($concat, $main);

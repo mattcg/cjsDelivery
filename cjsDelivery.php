@@ -82,7 +82,7 @@ class cjsDelivery implements hookManager\client {
 	 * @return string Complete output
 	 */
 	public function getOutput() {
-		return $this->generator->buildOutput();
+		return $this->generator->buildOutput($this->resolver->getAllDependencies());
 	}
 
 

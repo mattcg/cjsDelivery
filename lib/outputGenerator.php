@@ -34,9 +34,10 @@ class outputGenerator implements hookManager\client {
 	 *
 	 * @throws cjsDeliveryException If the module is not found
 	 *
+	 * @param array $modules List of modules from which to build output
 	 * @return string Complete output
 	 */
-	public function buildOutput() {
+	public function buildOutput(array $modules) {
 		$output = '';
 
 		// If output is created by the hook callbacks, return it
@@ -54,7 +55,6 @@ class outputGenerator implements hookManager\client {
 
 		$concat  = '';
 		$hasmain = false;
-		$modules = $this->resolver->getAllDependencies();
 
 		// Loop through the modules, render and look for the main module
 		foreach ($modules as $realpath => &$module) {

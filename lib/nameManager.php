@@ -42,13 +42,11 @@ class nameManager {
 		}
 
 		$module = $this->modules[$realpath];
-		$name   = $module['name'];
-
 		if ($module['i'] > 0) {
-			$name = $name . $module['i'];
+			return $module['name'] . $module['i'];
 		}
 
-		return $name;
+		return $module['name'];
 	}
 
 

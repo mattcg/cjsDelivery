@@ -17,7 +17,7 @@ function create() {
 	$hookmanager = hookManager\create();
 	$namemanager = new nameManager();
 
-	$outputrenderer = new outputRenderer();
+	$outputrenderer = new templateOutputRenderer();
 
 	$resolver = new dependencyResolver($namemanager);
 	$resolver->setHookManager($hookmanager);

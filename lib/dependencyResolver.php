@@ -56,7 +56,7 @@ class dependencyResolver implements hookManager\client {
 		$newcode = $this->resolveDependencies($realpath);
 		$newname = $this->namemanager->getResolvedName($realpath)
 
-		$this->modules[$realpath] = array('code' => &$newcode, 'name' => $newname);
+		$this->modules[$realpath] = array('code' => &$newcode, 'name' => $newname, 'filemtime' => filemtime($realpath));
 		return $newname;
 	}
 

@@ -7,7 +7,7 @@
  * @package cjsDelivery
  */
 
-class cacheManager {
+class cacheManager implements hookManager\plugin {
 
 	private $cachefile;
 
@@ -15,17 +15,17 @@ class cacheManager {
 	/**
 	 * Register the plugin on a cjsDelivery class instance
 	 *
-	 * @param cjsDelivery $instance
+	 * @param cjsDelivery $delivery
 	 */
-	function __construct(cjsDelivery $instance) {
-		$that = $this;
+	public static function register(hookManager\client $delivery) {
+		$cachemanager = new cacheManager();
 
-		$instance->hook('output_ready', function(&$output) use ($that) {
+		$cachemanager->hook(processHooks\OUTPUT_READY, function(&$output) use ($cachemanager) {
 			$that->setCacheContents($output);
 		});
 
-		$instance->hook('build_output', function(&$output) use ($that, $instance) {
-			$output = $that->getCacheContents($instance->getLastModTime());
+		$delivery->hook(processHooks\BUILD_OUTPUT, function(&$output) use ($that, $delivery) {
+			$output = $cachemanager->getCacheContents($delivery->getLastModTime());
 		});
 	}
 

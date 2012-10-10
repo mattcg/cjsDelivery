@@ -32,7 +32,7 @@ function create() {
 	return $delivery;
 }
 
-class cjsDelivery {
+class cjsDelivery implements hookManager\client {
 	private $generator = null;
 	private $resolver  = null;
 
@@ -50,6 +50,14 @@ class cjsDelivery {
 
 	public function getResolver() {
 		return $this->resolver;
+	}
+
+	public function setHookManager(hookManager\manager $hookmanager) {
+		$this->hookmanager = $hookmanager;
+	}
+
+	public function getHookManager() {
+		return $this->hookmanager;
 	}
 
 
@@ -75,5 +83,22 @@ class cjsDelivery {
 	 */
 	public function getOutput() {
 		return $this->generator->buildOutput();
+	}
+
+
+	/**
+	 * Get the maximum modified time of each of the module files, including dependencies
+	 *
+	 * @return int The maximum modified time of each of the module files
+	 */
+	public function getLastModTime() {
+		$lastmodtime = 0;
+
+		$dependencies = $this->resolver->getAllDepencies();
+		foreach ($dependencies as &$module) {
+			$lastmodtime = max($lastmodtime, $module['filemtime']);
+		}
+
+		return $lastmodtime;
 	}
 }

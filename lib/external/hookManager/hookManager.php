@@ -1,14 +1,24 @@
 <?php
 /**
- * processHooks
+ * hookManager
  *
  * Create a simple plugin architecture for data processing classes.
  *
  * @author Matthew Caruana Galizia <m@m.cg>
  * @copyright Copyright (c) 2012, Matthew Caruana Galizia
+ * @package hookManager
  */
 
-abstract class processHooks {
+namespace hookManager;
+
+require_once __DIR__.'/managerInterface.php';
+require_once __DIR__.'/clientInterface.php';
+
+function create() {
+	return new hookManager();
+}
+
+class hookManager implements manager {
 
 	private $hooks;
 
@@ -25,7 +35,6 @@ abstract class processHooks {
 	 */
 	public function hook($name, Closure $callback) {
 		$hooks =& $this->hooks;
-
 		if (!isset($hooks[$name])) {
 			$hooks[$name] = array();
 		}
@@ -42,7 +51,6 @@ abstract class processHooks {
 	 */
 	public function unhook($name, Closure $callback = null) {
 		$hooks =& $this->hooks;
-
 		if (isset($hooks[$name])) {
 			return;
 		}
@@ -65,13 +73,12 @@ abstract class processHooks {
 	 * @param string $name The name of the hook to run
 	 * @param mixed $arg Argument to pass to the hooked callback
 	 */
-	protected function runHook($name, &$arg) {
+	public function run($name, &$arg) {
 		if (!isset($this->hooks[$name])) {
 			return;
 		}
 
-		$hooks = $this->hooks[$name];
-
+		$hooks =& $this->hooks[$name];
 		foreach ($hooks as &$hook) {
 			$hook($arg);
 		}

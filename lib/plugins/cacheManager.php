@@ -7,6 +7,8 @@
  * @package cjsDelivery
  */
 
+namespace cjsDelivery;
+
 class cacheManager implements hookManager\plugin {
 
 	private $cachefile;

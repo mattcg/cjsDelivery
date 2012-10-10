@@ -29,8 +29,14 @@ class dependencyResolver implements hookManager\client {
 		return $this->hookmanager;
 	}
 
+	public function getNameManager() {
+		return $this->namemanager;
+	}
+
 
 	/**
+	 * Get all the resolved dependencies up to the current point
+	 *
 	 * @return array
 	 */
 	public function getAllDependencies() {
@@ -54,7 +60,7 @@ class dependencyResolver implements hookManager\client {
 		}
 
 		$newcode = $this->resolveDependencies($realpath);
-		$newname = $this->namemanager->getResolvedName($realpath)
+		$newname = $this->namemanager->getResolvedName($realpath);
 
 		$this->modules[$realpath] = array('code' => &$newcode, 'name' => $newname, 'filemtime' => filemtime($realpath));
 		return $newname;

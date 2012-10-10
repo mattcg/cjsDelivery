@@ -51,18 +51,32 @@ class nameManager {
 
 
 	/**
+	 * Get the canonical path for a module
+	 *
+	 * @param string $filepath Path to the module file
+	 * @return string The canonical module path
+	 */
+	public function getCanonicalName($filepath) {
+		$realpath = @realpath($filepath);
+
+		// Check if the path was resolved
+		if ($realpath === false) {
+			throw new cjsDeliveryException("Module not found at '$filepath'", cjsDeliveryException::MODULE_NOT_FOUND);
+		}
+
+		return $realpath;
+	}
+
+
+	/**
+	 * Add a module by name and path, which will automatically resolved
+	 *
 	 * @param string $name Name of the module to add
 	 * @param string $filepath Path to the module file
 	 * @return string The resolved module path
 	 */
 	public function addModule($name, $filepath) {
-		$realpath = @realpath($filepath);
-
-		// Check if the path was resolved
-		if ($realpath === false) {
-			throw new cjsDeliveryException("Module '$name' not found", cjsDeliveryException::MODULE_NOT_FOUND);
-		}
-
+		$realpath = $this->getCanonicalName($filepath);
 		$this->modules[$realpath] = array('name' => $name, 'i' => $this->checkSameName($name));
 		return $realpath;
 	}

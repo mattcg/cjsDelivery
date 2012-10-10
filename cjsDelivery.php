@@ -36,6 +36,8 @@ class cjsDelivery implements hookManager\client {
 	private $generator = null;
 	private $resolver  = null;
 
+	private $mainmodule;
+
 	public function setGenerator($generator) {
 		$this->generator = $generator;
 	}
@@ -73,6 +75,30 @@ class cjsDelivery implements hookManager\client {
 
 
 	/**
+	 * Set the name of the main module
+	 *
+	 * Each module is wrapped in a function which isn't executed until the module is required, so
+	 * a 'main' module needs to be 'required' automatically to kick off execution on the client.
+	 *
+	 * @param string $filepath The path to the main module
+	 */
+	public function setMainModule($filepath) {
+		$namemanager = $this->resolver->getNameManager();
+		$this->mainmodule = $namemanager->getCanonicalName($filepath);
+	}
+
+
+	/**
+	 * Get the name of the main module
+	 *
+	 * @return string The name of the main module
+	 */
+	public function getMainModule() {
+		return $this->mainmodule;
+	}
+
+
+	/**
 	 * Get complete module output, including all added modules and dependencies
 	 *
 	 * This method is useful for generating a single file that can be loaded in one HTTP request.
@@ -82,7 +108,10 @@ class cjsDelivery implements hookManager\client {
 	 * @return string Complete output
 	 */
 	public function getOutput() {
-		return $this->generator->buildOutput($this->resolver->getAllDependencies());
+		$namemanager = $this->resolver->getNameManager();
+		$mainmodule  = $namemanager->getResolvedName($this->mainmodule);
+		$allmodules  = $this->resolver->getAllDependencies();
+		return $this->generator->buildOutput($allmodules, $mainmodule);
 	}
 
 

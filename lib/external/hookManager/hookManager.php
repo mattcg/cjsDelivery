@@ -14,6 +14,7 @@ namespace hookManager;
 require_once __DIR__.'/managerInterface.php';
 require_once __DIR__.'/clientInterface.php';
 require_once __DIR__.'/hookPlugin.php';
+require_once __DIR__.'/pluggableAbstract.php';
 
 function create() {
 	return new hookManager();

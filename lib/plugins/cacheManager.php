@@ -21,12 +21,13 @@ class cacheManager implements hookManager\plugin {
 	 */
 	public static function register(hookManager\client $delivery) {
 		$cachemanager = new cacheManager();
+		$hookmanager  = $delivery->getHookManager();
 
-		$cachemanager->hook(processHooks\OUTPUT_READY, function(&$output) use ($cachemanager) {
-			$that->setCacheContents($output);
+		$hookmanager->hook(processHooks\OUTPUT_READY, function(&$output) use ($cachemanager) {
+			$cachemanager->setCacheContents($output);
 		});
 
-		$delivery->hook(processHooks\BUILD_OUTPUT, function(&$output) use ($that, $delivery) {
+		$hookmanager->hook(processHooks\BUILD_OUTPUT, function(&$output) use ($cachemanager, $delivery) {
 			$output = $cachemanager->getCacheContents($delivery->getLastModTime());
 		});
 	}

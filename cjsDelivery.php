@@ -32,13 +32,15 @@ function create() {
 	$generator->setHookManager($hookmanager);
 
 	$delivery = new cjsDelivery();
+	$delivery->setHookManager($hookmanager);
 	$delivery->setGenerator($generator);
 	$delivery->setResolver($resolver);
 
 	return $delivery;
 }
 
-class cjsDelivery implements hookManager\client {
+class cjsDelivery extends hookManager\pluggable {
+
 	private $generator = null;
 	private $resolver  = null;
 
@@ -58,14 +60,6 @@ class cjsDelivery implements hookManager\client {
 
 	public function getResolver() {
 		return $this->resolver;
-	}
-
-	public function setHookManager(hookManager\manager $hookmanager) {
-		$this->hookmanager = $hookmanager;
-	}
-
-	public function getHookManager() {
-		return $this->hookmanager;
 	}
 
 

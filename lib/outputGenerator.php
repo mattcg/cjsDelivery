@@ -7,7 +7,7 @@
 
 namespace cjsDelivery;
 
-class outputGenerator implements hookManager\client {
+class outputGenerator implements \hookManager\client {
 
 	private $hookmanager = null;
 	private $renderer    = null;
@@ -16,7 +16,7 @@ class outputGenerator implements hookManager\client {
 		$this->renderer = $renderer;
 	}
 
-	public function setHookManager(hookManager\manager $hookmanager) {
+	public function setHookManager(\hookManager\manager $hookmanager) {
 		$this->hookmanager = $hookmanager;
 	}
 

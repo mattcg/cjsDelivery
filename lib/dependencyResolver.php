@@ -7,7 +7,7 @@
 
 namespace cjsDelivery;
 
-class dependencyResolver implements hookManager\client {
+class dependencyResolver implements \hookManager\client {
 
 	const EXT_JS = '.js';
 	const REQUIRE_PREG = '/require\((\'|")(.*?)\1\)/';
@@ -21,7 +21,7 @@ class dependencyResolver implements hookManager\client {
 		$this->namemanager = $namemanager;
 	}
 
-	public function setHookManager(hookManager\manager $hookmanager) {
+	public function setHookManager(\hookManager\manager $hookmanager) {
 		$this->hookmanager = $hookmanager;
 	}
 

@@ -20,7 +20,7 @@ require_once __DIR__.'/lib/outputGenerator.php';
 require_once __DIR__.'/lib/templateOutputRenderer.php';
 
 function create() {
-	$hookmanager = hookManager\create();
+	$hookmanager = \hookManager\create();
 	$namemanager = new fileNameManager();
 
 	$outputrenderer = new templateOutputRenderer();

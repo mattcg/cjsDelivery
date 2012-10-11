@@ -5,7 +5,9 @@
  * @package cjsDelivery
  */
 
-class cjsDeliveryException extends Exception {
+namespace cjsDelivery;
+
+class cjsDeliveryException extends \Exception {
 	const MODULE_NOT_FOUND = 1;
 	const UNKNOWN_MODULE   = 2;
 	const UNABLE_TO_READ   = 3;

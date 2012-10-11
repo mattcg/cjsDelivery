@@ -39,7 +39,7 @@ function create() {
 	return $delivery;
 }
 
-class cjsDelivery extends hookManager\pluggable {
+class cjsDelivery extends \hookManager\pluggable {
 
 	private $generator = null;
 	private $resolver  = null;

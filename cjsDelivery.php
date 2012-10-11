@@ -15,7 +15,7 @@ require_once __DIR__.'/lib/external/hookManager/hookManager.php';
 
 function create() {
 	$hookmanager = hookManager\create();
-	$namemanager = new nameManager();
+	$namemanager = new fileNameManager();
 
 	$outputrenderer = new templateOutputRenderer();
 

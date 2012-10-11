@@ -7,77 +7,34 @@
 
 namespace cjsDelivery;
 
-class nameManager {
-	private $modules = array();
-
-
-	/**
-	 * Check for modules with the same name
-	 *
-	 * @param string $name The name to for duplicates of
-	 * @return integer Number of modules with the same name
-	 */
-	private function checkSameName($name) {
-		$i = 0;
-
-		foreach ($this->modules as &$module) {
-			if ($name === $module['name']) {
-				$i++;
-			}
-		}
-
-		return $i;
-	}
+interface nameManager {
 
 
 	/**
 	 * Get the 'resolved' name of a module that will actually be used in the JavaScript output
 	 *
-	 * @param string $realpath The resolved path to the module file
+	 * @param string $canonicalname The canonical name of the module
 	 * @return string The resolved name, including an incrementor in case of a collision
 	 */
-	public function getResolvedName($realpath) {
-		if (!isset($this->modules[$realpath])) {
-			throw new cjsDeliveryException("Unknown module '$realpath'", cjsDeliveryException::UNKNOWN_MODULE);
-		}
-
-		$module = $this->modules[$realpath];
-		if ($module['i'] > 0) {
-			return $module['name'] . $module['i'];
-		}
-
-		return $module['name'];
-	}
+	public function getResolvedName($canonicalname);
 
 
 	/**
-	 * Get the canonical path for a module
+	 * Get the canonical name of a module
 	 *
-	 * @param string $filepath Path to the module file
-	 * @return string The canonical module path
+	 * @param string $relname Non-canonical name of the module
+	 * @return string The canonical module name
 	 */
-	public function getCanonicalName($filepath) {
-		$realpath = @realpath($filepath);
-
-		// Check if the path was resolved
-		if ($realpath === false) {
-			throw new cjsDeliveryException("Module not found at '$filepath'", cjsDeliveryException::MODULE_NOT_FOUND);
-		}
-
-		return $realpath;
-	}
+	public function getCanonicalName($relname);
 
 
 	/**
 	 * Add a module by name and path, which will automatically resolved
 	 *
 	 * @param string $name Name of the module to add
-	 * @param string $filepath Path to the module file
-	 * @return string The resolved module path
+	 * @param string $relname Relative path to the module
+	 * @return string The canonical module name
 	 */
-	public function addModule($name, $filepath) {
-		$realpath = $this->getCanonicalName($filepath);
-		$this->modules[$realpath] = array('name' => $name, 'i' => $this->checkSameName($name));
-		return $realpath;
-	}
+	public function addModule($name, $relname);
+
 }

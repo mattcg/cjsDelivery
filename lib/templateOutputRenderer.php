@@ -7,7 +7,7 @@
 
 namespace cjsDelivery;
 
-require_once __DIR__.'/ouputRenderer.php';
+require_once __DIR__.'/outputRenderer.php';
 
 class templateOutputRenderer implements outputRenderer {
 

@@ -38,9 +38,11 @@ class outputGenerator implements hookManager\client {
 		$output = '';
 
 		// If output is created by the hook callbacks, return it
-		$this->hookmanager->run(processHooks\BUILD_OUTPUT, $output);
-		if ($output) {
-			return $output;
+		if ($this->hookmanager) {
+			$this->hookmanager->run(processHooks\BUILD_OUTPUT, $output);
+			if ($output) {
+				return $output;
+			}
 		}
 
 		// Loop through the modules, render and look for the main module
@@ -52,7 +54,9 @@ class outputGenerator implements hookManager\client {
 		$output = $this->renderer->renderOutput($concat, $main);
 
 		// Run hooks with the fully built output
-		$this->hooks->run(processHooks\OUTPUT_READY, $output);
+		if ($this->hookmanager) {
+			$this->hookmanager->run(processHooks\OUTPUT_READY, $output);
+		}
 		return $output;
 	}
 }

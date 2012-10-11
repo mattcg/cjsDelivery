@@ -12,7 +12,7 @@ class outputGenerator implements \hookManager\client {
 	private $hookmanager = null;
 	private $renderer    = null;
 
-	public function __construct(outputRender $renderer) {
+	public function __construct(outputRenderer $renderer) {
 		$this->renderer = $renderer;
 	}
 

@@ -12,6 +12,12 @@
 namespace cjsDelivery;
 
 require_once __DIR__.'/lib/external/hookManager/hookManager.php';
+require_once __DIR__.'/lib/processHooks.php';
+require_once __DIR__.'/lib/deliveryException.php';
+require_once __DIR__.'/lib/dependencyResolver.php';
+require_once __DIR__.'/lib/fileNameManager.php';
+require_once __DIR__.'/lib/outputGenerator.php';
+require_once __DIR__.'/lib/templateOutputRenderer.php';
 
 function create() {
 	$hookmanager = hookManager\create();

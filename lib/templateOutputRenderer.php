@@ -7,6 +7,8 @@
 
 namespace cjsDelivery;
 
+require_once __DIR__.'/ouputRenderer.php';
+
 class templateOutputRenderer implements outputRenderer {
 
 	const DIR_TEMPLATES = '/templates';

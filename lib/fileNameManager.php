@@ -7,6 +7,8 @@
 
 namespace cjsDelivery;
 
+require_once __DIR__.'/nameManager.php';
+
 class fileNameManager implements nameManager {
 	private $modules = array();
 

@@ -93,7 +93,7 @@ class dependencyResolver implements \hookManager\client {
 	private function resolveDependencies($realpath) {
 		$that = $this;
 		$code = $this->getModuleContents($realpath);
-		$relativetodir = basename($realpath, self::EXT_JS);
+		$relativetodir = dirname($realpath);
 
 		// Allow plugins to process modules before resolving as dependencies could be removed/added
 		if ($this->hookmanager) {

@@ -75,7 +75,10 @@ class fileNameManager implements nameManager {
 	 */
 	public function addModule($name, $filepath) {
 		$realpath = $this->getCanonicalName($filepath);
-		$this->modules[$realpath] = array('name' => $name, 'i' => $this->checkSameName($name));
+		if (!isset($this->modules[$realpath])) {
+	 		$this->modules[$realpath] = array('name' => $name, 'i' => $this->checkSameName($name));
+	 	}
+
 		return $realpath;
 	}
 }

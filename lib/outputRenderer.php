@@ -11,21 +11,20 @@ interface outputRenderer {
 
 
 	/**
-	 * Render output-ready code for a given module, calling the callback if specified
+	 * Render output-ready code for a given module
 	 *
-	 * @param string $name
-	 * @param array $code
+	 * @param module $module
 	 * @return string
 	 */
-	public function renderModule($name, &$code);
+	public function renderModule(&$module);
 
 
 	/**
 	 * Render all of the output-ready code together
 	 *
 	 * @param string $output Concatenated module code
-	 * @param string $main Name of the main module
+	 * @param string $main Identifier of the main module
 	 * @return string
 	 */
-	public function renderOutput($output, $main);
+	public function renderOutput(&$output, $main);
 }

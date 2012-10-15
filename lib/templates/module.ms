@@ -1,4 +1,4 @@
-	modules['{{name}}'] = function(require, exports, module, modules) {
+	modules['{{identifier}}'] = function(require, exports, module, modules) {
 
 		{{code}}
 	

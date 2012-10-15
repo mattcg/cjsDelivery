@@ -48,10 +48,10 @@ class templateOutputRenderer implements outputRenderer {
 	/**
 	 * @see outputRender::renderModule
 	 */
-	public function renderModule($name, &$code) {
+	public function renderModule(&$module) {
 		return $this->renderTemplate(self::TEMPLATE_MODULE,
-			array('{{name}}', '{{code}}'),
-			array($name, $code)
+			array('{{identifier}}', '{{code}}'),
+			array($module->getUniqueIdentifier(), $module->getCode())
 		);
 	}
 
@@ -59,7 +59,7 @@ class templateOutputRenderer implements outputRenderer {
 	/**
 	 * @see outputRenderer::renderOutput
 	 */
-	public function renderOutput($output, $main) {
+	public function renderOutput(&$output, $main) {
 		return $this->renderTemplate(self::TEMPLATE_FULL,
 			array('{{main}}', '{{output}}'),
 			array($main, $output)

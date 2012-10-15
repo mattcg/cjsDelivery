@@ -14,18 +14,18 @@ namespace cjsDelivery;
 require_once __DIR__.'/lib/external/hookManager/hookManager.php';
 require_once __DIR__.'/lib/processHooks.php';
 require_once __DIR__.'/lib/deliveryException.php';
-require_once __DIR__.'/lib/dependencyResolver.php';
-require_once __DIR__.'/lib/fileNameManager.php';
+require_once __DIR__.'/lib/fileDependencyResolver.php';
+require_once __DIR__.'/lib/fileIdentifierManager.php';
 require_once __DIR__.'/lib/outputGenerator.php';
 require_once __DIR__.'/lib/templateOutputRenderer.php';
 
 function create() {
 	$hookmanager = \hookManager\create();
-	$namemanager = new fileNameManager();
+	$identifiermanager = new fileIdentifierManager();
 
 	$outputrenderer = new templateOutputRenderer();
 
-	$resolver = new dependencyResolver($namemanager);
+	$resolver = new fileDependencyResolver($identifiermanager);
 	$resolver->setHookManager($hookmanager);
 
 	$generator = new outputGenerator($outputrenderer);
@@ -66,11 +66,10 @@ class cjsDelivery extends \hookManager\pluggable {
 	/**
 	 * Add a module. The module code will be parsed for 'require' statements to resolve dependencies
 	 *
-	 * @param string $name Name of the module to add
-	 * @param string $filepath Path to the module file
+	 * @param string $identifier Identifier for the module
 	 */
-	public function addModule($name, $filepath) {
-		$this->resolver->addModule($name, $filepath);
+	public function addModule($identifier) {
+		$this->resolver->addModule($identifier);
 	}
 
 
@@ -80,18 +79,18 @@ class cjsDelivery extends \hookManager\pluggable {
 	 * Each module is wrapped in a function which isn't executed until the module is required, so
 	 * a 'main' module needs to be 'required' automatically to kick off execution on the client.
 	 *
-	 * @param string $filepath The path to the main module
+	 * @param string $identifier Identifier for the module
 	 */
-	public function setMainModule($filepath) {
-		$namemanager = $this->resolver->getNameManager();
-		$this->mainmodule = $namemanager->getCanonicalName($filepath);
+	public function setMainModule($identifier) {
+		$identifiermanager = $this->resolver->getIdentifierManager();
+		$this->mainmodule = $identifiermanager->getTopLevelIdentifier($identifier);
 	}
 
 
 	/**
-	 * Get the name of the main module
+	 * Get the top level identifier for the main module
 	 *
-	 * @return string The name of the main module
+	 * @return string The top level identifier for the main module
 	 */
 	public function getMainModule() {
 		return $this->mainmodule;
@@ -112,9 +111,9 @@ class cjsDelivery extends \hookManager\pluggable {
 			throw new cjsDeliveryException('Main module not set', cjsDeliveryException::NO_MAIN);
 		}
 
-		$namemanager = $this->resolver->getNameManager();
-		$mainmodule  = $namemanager->getResolvedName($this->mainmodule);
-		$allmodules  = $this->resolver->getAllDependencies();
+		$identifiermanager = $this->resolver->getIdentifierManager();
+		$mainmodule = $identifiermanager->getFlattenedIdentifier($this->mainmodule);
+		$allmodules = $this->resolver->getAllDependencies();
 		return $this->generator->buildOutput($allmodules, $mainmodule);
 	}
 
@@ -127,9 +126,9 @@ class cjsDelivery extends \hookManager\pluggable {
 	public function getLastModTime() {
 		$lastmodtime = 0;
 
-		$dependencies = $this->resolver->getAllDepencies();
+		$dependencies = $this->resolver->getAllDependencies();
 		foreach ($dependencies as &$module) {
-			$lastmodtime = max($lastmodtime, $module['filemtime']);
+			$lastmodtime = max($lastmodtime, $module->getModificationTime());
 		}
 
 		return $lastmodtime;

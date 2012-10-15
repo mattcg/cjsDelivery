@@ -1,16 +1,16 @@
 (function(modules) {
 
-var require = function(name) {
+var require = function(identifier) {
 	var module, exports, req, func;
 
-	if (!modules[name].hasOwnProperty('exports')) {
+	if (!modules[identifier].hasOwnProperty('exports')) {
 		exports = {};
-		module = {'id': name, 'exports': exports};
-		func = modules[name];
-		modules[name] = {'exports': exports};
+		module = {'id': identifier, 'exports': exports};
+		func = modules[identifier];
+		modules[identifier] = {'exports': exports};
 
 		req = function(n) {
-			if (n !== name) {
+			if (n !== identifier) {
 				return require(n);
 			}
 
@@ -21,7 +21,7 @@ var require = function(name) {
 		func.call(module, req, exports, module);
 	}
 
-	return modules[name].exports;
+	return modules[identifier].exports;
 };
 
 {{output}}

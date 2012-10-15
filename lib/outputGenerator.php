@@ -30,7 +30,7 @@ class outputGenerator implements \hookManager\client {
 	 *
 	 * @throws cjsDeliveryException If the module is not found
 	 *
-	 * @param array $modules List of modules from which to build output
+	 * @param module[] $modules List of modules from which to build output
 	 * @param string $main Name of the main module
 	 * @return string Complete output
 	 */
@@ -48,7 +48,7 @@ class outputGenerator implements \hookManager\client {
 		// Loop through the modules, render and look for the main module
 		$concat = '';
 		foreach ($modules as $realpath => &$module) {
-			$concat .= $this->renderer->renderModule($module['name'], $module['code']);
+			$concat .= $this->renderer->renderModule($module);
 		}
 
 		$output = $this->renderer->renderOutput($concat, $main);
@@ -57,6 +57,7 @@ class outputGenerator implements \hookManager\client {
 		if ($this->hookmanager) {
 			$this->hookmanager->run(processHooks\OUTPUT_READY, $output);
 		}
+
 		return $output;
 	}
 }

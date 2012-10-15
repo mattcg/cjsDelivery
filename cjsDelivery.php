@@ -107,12 +107,12 @@ class cjsDelivery extends \hookManager\pluggable {
 	 * @return string Complete output
 	 */
 	public function getOutput() {
-		if (empty($this->mainmodule)) {
-			throw new cjsDeliveryException('Main module not set', cjsDeliveryException::NO_MAIN);
+		$identifiermanager = $this->resolver->getIdentifierManager();
+		$mainmodule = '';
+		if ($this->mainmodule) {
+			$mainmodule = $identifiermanager->getFlattenedIdentifier($this->mainmodule);
 		}
 
-		$identifiermanager = $this->resolver->getIdentifierManager();
-		$mainmodule = $identifiermanager->getFlattenedIdentifier($this->mainmodule);
 		$allmodules = $this->resolver->getAllDependencies();
 		return $this->generator->buildOutput($allmodules, $mainmodule);
 	}

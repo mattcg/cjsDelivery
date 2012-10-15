@@ -16,6 +16,7 @@ class templateOutputRenderer implements outputRenderer {
 
 	const TEMPLATE_FULL = 'full';
 	const TEMPLATE_MODULE = 'module';
+	const TEMPLATE_MAIN = 'main';
 
 	const EXT_MS = '.ms';
 
@@ -30,15 +31,10 @@ class templateOutputRenderer implements outputRenderer {
 	 * @param array $values
 	 * @return string
 	 */
-	private function renderTemplate($name, $keys = null, $values = null) {
-		$filepath = self::DIR_LIB . self::DIR_TEMPLATES . '/' . $name . self::EXT_MS;
-
+	private function renderTemplate($name, $keys, $values) {
 		if (!isset($this->templates[$name])) {
+			$filepath = self::DIR_LIB . self::DIR_TEMPLATES . '/' . $name . self::EXT_MS;
 			$this->templates[$name] = file_get_contents($filepath, false);
-		}
-
-		if (!$keys) {
-			return $this->templates[$name];
 		}
 
 		return str_replace($keys, $values, $this->templates[$name]);
@@ -59,10 +55,14 @@ class templateOutputRenderer implements outputRenderer {
 	/**
 	 * @see outputRenderer::renderOutput
 	 */
-	public function renderOutput(&$output, $main) {
-		return $this->renderTemplate(self::TEMPLATE_FULL,
-			array('{{main}}', '{{output}}'),
-			array($main, $output)
+	public function renderOutput(&$output, $main = '') {
+		if ($main) {
+			$main = $this->renderTemplate(self::TEMPLATE_MAIN, '{{main}}', $main);
+		}
+
+		return $output = $this->renderTemplate(self::TEMPLATE_FULL,
+			array('{{output}}', '{{main}}'),
+			array($output, $main)
 		);
 	}
 }

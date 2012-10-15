@@ -23,9 +23,8 @@ var require = function(identifier) {
 
 	return modules[identifier].exports;
 };
-
+	
 {{output}}
-
-require('{{main}}');
-
+	
+{{main}}
 }({}));

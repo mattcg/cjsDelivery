@@ -26,5 +26,5 @@ interface outputRenderer {
 	 * @param string $main Identifier of the main module
 	 * @return string
 	 */
-	public function renderOutput(&$output, $main);
+	public function renderOutput(&$output, $main = '');
 }

@@ -31,10 +31,10 @@ class outputGenerator implements \hookManager\client {
 	 * @throws cjsDeliveryException If the module is not found
 	 *
 	 * @param module[] $modules List of modules from which to build output
-	 * @param string $main Name of the main module
+	 * @param string $main Identifier of the main module
 	 * @return string Complete output
 	 */
-	public function buildOutput(array $modules, $main) {
+	public function buildOutput(array $modules, $main = '') {
 		$output = '';
 
 		// If output is created by the hook callbacks, return it

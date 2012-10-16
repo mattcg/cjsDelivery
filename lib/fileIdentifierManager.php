@@ -10,24 +10,20 @@ namespace cjsDelivery;
 require_once __DIR__.'/identifierManager.php';
 
 class fileIdentifierManager implements identifierManager {
+	private $identifiergenerator;
+
 	private $modules = array();
 
+	public function __construct(identifierGenerator $identifiergenerator) {
+		$this->setIdentifierGenerator($identifiergenerator);
+	}
 
-	/**
-	 * Check for modules with the same base name
-	 *
-	 * @param string $basename The base name of a module identifier to check for duplicates of
-	 * @return integer Number of modules with the same base name
-	 */
-	private function checkSameBaseName($basename) {
-		$i = 0;
-		foreach ($this->modules as &$module) {
-			if ($basename === $module['basename']) {
-				$i++;
-			}
-		}
+	public function setIdentifierGenerator(identifierGenerator $identifiergenerator) {
+		$this->identifiergenerator = $identifiergenerator;
+	}
 
-		return $i;
+	public function getIdentifierGenerator() {
+		return $this->identifiergenerator;
 	}
 
 
@@ -36,16 +32,11 @@ class fileIdentifierManager implements identifierManager {
 	 * @param string $realpath The canonicalized absolute pathname of the module
 	 */
 	public function getFlattenedIdentifier($realpath) {
-		if (!isset($this->modules[$realpath])) {
+		if (!in_array($realpath, $this->modules[])) {
 			throw new cjsDeliveryException("Unknown module '$realpath'", cjsDeliveryException::UNKNOWN_MODULE);
 		}
 
-		$module = $this->modules[$realpath];
-		if ($module['basenamecount'] > 0) {
-			return $module['basename'] . $module['basenamecount'];
-		}
-
-		return $module['basename'];
+		return $this->identifiergenerator->generateFlattenedIdentifier($realpath);
 	}
 
 
@@ -73,12 +64,8 @@ class fileIdentifierManager implements identifierManager {
 	 */
 	public function addIdentifier($filepath) {
 		$realpath = $this->getTopLevelIdentifier($filepath);
-		if (!isset($this->modules[$realpath])) {
-			$basename = basename($filepath, '.' . pathinfo($filepath, PATHINFO_EXTENSION));
-	 		$this->modules[$realpath] = array(
-	 			'basename' => $basename,
-	 			'basenamecount' => $this->checkSameBaseName($basename)
-	 		);
+		if (!in_array($realpath, $this->modules)) {
+			$this->modules[] = $realpath;
 	 	}
 
 		return $realpath;

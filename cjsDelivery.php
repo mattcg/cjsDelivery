@@ -19,9 +19,12 @@ require_once __DIR__.'/lib/fileIdentifierManager.php';
 require_once __DIR__.'/lib/outputGenerator.php';
 require_once __DIR__.'/lib/templateOutputRenderer.php';
 
+require_once __DIR__.'/lib/flatIdentifierGenerator.php';
+require_once __DIR__.'/lib/minIdentifierGenerator.php';
+
 function create() {
 	$hookmanager = \hookManager\create();
-	$identifiermanager = new fileIdentifierManager();
+	$identifiermanager = new fileIdentifierManager(new flatIdentifierGenerator());
 
 	$outputrenderer = new templateOutputRenderer();
 
@@ -115,6 +118,23 @@ class cjsDelivery extends \hookManager\pluggable {
 
 		$allmodules = $this->resolver->getAllDependencies();
 		return $this->generator->buildOutput($allmodules, $mainmodule);
+	}
+
+
+	/**
+	 * Set whether to use minified identifers like 'a' and 'Bb' in output instead of mnenomic ones
+	 *
+	 * @param bool $yes
+	 */
+	public function minifyIdentifiers($yes = true) {
+		if ($yes) {
+			$generator = new minIdentifierGenerator();
+		} else {
+			$generator = new flatIdentifierGenerator();
+		}
+
+		$identifiermanager = $this->resolver->getIdentifierManager();
+		$identifiermanager->setIdentifierGenerator($generator);
 	}
 
 

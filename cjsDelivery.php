@@ -13,7 +13,7 @@ namespace cjsDelivery;
 
 require_once __DIR__.'/lib/external/hookManager/hookManager.php';
 require_once __DIR__.'/lib/processHooks.php';
-require_once __DIR__.'/lib/deliveryException.php';
+require_once __DIR__.'/lib/exception.php';
 require_once __DIR__.'/lib/fileDependencyResolver.php';
 require_once __DIR__.'/lib/fileIdentifierManager.php';
 require_once __DIR__.'/lib/outputGenerator.php';

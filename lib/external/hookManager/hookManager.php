@@ -11,10 +11,10 @@
 
 namespace hookManager;
 
-require_once __DIR__.'/managerInterface.php';
-require_once __DIR__.'/clientInterface.php';
-require_once __DIR__.'/pluginInterface.php';
-require_once __DIR__.'/pluggableAbstract.php';
+require_once __DIR__.'/lib/manager.php';
+require_once __DIR__.'/lib/client.php';
+require_once __DIR__.'/lib/plugin.php';
+require_once __DIR__.'/lib/pluggable.php';
 
 function create() {
 	return new hookManager();

@@ -7,6 +7,8 @@
 
 namespace cjsDelivery;
 
+require_once __DIR__.'/identifierGenerator.php';
+
 class minIdentifierGenerator implements identifierGenerator {
 	private $minified = array();
 	private $minifyposition = 65, $minifyiteration = 0;

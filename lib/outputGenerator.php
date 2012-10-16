@@ -7,6 +7,9 @@
 
 namespace cjsDelivery;
 
+require_once __DIR__.'/exception.php';
+require_once __DIR__.'/processHooks.php';
+
 class outputGenerator implements \hookManager\client {
 
 	private $hookmanager = null;

@@ -10,6 +10,8 @@ namespace cjsDelivery;
 require_once __DIR__.'/identifierManager.php';
 
 class fileIdentifierManager implements identifierManager {
+	const EXT_JS = 'js';
+
 	private $identifiergenerator;
 
 	private $modules = array();
@@ -32,7 +34,7 @@ class fileIdentifierManager implements identifierManager {
 	 * @param string $realpath The canonicalized absolute pathname of the module
 	 */
 	public function getFlattenedIdentifier($realpath) {
-		if (!in_array($realpath, $this->modules[])) {
+		if (!in_array($realpath, $this->modules)) {
 			throw new cjsDeliveryException("Unknown module '$realpath'", cjsDeliveryException::UNKNOWN_MODULE);
 		}
 
@@ -46,7 +48,7 @@ class fileIdentifierManager implements identifierManager {
 	 * @return string The canonicalized absolute pathname of the module
 	 */
 	public function getTopLevelIdentifier($filepath) {
-		$realpath = realpath($filepath);
+		$realpath = realpath($this->addExtension($filepath));
 
 		// Check if the path was resolved
 		if ($realpath === false) {
@@ -69,5 +71,20 @@ class fileIdentifierManager implements identifierManager {
 	 	}
 
 		return $realpath;
+	}
+
+
+	/**
+	 * Add the standard JavaScript file extension if it's missing
+	 *
+	 * @param string $filepath
+	 * @returns string The path with a file extension added if needed
+	 */
+	private function addExtension($filepath) {
+		if ((pathinfo($filepath, PATHINFO_EXTENSION)) !== self::EXT_JS) {
+			$filepath .= '.' . self::EXT_JS;
+		}
+
+		return $filepath;
 	}
 }

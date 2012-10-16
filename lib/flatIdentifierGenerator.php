@@ -34,7 +34,7 @@ class flatIdentifierGenerator implements identifierGenerator {
 	 */
 	public function generateFlattenedIdentifier($toplevelidentifier)  {
 		if (!isset($this->modules[$toplevelidentifier])) {
-			$basename = basename($filepath, '.' . pathinfo($filepath, PATHINFO_EXTENSION));
+			$basename = basename($toplevelidentifier, '.' . pathinfo($toplevelidentifier, PATHINFO_EXTENSION));
 	 		$this->modules[$toplevelidentifier] = array(
 	 			'basename' => $basename,
 	 			'basenamecount' => $this->checkSameBaseName($basename)

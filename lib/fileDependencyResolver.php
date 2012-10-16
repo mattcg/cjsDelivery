@@ -11,7 +11,6 @@ require_once __DIR__.'/dependencyResolver.php';
 
 class fileDependencyResolver implements \hookManager\client, dependencyResolver {
 
-	const EXT_JS = '.js';
 	const REQUIRE_PREG = '/require\((\'|")(.*?)\1\)/';
 
 	private $modules = array();
@@ -57,14 +56,14 @@ class fileDependencyResolver implements \hookManager\client, dependencyResolver 
 		}
 
 		$newcode = $this->resolveDependencies($realpath);
-		$newidentidifier = $this->identifiermanager->getFlattenedIdentifier($realpath);
+		$newidentifier = $this->identifiermanager->getFlattenedIdentifier($realpath);
 
 		$module = new module($newcode);
 		$module->setModificationTime(filemtime($realpath));
-		$module->setUniqueIdentifier($newidentidifier);
+		$module->setUniqueIdentifier($newidentifier);
 
 		$this->modules[$realpath] = $module;
-		return $newidentidifier;
+		return $newidentifier;
 	}
 
 
@@ -122,13 +121,8 @@ class fileDependencyResolver implements \hookManager\client, dependencyResolver 
 			$newfilepath = $relativetodir . '/' . $newfilepath;
 		}
 
-		// Add the standard JavaScript file extension if it's missing
-		if (('.' . pathinfo($newfilepath, PATHINFO_EXTENSION)) !== self::EXT_JS) {
-			$newfilepath .= self::EXT_JS;
-		}
-
 		// Add the module and get the new identifier
-		$newidentidifier = $that->addModule($newfilepath);
-		return "require('$newname')";
+		$newidentifier = $that->addModule($newfilepath);
+		return "require('$newidentifier')";
 	}
 }

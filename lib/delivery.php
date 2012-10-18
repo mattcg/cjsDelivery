@@ -40,16 +40,8 @@ class delivery extends \hookManager\pluggable {
 		$this->outputgenerator = $generator;
 	}
 
-	public function getOutputGenerator() {
-		return $this->outputgenerator;
-	}
-
 	public function setDependencyResolver(dependencyResolver $resolver) {
 		$this->dependencyresolver = $resolver;
-	}
-
-	public function getDependencyResolver() {
-		return $this->dependencyresolver;
 	}
 
 

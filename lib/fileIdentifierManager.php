@@ -7,9 +7,6 @@
 
 namespace cjsDelivery;
 
-require_once __DIR__.'/identifierManager.php';
-require_once __DIR__.'/exception.php';
-
 class fileIdentifierManager implements identifierManager {
 	const EXT_JS = 'js';
 

@@ -7,30 +7,44 @@
 
 namespace cjsDelivery;
 
-require_once __DIR__.'/flatIdentifierGenerator.php';
-require_once __DIR__.'/minIdentifierGenerator.php';
+require 'external/hookManager/hookManager.php';
+
+require 'dependencyResolver.php';
+require 'exception.php';
+require 'factory.php';
+require 'fileDependencyResolve.php';
+require 'fileIdentifierManager.php';
+require 'flatIdentifierGenerator.php';
+require 'identifierGenerator.php';
+require 'identifierManager.php';
+require 'minIdentifierManager.php';
+require 'module.php';
+require 'outputGenerator.php';
+require 'outputRenderer.php';
+require 'processHooks.php';
+require 'templateOutputRenderer.php';
 
 class delivery extends \hookManager\pluggable {
 
-	private $generator = null;
-	private $resolver  = null;
+	private $outputgenerator = null;
+	private $dependencyresolver = null;
 
 	private $mainmodule;
 
-	public function setGenerator($generator) {
-		$this->generator = $generator;
+	public function setOutputGenerator(outputGenerator $generator) {
+		$this->outputgenerator = $generator;
 	}
 
-	public function getGenerator() {
-		return $this->generator;
+	public function getOutputGenerator() {
+		return $this->outputgenerator;
 	}
 
-	public function setResolver(dependencyResolver $resolver) {
-		$this->resolver = $resolver;
+	public function setDependencyResolver(dependencyResolver $resolver) {
+		$this->dependencyresolver = $resolver;
 	}
 
-	public function getResolver() {
-		return $this->resolver;
+	public function getDependencyResolver() {
+		return $this->dependencyresolver;
 	}
 
 
@@ -40,7 +54,7 @@ class delivery extends \hookManager\pluggable {
 	 * @param string $identifier Identifier for the module
 	 */
 	public function addModule($identifier) {
-		$this->resolver->addModule($identifier);
+		$this->dependencyresolver->addModule($identifier);
 	}
 
 
@@ -53,7 +67,7 @@ class delivery extends \hookManager\pluggable {
 	 * @param string $identifier Identifier for the module
 	 */
 	public function setMainModule($identifier) {
-		$identifiermanager = $this->resolver->getIdentifierManager();
+		$identifiermanager = $this->dependencyresolver->getIdentifierManager();
 		$this->mainmodule = $identifiermanager->getTopLevelIdentifier($identifier);
 	}
 
@@ -78,31 +92,14 @@ class delivery extends \hookManager\pluggable {
 	 * @return string Complete output
 	 */
 	public function getOutput() {
-		$identifiermanager = $this->resolver->getIdentifierManager();
+		$identifiermanager = $this->dependencyresolver->getIdentifierManager();
 		$mainmodule = '';
 		if ($this->mainmodule) {
 			$mainmodule = $identifiermanager->getFlattenedIdentifier($this->mainmodule);
 		}
 
-		$allmodules = $this->resolver->getAllDependencies();
-		return $this->generator->buildOutput($allmodules, $mainmodule);
-	}
-
-
-	/**
-	 * Set whether to use minified identifers like 'a' and 'Bb' in output instead of mnenomic ones
-	 *
-	 * @param bool $yes
-	 */
-	public function minifyIdentifiers($yes = true) {
-		if ($yes) {
-			$generator = new minIdentifierGenerator();
-		} else {
-			$generator = new flatIdentifierGenerator();
-		}
-
-		$identifiermanager = $this->resolver->getIdentifierManager();
-		$identifiermanager->setIdentifierGenerator($generator);
+		$allmodules = $this->dependencyresolver->getAllDependencies();
+		return $this->outputgenerator->buildOutput($allmodules, $mainmodule);
 	}
 
 
@@ -114,7 +111,7 @@ class delivery extends \hookManager\pluggable {
 	public function getLastModTime() {
 		$lastmodtime = 0;
 
-		$dependencies = $this->resolver->getAllDependencies();
+		$dependencies = $this->dependencyresolver->getAllDependencies();
 		foreach ($dependencies as &$module) {
 			$lastmodtime = max($lastmodtime, $module->getModificationTime());
 		}

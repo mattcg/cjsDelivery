@@ -7,8 +7,6 @@
 
 namespace cjsDelivery;
 
-require_once __DIR__.'/identifierGenerator.php';
-
 class flatIdentifierGenerator implements identifierGenerator {
 	private $modules = array();
 

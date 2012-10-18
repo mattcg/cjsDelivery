@@ -7,8 +7,6 @@
 
 namespace cjsDelivery;
 
-require_once __DIR__.'/module.php';
-
 interface dependencyResolver {
 
 

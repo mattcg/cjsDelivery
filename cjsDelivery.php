@@ -9,31 +9,4 @@
  * @package cjsDelivery
  */
 
-namespace cjsDelivery;
-
-require_once __DIR__.'/lib/external/hookManager/hookManager.php';
-
-require_once __DIR__.'/lib/delivery.php';
-
-require_once __DIR__.'/lib/fileDependencyResolver.php';
-require_once __DIR__.'/lib/fileIdentifierManager.php';
-require_once __DIR__.'/lib/outputGenerator.php';
-require_once __DIR__.'/lib/templateOutputRenderer.php';
-
-function create() {
-	$hookmanager = \hookManager\create();
-	$identifiermanager = new fileIdentifierManager(new flatIdentifierGenerator());
-
-	$resolver = new fileDependencyResolver($identifiermanager);
-	$resolver->setHookManager($hookmanager);
-
-	$generator = new outputGenerator(new templateOutputRenderer());
-	$generator->setHookManager($hookmanager);
-
-	$delivery = new delivery();
-	$delivery->setHookManager($hookmanager);
-	$delivery->setGenerator($generator);
-	$delivery->setResolver($resolver);
-
-	return $delivery;
-}
+require './lib/factory.php';

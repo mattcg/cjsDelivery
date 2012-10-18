@@ -7,11 +7,6 @@
 
 namespace cjsDelivery;
 
-require_once __DIR__.'/processHooks.php';
-
-require_once __DIR__.'/dependencyResolver.php';
-require_once __DIR__.'/exception.php';
-
 class fileDependencyResolver implements \hookManager\client, dependencyResolver {
 
 	const REQUIRE_PREG = '/require\((\'|")(.*?)\1\)/';

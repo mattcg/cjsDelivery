@@ -9,20 +9,25 @@ namespace cjsDelivery;
 
 require 'external/hookManager/hookManager.php';
 
-require 'dependencyResolver.php';
 require 'exception.php';
-require 'factory.php';
-require 'fileDependencyResolve.php';
-require 'fileIdentifierManager.php';
-require 'flatIdentifierGenerator.php';
-require 'identifierGenerator.php';
-require 'identifierManager.php';
-require 'minIdentifierManager.php';
 require 'module.php';
-require 'outputGenerator.php';
+
+require 'identifierManager.php';
+require 'fileIdentifierManager.php';
+
+require 'identifierGenerator.php';
+require 'flatIdentifierGenerator.php';
+require 'minIdentifierGenerator.php';
+
+require 'dependencyResolver.php';
+require 'fileDependencyResolve.php';
+
 require 'outputRenderer.php';
-require 'processHooks.php';
 require 'templateOutputRenderer.php';
+
+require 'outputGenerator.php';
+
+require 'processHooks.php';
 
 class delivery extends \hookManager\pluggable {
 

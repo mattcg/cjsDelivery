@@ -9,4 +9,4 @@
  * @package cjsDelivery
  */
 
-require './lib/factory.php';
+require 'lib/factory.php';

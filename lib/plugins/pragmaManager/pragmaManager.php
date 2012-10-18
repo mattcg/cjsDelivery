@@ -9,7 +9,7 @@
 
 namespace cjsDelivery;
 
-class pragmaManager implements hookManager\plugin {
+class pragmaManager implements \hookManager\plugin {
 
 	private $pragmas = array();
 	private $pragmaformat;
@@ -34,9 +34,9 @@ class pragmaManager implements hookManager\plugin {
 	 *
 	 * @param cjsDelivery $delivery
 	 */
-	public static function register(hookManager\client $delivery) {
+	public static function register(\hookManager\client $delivery) {
 		$pragmamanager = new pragmaManager();
-		$hookmanager   = $delivery->getHookManager();
+		$hookmanager = $delivery->getHookManager();
 
 		$hookmanager->hook(processHooks\PROCESS_MODULE, function(&$code) use ($pragmamanager) {
 			$pragmamanager->processPragmas($code);

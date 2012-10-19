@@ -35,9 +35,12 @@ class outputGenerator implements \hookManager\client {
 	 * @return string Complete output
 	 */
 	public function buildOutput(array $modules, $main = '') {
-		$output = '';
+		if (empty($modules)) {
+			throw new cjsDeliveryException('Nothing to build', cjsDeliveryException::NOTHING_TO_BUILD);
+		}
 
 		// If output is created by the hook callbacks, return it
+		$output = '';
 		if ($this->hookmanager) {
 			$this->hookmanager->run(processHooks\BUILD_OUTPUT, $output);
 			if ($output) {

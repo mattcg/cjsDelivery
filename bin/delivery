@@ -1,7 +1,9 @@
 #!/usr/bin/php
 <?php
 
-require '../lib/commandLineRunner.php';
+// set_include_path(get_include_path() . PATH_SEPARATOR . '/absolute/path');
+
+require __DIR__.'/../lib/commandLineRunner.php';
 
 $clr = new cjsDelivery\commandLineRunner();
 try {

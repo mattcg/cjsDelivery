@@ -1,0 +1,12 @@
+#!/usr/bin/php
+<?php
+
+require '../lib/commandLineRunner.php';
+
+$clr = new cjsDelivery\commandLineRunner();
+try {
+	echo $clr->run(getopt($clr->getOptions(), $clr->getLongOptions()));
+} catch (cjsDelivery\cjsDeliveryException $e) {
+	echo 'Error: ', $e->getMessage(), ' (', $e->getCode(),')', PHP_EOL;
+	exit(1);
+}

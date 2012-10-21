@@ -3,11 +3,11 @@
 var require = function(identifier) {
 	var module, exports, req, func;
 
-	if (!modules[identifier].hasOwnProperty('exports')) {
+	if (!modules[identifier].exports) {
 		exports = {};
-		module = {'id': identifier, 'exports': exports};
+		module = {id: identifier, exports: exports};
 		func = modules[identifier];
-		modules[identifier] = {'exports': exports};
+		modules[identifier] = {exports: exports};
 
 		req = function(n) {
 			if (n !== identifier) {

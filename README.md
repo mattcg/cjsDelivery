@@ -4,6 +4,8 @@ Use this library to deliver [CommonJS-syntax](http://wiki.commonjs.org/wiki/Modu
 
 Features include support for shortening ('minifying') identifiers, a plugin architecture, and enabling and disabling static code pragmas.
 
+The output is designed to be suitable for compilation with the [Google Closure Compiler](https://developers.google.com/closure/compiler/) in advanced optimizations mode.
+
 ## Executable
 
 The `bin/delivery` executable is provided for command-line use. Run the following example to compiled the bundled example `fruit` application:

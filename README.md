@@ -6,7 +6,7 @@ Experimental features include support for shortening ('minifying') identifiers, 
 
 ## Executable
 
-The `bin/deliver` executable is provided for command-line use. Run the following example to compiled the bundled example `fruit` application:
+The `bin/delivery` executable is provided for command-line use. Run the following example to compiled the bundled example `fruit` application:
 
 ```
 ./bin/delivery -m='examples/fruit/modules/main' --main_module='examples/fruit/modules/main'

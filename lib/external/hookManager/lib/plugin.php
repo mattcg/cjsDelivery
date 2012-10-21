@@ -9,5 +9,5 @@ namespace hookManager;
 
 interface plugin {
 
-	public static function register(client $hookclient);
+	public function register(client $hookclient);
 }

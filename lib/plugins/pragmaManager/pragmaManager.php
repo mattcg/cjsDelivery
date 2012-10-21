@@ -26,7 +26,7 @@ class pragmaManager implements \hookManager\plugin {
 	 * ?>
 	 * </code>
 	 */
-	const DEFAULT_PFMT = '/\/\/ ifdef (?<pragma>[A-Z_])\n(.*?)\n\/\/ endif \1/';
+	const DEFAULT_PFMT = '/\/\/ ifdef (?<pragma>[A-Z_]+)\n(.*?)\n\/\/ endif \1/';
 
 
 	/**
@@ -34,12 +34,12 @@ class pragmaManager implements \hookManager\plugin {
 	 *
 	 * @param cjsDelivery $delivery
 	 */
-	public static function register(\hookManager\client $delivery) {
-		$pragmamanager = new pragmaManager();
+	public function register(\hookManager\client $delivery) {
 		$hookmanager = $delivery->getHookManager();
 
-		$hookmanager->hook(processHooks\PROCESS_MODULE, function(&$code) use ($pragmamanager) {
-			$pragmamanager->processPragmas($code);
+		$that = $this;
+		$hookmanager->hook(processHooks\PROCESS_MODULE, function(&$code) use ($that) {
+			$that->processPragmas($code);
 		});
 	}
 
@@ -51,11 +51,9 @@ class pragmaManager implements \hookManager\plugin {
 	 */
 	public function processPragmas(&$code) {
 		$pattern = $this->pragmaformat;
-
 		if (!$pattern) {
 			$pattern = self::DEFAULT_PFMT;
 		}
-
 		$that = $this;
 		$code = preg_replace_callback($pattern, function($match) use ($that) {
 			if ($that->checkPragma($match['pragma'])) {

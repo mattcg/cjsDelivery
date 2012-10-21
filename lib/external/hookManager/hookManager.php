@@ -35,7 +35,7 @@ class hookManager implements manager {
 	 * @param string $name The name of the hook to hook on
 	 * @param Closure $callback Callback to invoke when the hook is run
 	 */
-	public function hook($name, Closure $callback) {
+	public function hook($name, \Closure $callback) {
 		$hooks =& $this->hooks;
 		if (!isset($hooks[$name])) {
 			$hooks[$name] = array();
@@ -51,7 +51,7 @@ class hookManager implements manager {
 	 * @param string $name The name of the hook to unhook
 	 * @param Closure $callback If specified, only this callback will be unhooked
 	 */
-	public function unhook($name, Closure $callback = null) {
+	public function unhook($name, \Closure $callback = null) {
 		$hooks =& $this->hooks;
 		if (isset($hooks[$name])) {
 			return;

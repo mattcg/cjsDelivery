@@ -21,7 +21,7 @@ abstract class pluggable implements client {
 
 	public function plugin(plugin $plugin) {
 		if ($this->hookmanager) {
-			return $plugin::register($this);
+			return $plugin->register($this);
 		}
 
 		return null;

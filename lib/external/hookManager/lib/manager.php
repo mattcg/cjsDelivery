@@ -9,7 +9,7 @@ namespace hookManager;
 
 interface manager {
 
-	public function hook($name, Closure $callback);
-	public function unhook($name, Closure $callback = null);
+	public function hook($name, \Closure $callback);
+	public function unhook($name, \Closure $callback = null);
 	public function run($name, &$arg);
 }

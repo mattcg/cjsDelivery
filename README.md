@@ -4,8 +4,36 @@ Use this library to deliver CommonJS-syntax JavaScript modules to clients as a s
 
 Experimental features include support for shortening ('minifying') identifiers, a plugin architecture, enabling and disabling static code pragmas, output caching and some more.
 
-The `bin/deliver` executable is provided for command-line use. Run the following example:
+## Executable
+
+The `bin/deliver` executable is provided for command-line use. Run the following example to compiled the bundled example `fruit` application:
 
 ```
-./bin/delivery -m 'examples/fruit/modules/main' --main_module='examples/fruit/modules/main'
+./bin/delivery -m='examples/fruit/modules/main' --main_module='examples/fruit/modules/main'
+```
+
+## Pragmas
+
+The pragma manager plugin is bundled with this package. Use it to include or exclude pieces of code from the final output.
+
+When passed to the `delivery` executable, the `-p` option will turn on the manager and any code contained between undefined pragmas will be 'compiled out'.
+
+The bundled example module in `examples/fruit/modules/main.js` includes the following lines:
+
+```
+// ifdef BANANA
+log.print(require('banana').message);
+// endif BANANA
+```
+
+Run the following example command to compile the `fruit` application without the `banana` module:
+
+```
+./bin/delivery -m='examples/fruit/modules/main' --main_module='examples/fruit/modules/main' -p
+```
+
+Now try the opposite:
+
+```
+./bin/delivery -m='examples/fruit/modules/main' --main_module='examples/fruit/modules/main' -p='BANANA'
 ```

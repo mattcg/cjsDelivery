@@ -19,11 +19,9 @@ class pragmaManager implements \hookManager\plugin {
 	 * Default pragma format
 	 *
 	 * <code>
-	 * <?php
 	 * // ifdef DEBUG_CLIENT
 	 * ...
 	 * // endif DEBUG_CLIENT
-	 * ?>
 	 * </code>
 	 */
 	const DEFAULT_PFMT = '/\/\/ ifdef (?<pragma>[A-Z_]+)\n(.*?)\n\/\/ endif \1/';

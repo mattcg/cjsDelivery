@@ -38,6 +38,16 @@ Now try the opposite:
 ./bin/delivery -m='examples/fruit/modules/main' --main_module='examples/fruit/modules/main' -p='BANANA'
 ```
 
+## Minified identifiers
+
+cjsDelivery will flatten the module tree internally, rewriting `path/to/module` as `module`, for example. In a production environment it makes sense to use non-mnemonic identifiers. If enabled, cjsDelivery will rewrite `path/to/module` as `A`, `path/to/othermodule` as `B` and so on.
+
+Try this example:
+
+```
+./bin/delivery -m='examples/fruit/modules/main' --main_module='examples/fruit/modules/main' --minify_identifiers
+```
+
 ## License
 
 CommonJS is copyright © 2009 - Kevin Dangoor and many CommonJS contributors, licensed under an MIT license.

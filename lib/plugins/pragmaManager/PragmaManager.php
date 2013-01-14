@@ -9,7 +9,7 @@
 
 namespace cjsDelivery;
 
-class pragmaManager implements \hookManager\plugin {
+class PragmaManager implements \hookManager\plugin {
 
 	private $pragmas = array();
 	private $pragmaformat;

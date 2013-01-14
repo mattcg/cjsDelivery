@@ -19,7 +19,7 @@ require 'identifierGenerator.php';
 require 'flatIdentifierGenerator.php';
 require 'minIdentifierGenerator.php';
 
-require 'dependencyResolver.php';
+require 'DependencyResolver.php';
 require 'fileDependencyResolver.php';
 
 require 'outputRenderer.php';
@@ -40,7 +40,7 @@ class Delivery extends \hookManager\pluggable {
 		$this->outputgenerator = $generator;
 	}
 
-	public function setDependencyResolver(dependencyResolver $resolver) {
+	public function setDependencyResolver(DependencyResolver $resolver) {
 		$this->dependencyresolver = $resolver;
 	}
 

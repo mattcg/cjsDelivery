@@ -7,7 +7,7 @@
 
 namespace cjsDelivery;
 
-interface dependencyResolver {
+interface DependencyResolver {
 
 
 	/**

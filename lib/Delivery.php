@@ -25,7 +25,7 @@ require 'FileDependencyResolver.php';
 require 'outputRenderer.php';
 require 'templateOutputRenderer.php';
 
-require 'outputGenerator.php';
+require 'OutputGenerator.php';
 
 require 'processHooks.php';
 
@@ -36,7 +36,7 @@ class Delivery extends \hookManager\pluggable {
 
 	private $mainmodule;
 
-	public function setOutputGenerator(outputGenerator $generator) {
+	public function setOutputGenerator(OutputGenerator $generator) {
 		$this->outputgenerator = $generator;
 	}
 

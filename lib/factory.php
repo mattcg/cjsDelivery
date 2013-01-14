@@ -22,7 +22,7 @@ function create($minifyidentifiers = false) {
 	$dependencyresolver = new FileDependencyResolver($identifiermanager);
 	$dependencyresolver->setHookManager($hookmanager);
 
-	$outputgenerator = new outputGenerator(new templateOutputRenderer());
+	$outputgenerator = new OutputGenerator(new templateOutputRenderer());
 	$outputgenerator->setHookManager($hookmanager);
 
 	$delivery = new Delivery();

@@ -11,16 +11,16 @@
 
 namespace hookManager;
 
-require 'lib/manager.php';
-require 'lib/client.php';
-require 'lib/plugin.php';
-require 'lib/pluggable.php';
+require 'lib/Manager.php';
+require 'lib/Client.php';
+require 'lib/Plugin.php';
+require 'lib/Pluggable.php';
 
 function create() {
 	return new HookManager();
 }
 
-class HookManager implements manager {
+class HookManager implements Manager {
 
 	private $hooks;
 

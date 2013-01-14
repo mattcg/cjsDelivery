@@ -17,7 +17,7 @@ require 'FileIdentifierManager.php';
 
 require 'IdentifierGenerator.php';
 require 'FlatIdentifierGenerator.php';
-require 'minIdentifierGenerator.php';
+require 'MinIdentifierGenerator.php';
 
 require 'DependencyResolver.php';
 require 'FileDependencyResolver.php';

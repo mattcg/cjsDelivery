@@ -13,7 +13,7 @@ function create($minifyidentifiers = false) {
 	$hookmanager = \hookManager\create();
 
 	if ($minifyidentifiers) {
-		$identifiergenerator = new minIdentifierGenerator();
+		$identifiergenerator = new MinIdentifierGenerator();
 	} else {
 		$identifiergenerator = new FlatIdentifierGenerator();
 	}

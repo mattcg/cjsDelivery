@@ -7,7 +7,7 @@
 
 namespace cjsDelivery;
 
-class minIdentifierGenerator implements IdentifierGenerator {
+class MinIdentifierGenerator implements IdentifierGenerator {
 	private $minified = array();
 	private $minifyposition = 65, $minifyiteration = 0;
 

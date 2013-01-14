@@ -17,7 +17,7 @@ function create($minifyidentifiers = false) {
 	} else {
 		$identifiergenerator = new flatIdentifierGenerator();
 	}
-	$identifiermanager = new fileIdentifierManager($identifiergenerator);
+	$identifiermanager = new FileIdentifierManager($identifiergenerator);
 
 	$dependencyresolver = new FileDependencyResolver($identifiermanager);
 	$dependencyresolver->setHookManager($hookmanager);

@@ -13,7 +13,7 @@ require 'Exception.php';
 require 'module.php';
 
 require 'identifierManager.php';
-require 'fileIdentifierManager.php';
+require 'FileIdentifierManager.php';
 
 require 'identifierGenerator.php';
 require 'flatIdentifierGenerator.php';

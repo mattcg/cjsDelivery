@@ -7,7 +7,7 @@
 
 namespace cjsDelivery;
 
-class fileIdentifierManager implements identifierManager {
+class FileIdentifierManager implements identifierManager {
 	const EXT_JS = 'js';
 
 	private $identifiergenerator;

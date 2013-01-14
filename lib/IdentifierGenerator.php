@@ -7,7 +7,7 @@
 
 namespace cjsDelivery;
 
-interface identifierGenerator {
+interface IdentifierGenerator {
 
 
 	/**

@@ -7,7 +7,7 @@
 
 namespace cjsDelivery;
 
-class FlatIdentifierGenerator implements identifierGenerator {
+class FlatIdentifierGenerator implements IdentifierGenerator {
 	private $modules = array();
 
 
@@ -30,7 +30,7 @@ class FlatIdentifierGenerator implements identifierGenerator {
 
 
 	/**
-	 * @see identifierGenerator::generateFlattenedIdentifier
+	 * @see IdentifierGenerator::generateFlattenedIdentifier
 	 */
 	public function generateFlattenedIdentifier($toplevelidentifier)  {
 		if (!isset($this->modules[$toplevelidentifier])) {

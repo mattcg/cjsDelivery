@@ -7,7 +7,7 @@
 
 namespace cjsDelivery;
 
-class minIdentifierGenerator implements identifierGenerator {
+class minIdentifierGenerator implements IdentifierGenerator {
 	private $minified = array();
 	private $minifyposition = 65, $minifyiteration = 0;
 
@@ -15,7 +15,7 @@ class minIdentifierGenerator implements identifierGenerator {
 	/**
 	 * Get a minified version of a top level identifier
 	 *
-	 * @see identifierGenerator::generateFlattenedIdentifier
+	 * @see IdentifierGenerator::generateFlattenedIdentifier
 	 */
 	public function generateFlattenedIdentifier($toplevelidentifier) {
 		if (isset($this->minified[$toplevelidentifier])) {

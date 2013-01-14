@@ -9,8 +9,8 @@ namespace cjsDelivery;
 
 interface identifierManager {
 
-	public function __construct(identifierGenerator $identifiergenerator);
-	public function setIdentifierGenerator(identifierGenerator $identifiergenerator);
+	public function __construct(IdentifierGenerator $identifiergenerator);
+	public function setIdentifierGenerator(IdentifierGenerator $identifiergenerator);
 	public function getIdentifierGenerator();
 
 

@@ -7,7 +7,7 @@
 
 namespace cjsDelivery;
 
-class FileDependencyResolver implements \hookManager\client, DependencyResolver {
+class FileDependencyResolver implements \hookManager\Client, DependencyResolver {
 
 	const REQUIRE_PREG = '/require\((\'|")(.*?)\1\)/';
 
@@ -20,7 +20,7 @@ class FileDependencyResolver implements \hookManager\client, DependencyResolver 
 		$this->identifiermanager = $identifiermanager;
 	}
 
-	public function setHookManager(\hookManager\manager $hookmanager) {
+	public function setHookManager(\hookManager\Manager $hookmanager) {
 		$this->hookmanager = $hookmanager;
 	}
 

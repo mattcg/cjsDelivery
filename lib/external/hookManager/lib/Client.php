@@ -7,9 +7,8 @@
 
 namespace hookManager;
 
-interface manager {
+interface Client {
 
-	public function hook($name, \Closure $callback);
-	public function unhook($name, \Closure $callback = null);
-	public function run($name, &$arg);
+	public function setHookManager(Manager $manager);
+	public function getHookManager();
 }

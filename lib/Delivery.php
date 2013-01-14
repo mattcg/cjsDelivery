@@ -29,7 +29,7 @@ require 'OutputGenerator.php';
 
 require 'processHooks.php';
 
-class Delivery extends \hookManager\pluggable {
+class Delivery extends \hookManager\Pluggable {
 
 	private $outputgenerator = null;
 	private $dependencyresolver = null;

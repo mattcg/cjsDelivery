@@ -7,11 +7,11 @@
 
 namespace hookManager;
 
-abstract class pluggable implements client {
+abstract class Pluggable implements Client {
 
 	private $hookmanager = null;
 
-	public function setHookManager(manager $hookmanager) {
+	public function setHookManager(Manager $hookmanager) {
 		$this->hookmanager = $hookmanager;
 	}
 
@@ -19,7 +19,7 @@ abstract class pluggable implements client {
 		return $this->hookmanager;
 	}
 
-	public function plugin(plugin $plugin) {
+	public function plugin(Plugin $plugin) {
 		if ($this->hookmanager) {
 			return $plugin->register($this);
 		}

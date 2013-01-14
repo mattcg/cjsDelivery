@@ -17,10 +17,10 @@ require 'lib/plugin.php';
 require 'lib/pluggable.php';
 
 function create() {
-	return new hookManager();
+	return new HookManager();
 }
 
-class hookManager implements manager {
+class HookManager implements manager {
 
 	private $hooks;
 

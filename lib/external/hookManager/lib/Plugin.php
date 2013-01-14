@@ -7,7 +7,7 @@
 
 namespace hookManager;
 
-interface plugin {
+interface Plugin {
 
-	public function register(client $hookclient);
+	public function register(Client $hookclient);
 }

@@ -10,7 +10,7 @@ namespace cjsDelivery;
 require 'factory.php';
 require 'plugins/pragmaManager/pragmaManager.php';
 
-class commandLineRunner {
+class CommandLineRunner {
 	const LONGOPT_MINIFY = 'minify_identifiers';
 	const LONGOPT_MAIN   = 'main_module';
 	const LONGOPT_PFMT   = 'pragma_format';

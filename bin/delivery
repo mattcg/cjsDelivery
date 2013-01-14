@@ -2,9 +2,9 @@
 <?php
 
 // set_include_path(get_include_path() . PATH_SEPARATOR . '/absolute/path');
-require __DIR__.'/../lib/commandLineRunner.php';
+require __DIR__.'/../lib/CommandLineRunner.php';
 
-$clr = new cjsDelivery\commandLineRunner();
+$clr = new cjsDelivery\CommandLineRunner();
 $options = getopt($clr->getOptions(), $clr->getLongOptions());
 $debugfunc = function($message) {
 	echo $message, '...', PHP_EOL;

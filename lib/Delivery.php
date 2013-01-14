@@ -23,7 +23,7 @@ require 'DependencyResolver.php';
 require 'FileDependencyResolver.php';
 
 require 'OutputRenderer.php';
-require 'templateOutputRenderer.php';
+require 'TemplateOutputRenderer.php';
 
 require 'OutputGenerator.php';
 

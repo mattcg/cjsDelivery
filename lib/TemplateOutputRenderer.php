@@ -7,7 +7,7 @@
 
 namespace cjsDelivery;
 
-class templateOutputRenderer implements OutputRenderer {
+class TemplateOutputRenderer implements OutputRenderer {
 
 	const DIR_TEMPLATES = '/templates';
 	const DIR_LIB = __DIR__;

@@ -7,7 +7,7 @@
 
 namespace cjsDelivery;
 
-class templateOutputRenderer implements outputRenderer {
+class templateOutputRenderer implements OutputRenderer {
 
 	const DIR_TEMPLATES = '/templates';
 	const DIR_LIB = __DIR__;
@@ -51,7 +51,7 @@ class templateOutputRenderer implements outputRenderer {
 
 
 	/**
-	 * @see outputRenderer::renderOutput
+	 * @see OutputRenderer::renderOutput
 	 */
 	public function renderOutput(&$output, $main = '') {
 		if ($main) {

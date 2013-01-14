@@ -22,7 +22,7 @@ require 'MinIdentifierGenerator.php';
 require 'DependencyResolver.php';
 require 'FileDependencyResolver.php';
 
-require 'outputRenderer.php';
+require 'OutputRenderer.php';
 require 'templateOutputRenderer.php';
 
 require 'OutputGenerator.php';

@@ -7,7 +7,7 @@
 
 namespace cjsDelivery;
 
-interface outputRenderer {
+interface OutputRenderer {
 
 
 	/**

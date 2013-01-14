@@ -20,7 +20,7 @@ require 'flatIdentifierGenerator.php';
 require 'minIdentifierGenerator.php';
 
 require 'DependencyResolver.php';
-require 'fileDependencyResolver.php';
+require 'FileDependencyResolver.php';
 
 require 'outputRenderer.php';
 require 'templateOutputRenderer.php';

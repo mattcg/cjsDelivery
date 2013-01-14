@@ -19,7 +19,7 @@ function create($minifyidentifiers = false) {
 	}
 	$identifiermanager = new fileIdentifierManager($identifiergenerator);
 
-	$dependencyresolver = new fileDependencyResolver($identifiermanager);
+	$dependencyresolver = new FileDependencyResolver($identifiermanager);
 	$dependencyresolver->setHookManager($hookmanager);
 
 	$outputgenerator = new outputGenerator(new templateOutputRenderer());

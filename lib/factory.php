@@ -15,7 +15,7 @@ function create($minifyidentifiers = false) {
 	if ($minifyidentifiers) {
 		$identifiergenerator = new minIdentifierGenerator();
 	} else {
-		$identifiergenerator = new flatIdentifierGenerator();
+		$identifiergenerator = new FlatIdentifierGenerator();
 	}
 	$identifiermanager = new FileIdentifierManager($identifiergenerator);
 

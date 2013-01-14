@@ -7,7 +7,7 @@
 
 namespace cjsDelivery;
 
-class flatIdentifierGenerator implements identifierGenerator {
+class FlatIdentifierGenerator implements identifierGenerator {
 	private $modules = array();
 
 

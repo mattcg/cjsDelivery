@@ -16,7 +16,7 @@ class FileDependencyResolver implements \hookManager\client, DependencyResolver 
 	private $identifiermanager = null;
 	private $hookmanager = null;
 
-	public function __construct(identifierManager $identifiermanager) {
+	public function __construct(IdentifierManager $identifiermanager) {
 		$this->identifiermanager = $identifiermanager;
 	}
 

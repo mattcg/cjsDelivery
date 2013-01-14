@@ -7,7 +7,7 @@
 
 namespace cjsDelivery;
 
-class FileIdentifierManager implements identifierManager {
+class FileIdentifierManager implements IdentifierManager {
 	const EXT_JS = 'js';
 
 	private $identifiergenerator;
@@ -28,7 +28,7 @@ class FileIdentifierManager implements identifierManager {
 
 
 	/**
-	 * @see identifierManager::getFlattenedIdentifier()
+	 * @see IdentifierManager::getFlattenedIdentifier()
 	 * @param string $realpath The canonicalized absolute pathname of the module
 	 */
 	public function getFlattenedIdentifier($realpath) {
@@ -41,7 +41,7 @@ class FileIdentifierManager implements identifierManager {
 
 
 	/**
-	 * @see identifierManager::getTopLevelIdentifier()
+	 * @see IdentifierManager::getTopLevelIdentifier()
 	 * @param string $filepath Path to the module file
 	 * @return string The canonicalized absolute pathname of the module
 	 */
@@ -58,7 +58,7 @@ class FileIdentifierManager implements identifierManager {
 
 
 	/**
-	 * @see identifierManager::addIdentifier()
+	 * @see IdentifierManager::addIdentifier()
 	 * @param string $filepath Path to the module file
 	 * @return string The canonicalized absolute pathname of the module
 	 */

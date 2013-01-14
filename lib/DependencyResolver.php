@@ -11,13 +11,13 @@ interface DependencyResolver {
 
 
 	/**
-	 * @param identifierManager $identifiermanager
+	 * @param IdentifierManager $identifiermanager
 	 */
-	public function __construct(identifierManager $identifiermanager);
+	public function __construct(IdentifierManager $identifiermanager);
 
 
 	/**
-	 * @returns identifierManager
+	 * @returns IdentifierManager
 	 */
 	public function getIdentifierManager();
 

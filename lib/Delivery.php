@@ -12,7 +12,7 @@ require 'external/hookManager/hookManager.php';
 require 'Exception.php';
 require 'module.php';
 
-require 'identifierManager.php';
+require 'IdentifierManager.php';
 require 'FileIdentifierManager.php';
 
 require 'IdentifierGenerator.php';

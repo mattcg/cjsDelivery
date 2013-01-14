@@ -12,7 +12,7 @@ $debugfunc = function($message) {
 
 try {
 	echo $clr->run($options, $debugfunc), PHP_EOL;
-} catch (cjsDelivery\cjsDeliveryException $e) {
+} catch (cjsDelivery\Exception $e) {
 	echo 'Error: ', $e->getMessage(), ' (', $e->getCode(),')', PHP_EOL;
 	exit(1);
 }

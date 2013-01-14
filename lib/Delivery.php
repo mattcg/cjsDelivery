@@ -9,7 +9,7 @@ namespace cjsDelivery;
 
 require 'external/hookManager/hookManager.php';
 
-require 'exception.php';
+require 'Exception.php';
 require 'module.php';
 
 require 'identifierManager.php';
@@ -84,7 +84,7 @@ class Delivery extends \hookManager\pluggable {
 	 *
 	 * This method is useful for generating a single file that can be loaded in one HTTP request.
 	 *
-	 * @throws cjsDeliveryException If the module is not found
+	 * @throws Exception If the module is not found
 	 *
 	 * @return string Complete output
 	 */

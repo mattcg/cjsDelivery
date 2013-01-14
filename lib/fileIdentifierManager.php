@@ -33,7 +33,7 @@ class fileIdentifierManager implements identifierManager {
 	 */
 	public function getFlattenedIdentifier($realpath) {
 		if (!in_array($realpath, $this->modules)) {
-			throw new cjsDeliveryException("Unknown module '$realpath'", cjsDeliveryException::UNKNOWN_MODULE);
+			throw new Exception("Unknown module '$realpath'", Exception::UNKNOWN_MODULE);
 		}
 
 		return $this->identifiergenerator->generateFlattenedIdentifier($realpath);
@@ -50,7 +50,7 @@ class fileIdentifierManager implements identifierManager {
 
 		// Check if the path was resolved
 		if ($realpath === false) {
-			throw new cjsDeliveryException("Module not found at '$filepath'", cjsDeliveryException::MODULE_NOT_FOUND);
+			throw new Exception("Module not found at '$filepath'", Exception::MODULE_NOT_FOUND);
 		}
 
 		return $realpath;

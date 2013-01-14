@@ -42,7 +42,7 @@ class CommandLineRunner {
 
 	public function run(array $options, \Closure $debugfunc) {
 		if (empty($options[self::OPT_MODULE])) {
-			throw new cjsDeliveryException('No module specified', cjsDeliveryException::NOTHING_TO_BUILD);
+			throw new Exception('No module specified', Exception::NOTHING_TO_BUILD);
 		}
 
 		if (isset($options[self::OPT_DEBUG])) {

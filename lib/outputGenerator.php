@@ -28,7 +28,7 @@ class outputGenerator implements \hookManager\client {
 	/**
 	 * Build complete module output, including all added modules and dependencies
 	 *
-	 * @throws cjsDeliveryException If the module is not found
+	 * @throws Exception If the module is not found
 	 *
 	 * @param module[] $modules List of modules from which to build output
 	 * @param string $main Identifier of the main module
@@ -36,7 +36,7 @@ class outputGenerator implements \hookManager\client {
 	 */
 	public function buildOutput(array $modules, $main = '') {
 		if (empty($modules)) {
-			throw new cjsDeliveryException('Nothing to build', cjsDeliveryException::NOTHING_TO_BUILD);
+			throw new Exception('Nothing to build', Exception::NOTHING_TO_BUILD);
 		}
 
 		// If output is created by the hook callbacks, return it

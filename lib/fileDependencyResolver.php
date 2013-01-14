@@ -75,7 +75,7 @@ class fileDependencyResolver implements \hookManager\client, dependencyResolver 
 	private function getModuleContents($realpath) {
 		$code = @file_get_contents($realpath, false);
 		if ($code === false) {
-			throw new cjsDeliveryException("Unable to read '$realpath'", cjsDeliveryException::UNABLE_TO_READ);
+			throw new Exception("Unable to read '$realpath'", Exception::UNABLE_TO_READ);
 		}
 
 		return $code;

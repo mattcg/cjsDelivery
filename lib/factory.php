@@ -7,7 +7,7 @@
 
 namespace cjsDelivery;
 
-require 'delivery.php';
+require 'Delivery.php';
 
 function create($minifyidentifiers = false) {
 	$hookmanager = \hookManager\create();
@@ -25,7 +25,7 @@ function create($minifyidentifiers = false) {
 	$outputgenerator = new outputGenerator(new templateOutputRenderer());
 	$outputgenerator->setHookManager($hookmanager);
 
-	$delivery = new delivery();
+	$delivery = new Delivery();
 	$delivery->setHookManager($hookmanager);
 	$delivery->setOutputGenerator($outputgenerator);
 	$delivery->setDependencyResolver($dependencyresolver);

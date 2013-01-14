@@ -56,7 +56,7 @@ class FileDependencyResolver implements \hookManager\client, DependencyResolver 
 		$newcode = $this->resolveDependencies($realpath);
 		$newidentifier = $this->identifiermanager->getFlattenedIdentifier($realpath);
 
-		$module = new module($newcode);
+		$module = new Module($newcode);
 		$module->setModificationTime(filemtime($realpath));
 		$module->setUniqueIdentifier($newidentifier);
 

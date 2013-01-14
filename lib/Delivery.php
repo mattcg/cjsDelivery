@@ -10,7 +10,7 @@ namespace cjsDelivery;
 require 'external/hookManager/hookManager.php';
 
 require 'Exception.php';
-require 'module.php';
+require 'Module.php';
 
 require 'IdentifierManager.php';
 require 'FileIdentifierManager.php';

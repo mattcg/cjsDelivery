@@ -30,7 +30,7 @@ class outputGenerator implements \hookManager\client {
 	 *
 	 * @throws Exception If the module is not found
 	 *
-	 * @param module[] $modules List of modules from which to build output
+	 * @param Module[] $modules List of modules from which to build output
 	 * @param string $main Identifier of the main module
 	 * @return string Complete output
 	 */

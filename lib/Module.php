@@ -7,7 +7,7 @@
 
 namespace cjsDelivery;
 
-class module {
+class Module {
 	private $code, $uniqueidentifier, $modificationtime;
 
 	public function __construct(&$code) {

@@ -2,5 +2,5 @@
 
 		{{code}}
 	
-		return exports;
+		return module.exports;
 	};

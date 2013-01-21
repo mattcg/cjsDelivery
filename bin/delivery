@@ -13,6 +13,15 @@ $debugfunc = function($message) {
 try {
 	echo $clr->run($options, $debugfunc), PHP_EOL;
 } catch (cjsDelivery\Exception $e) {
-	echo 'Error: ', $e->getMessage(), ' (', $e->getCode(),')', PHP_EOL;
+
+	$reporterror = function($e, $reporterror) {
+		echo 'Error: ', $e->getMessage(), ' (', $e->getCode(),')', PHP_EOL;
+		if ($e->getPrevious()) {
+			$reporterror($e->getPrevious(), $reporterror);
+		}
+	};
+
+	$reporterror($e, $reporterror);
+	
 	exit(1);
 }

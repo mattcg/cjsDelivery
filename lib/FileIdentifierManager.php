@@ -13,6 +13,7 @@ class FileIdentifierManager implements IdentifierManager {
 	private $identifiergenerator;
 
 	private $modules = array();
+	private $includes = null;
 
 	public function __construct(identifierGenerator $identifiergenerator) {
 		$this->setIdentifierGenerator($identifiergenerator);
@@ -24,6 +25,10 @@ class FileIdentifierManager implements IdentifierManager {
 
 	public function getIdentifierGenerator() {
 		return $this->identifiergenerator;
+	}
+
+	public function setIncludes(array $includes = null) {
+		$this->includes = $includes;
 	}
 
 
@@ -41,19 +46,103 @@ class FileIdentifierManager implements IdentifierManager {
 
 
 	/**
+	 * @return string|boolean
+	 */
+	private function findFileInDirectory($dirpath) {
+
+		// 1) check for index file
+		$realpath = realpath($dirpath . '/index.' . self::EXT_JS);
+
+		// 2) check for package.json
+		$packagejsonpath = $dirpath . '/package.json';
+		if (is_file($packagejsonpath)) {
+
+			// TODO: catch and report errors
+			$packagejson = json_decode(file_get_contents($packagejsonpath));
+			if ($packagejson and !empty($packagejson['main'])) {
+				$mainpath = $dirpath . '/' . $packagejson['main'];
+				if (is_file($mainpath)) {
+					return $mainpath;
+				}
+			}
+		}
+
+		// 3) check for file with same name as folder
+		if ($realpath === false) {
+			$realpath = realpath($dirpath . '/' . basename($dirpath) . '.' . self::EXT_JS);
+		}
+
+		// 4) check for one file
+		if ($realpath === false) {
+			$filesindir = glob($dirpath . '/*.' . self::EXT_JS);
+			if (count($filesindir) == 1) {
+				$realpath = realpath($dirpath . '/' . $filesindir[0]);
+			}
+		}
+
+		if ($realpath !== false and is_file($realpath)) {
+			return $realpath;
+		}
+
+		return false;
+	}
+
+
+	/**
+	 * @return string|boolean
+	 */
+	private function findFileInIncludes($filepath) {
+		foreach ($this->includes as $include) {
+
+			// First try with appended extension
+			$realpath = realpath($include . '/' . $this->addExtension($filepath));
+			if (is_file($realpath)) {
+				return $realpath;
+			}
+
+			$realpath = realpath($include . '/' . $filepath);
+			if (is_dir($realpath)) {
+				$realpath = $this->findFileInDirectory($realpath);
+				if ($realpath !== false) {
+					return $realpath;
+				}
+			}
+		}
+
+		return false;
+	}
+
+
+	/**
 	 * @see IdentifierManager::getTopLevelIdentifier()
 	 * @param string $filepath Path to the module file
 	 * @return string The canonicalized absolute pathname of the module
 	 */
 	public function getTopLevelIdentifier($filepath) {
-		$realpath = realpath($this->addExtension($filepath));
-
-		// Check if the path was resolved
-		if ($realpath === false) {
-			throw new Exception("Module not found at '$filepath'", Exception::MODULE_NOT_FOUND);
+		$filepathwithext = $this->addExtension($filepath);
+		$realpath = realpath($filepathwithext);
+		if (is_file($realpath)) {
+			return $realpath;
 		}
 
-		return $realpath;
+		// Try again without the .js suffix on the given path
+		$realpath = realpath($filepath);
+		if (is_dir($realpath)) {
+			$realpath = $this->findFileInDirectory($realpath);
+			if ($realpath !== false) {
+				return $realpath;
+			}
+		}
+
+		// If the path wasn't resolved, check the includes directory
+		if ($this->includes) {
+			$realpath = $this->findFileInIncludes($filepath);
+			if ($realpath !== false) {
+				return $realpath;
+			}
+		}
+
+		throw new Exception("Module not found at '$filepath'", Exception::MODULE_NOT_FOUND);
 	}
 
 

@@ -15,15 +15,16 @@ class CommandLineRunner {
 	const LONGOPT_MAIN   = 'main_module';
 	const LONGOPT_PFMT   = 'pragma_format';
 
-	const OPT_MODULE = 'm';
-	const OPT_PRAGMA = 'p';
-	const OPT_DEBUG  = 'd';
+	const OPT_MODULE   = 'm';
+	const OPT_PRAGMA   = 'p';
+	const OPT_DEBUG    = 'd';
+	const OPT_INCLUDES = 'i';
 
 	private $debugmode = false;
 	private $debugfunc = null;
 
 	public function getOptions() {
-		return self::OPT_MODULE.':'.self::OPT_PRAGMA.'::'.self::OPT_DEBUG;
+		return self::OPT_MODULE.':'.self::OPT_PRAGMA.'::'.self::OPT_INCLUDES.'::'.self::OPT_DEBUG;
 	}
 
 	public function getLongOptions() {
@@ -50,9 +51,14 @@ class CommandLineRunner {
 			$this->debugfunc = $debugfunc;
 		}
 
+		$includes = null;
+		if (isset($options[self::OPT_INCLUDES])) {
+			$includes = explode(':', $options[self::OPT_INCLUDES]);
+		}
+
 		$minifyidentifiers = isset($options[self::LONGOPT_MINIFY]);
 		$this->maybeDebugOut('Setting identifier minification: '.($minifyidentifiers ? 'true' : 'false'));
-		$delivery = create($minifyidentifiers);
+		$delivery = create($minifyidentifiers, $includes);
 
 		if (isset($options[self::OPT_PRAGMA])) {
 			$pragmamanager = new PragmaManager();

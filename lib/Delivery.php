@@ -92,6 +92,8 @@ class Delivery extends \hookManager\Pluggable {
 		$identifiermanager = $this->dependencyresolver->getIdentifierManager();
 		$mainmodule = '';
 		if ($this->mainmodule) {
+
+			// Exception should be thrown by getFlattenedIdentifier if main module is not in list
 			$mainmodule = $identifiermanager->getFlattenedIdentifier($this->mainmodule);
 		}
 

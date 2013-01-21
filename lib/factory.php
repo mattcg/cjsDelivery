@@ -9,7 +9,7 @@ namespace cjsDelivery;
 
 require 'Delivery.php';
 
-function create($minifyidentifiers = false) {
+function create($minifyidentifiers = false, array $includes = null) {
 	$hookmanager = \hookManager\create();
 
 	if ($minifyidentifiers) {
@@ -18,6 +18,9 @@ function create($minifyidentifiers = false) {
 		$identifiergenerator = new FlatIdentifierGenerator();
 	}
 	$identifiermanager = new FileIdentifierManager($identifiergenerator);
+	if ($includes) {
+		$identifiermanager->setIncludes($includes);
+	}
 
 	$dependencyresolver = new FileDependencyResolver($identifiermanager);
 	$dependencyresolver->setHookManager($hookmanager);

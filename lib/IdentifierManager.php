@@ -18,7 +18,7 @@ interface IdentifierManager {
 	 * Get the 'resolved' identifier of a module that will actually be used in the JavaScript output
 	 *
 	 * @param string $toplevelidentifier The top level identifier of the module
-	 * @return string The flattened identifier, including an incrementor in case of a collision
+	 * @return string|boolean The flattened identifier, including an incrementor in case of a collision
 	 */
 	public function getFlattenedIdentifier($toplevelidentifier);
 
@@ -27,7 +27,7 @@ interface IdentifierManager {
 	 * Get the top level identifier for the given relative identifier
 	 *
 	 * @param string $relativeidentifier Relative identifier for the module
-	 * @return string The top level identifier for the module
+	 * @return string|boolean The top level identifier for the module or false on failure
 	 */
 	public function getTopLevelIdentifier($relativeidentifier);
 

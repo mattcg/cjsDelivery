@@ -53,7 +53,12 @@ class FileDependencyResolver implements \hookManager\Client, DependencyResolver 
 			return $this->identifiermanager->getFlattenedIdentifier($realpath);
 		}
 
-		$newcode = $this->resolveDependencies($realpath);
+		try {
+			$newcode = $this->resolveDependencies($realpath);
+		} catch (Exception $e) {
+			throw new Exception("Could not resolve dependency in '$realpath'", Exception::UNABLE_TO_RESOLVE, $e);
+		}
+
 		$newidentifier = $this->identifiermanager->getFlattenedIdentifier($realpath);
 
 		$module = new Module($newcode);
@@ -115,7 +120,7 @@ class FileDependencyResolver implements \hookManager\Client, DependencyResolver 
 	public static function requireCallback($that, $relativetodir, $newfilepath) {
 
 		// If the given path was relative, resolve it from the current module directory
-		if ($newfilepath[0] !== '/') {
+		if ($newfilepath[0] === '.') {
 			$newfilepath = $relativetodir . '/' . $newfilepath;
 		}
 

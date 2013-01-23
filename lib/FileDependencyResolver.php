@@ -42,35 +42,6 @@ class FileDependencyResolver implements \hookManager\Client, DependencyResolver 
 
 
 	/**
-	 * @see dependencyResolve::addModule
-	 * @param string $filepath Path to the module file
-	 */
-	public function addModule($filepath) {
-		$realpath = $this->identifiermanager->addIdentifier($filepath);
-
-		// Check if the module has already been added
-		if (isset($this->modules[$realpath])) {
-			return $this->identifiermanager->getFlattenedIdentifier($realpath);
-		}
-
-		try {
-			$newcode = $this->resolveDependencies($realpath);
-		} catch (Exception $e) {
-			throw new Exception("Could not resolve dependency in '$realpath'", Exception::UNABLE_TO_RESOLVE, $e);
-		}
-
-		$newidentifier = $this->identifiermanager->getFlattenedIdentifier($realpath);
-
-		$module = new Module($newcode);
-		$module->setModificationTime(filemtime($realpath));
-		$module->setUniqueIdentifier($newidentifier);
-
-		$this->modules[$realpath] = $module;
-		return $newidentifier;
-	}
-
-
-	/**
 	 * Get the raw contents from a module file
 	 *
 	 * @throws Exception If the module file is unreadable
@@ -88,12 +59,69 @@ class FileDependencyResolver implements \hookManager\Client, DependencyResolver 
 
 
 	/**
+	 * @see dependencyResolve::hasModule
+	 * @param string $realpath Absolute path to the module file
+	 */
+	public function hasModule($realpath) {
+		return isset($this->modules[$realpath]);
+	}
+
+
+	/**
+	 * @see dependencyResolve::addModule
+	 * @param string $filepath Path to the module file
+	 */
+	public function addModule($filepath) {
+		$queue = array();
+
+		$realpath = $this->identifiermanager->addIdentifier($filepath);
+
+		// Check if the module has already been added
+		if ($this->hasModule($realpath)) {
+			return $this->identifiermanager->getFlattenedIdentifier($realpath);
+		}
+
+		try {
+			$code = $this->resolveDependencies($realpath, $queue);
+			$identifier = $this->addModuleToList($realpath, $code);
+			while (count($queue)) {
+				$filepath = array_pop($queue);
+				$realpath = $this->identifiermanager->addIdentifier($filepath);
+				$code = $this->resolveDependencies($realpath, $queue);
+				$this->addModuleToList($realpath, $code);
+			}
+		} catch (Exception $e) {
+			throw new Exception("Could not resolve dependency in '$filepath'", Exception::UNABLE_TO_RESOLVE, $e);
+		}
+
+		return $identifier;
+	}
+
+
+	/**
+	 * @param string $realpath Canonicalized path to the module file
+	 * @param string $code Code extracted from the module file
+	 * @return string Unique (but not canonicalized) identifier for the module
+	 */
+	private function addModuleToList($realpath, &$code) {
+		$identifier = $this->identifiermanager->getFlattenedIdentifier($realpath);
+
+		$module = new Module($code);
+		$module->setModificationTime(filemtime($realpath));
+		$module->setUniqueIdentifier($identifier);
+
+		$this->modules[$realpath] = $module;
+		return $identifier;
+	}
+
+
+	/**
 	 * Look for require statements in the code and add referenced modules
 	 *
 	 * @param string $realpath The resolved path to the module file
 	 * @return string The code with resolved dependencies
 	 */
-	private function resolveDependencies($realpath) {
+	private function resolveDependencies($realpath, &$queue) {
 		$that = $this;
 		$code = $this->getModuleContents($realpath);
 		$relativetodir = dirname($realpath);
@@ -103,29 +131,27 @@ class FileDependencyResolver implements \hookManager\Client, DependencyResolver 
 			$this->hookmanager->run(processHooks\PROCESS_MODULE, $code);
 		}
 
-		return preg_replace_callback(self::REQUIRE_PREG, function($match) use ($that, $relativetodir) {
-			return $that::requireCallback($that, $relativetodir, $match[2]);
+		return preg_replace_callback(self::REQUIRE_PREG, function($match) use ($that, &$queue, $relativetodir) {
+			$filepath = $match[2];
+
+			// If the given path was relative, resolve it from the current module directory
+			if ($filepath[0] === '.') {
+				$filepath = $relativetodir . '/' . $filepath;
+			}
+	
+			try {
+
+				// Add the module and get the new identifier
+				$realpath = $that->getIdentifierManager()->addIdentifier($filepath);
+				if (!in_array($realpath, $queue) and !$that->hasModule($realpath)) {
+					$queue[] = $realpath;
+				}
+				$newidentifier = $that->getIdentifierManager()->getFlattenedIdentifier($realpath);
+			} catch (Exception $e)  {
+				throw new Exception("Could not resolve dependency for '$filepath'", Exception::UNABLE_TO_RESOLVE, $e);
+			}
+
+			return "require('$newidentifier')";
 		}, $code);
-	}
-
-
-	/**
-	 * Callback for handling 'require' calls in parsed modules
-	 *
-	 * @param cjsDelivery $that The instance to operate on
-	 * @param string $relativetodir Path to the directory of the module file currently being parsed
-	 * @param string $newfilepath Path to required module file
-	 * @return string The new value to replace the require call with
-	 */
-	public static function requireCallback($that, $relativetodir, $newfilepath) {
-
-		// If the given path was relative, resolve it from the current module directory
-		if ($newfilepath[0] === '.') {
-			$newfilepath = $relativetodir . '/' . $newfilepath;
-		}
-
-		// Add the module and get the new identifier
-		$newidentifier = $that->addModule($newfilepath);
-		return "require('$newidentifier')";
 	}
 }

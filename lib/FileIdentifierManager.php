@@ -27,6 +27,12 @@ class FileIdentifierManager implements IdentifierManager {
 		return $this->identifiergenerator;
 	}
 
+
+	/**
+	 * Set the list of file include directories to use when searching for module files.
+	 *
+	 * @param array $includes
+	 */
 	public function setIncludes(array $includes = null) {
 		$this->includes = $includes;
 	}
@@ -46,7 +52,14 @@ class FileIdentifierManager implements IdentifierManager {
 
 
 	/**
-	 * @return string|boolean
+	 * Searches for a potential module file in a given directory using the following prioritised rules:
+	 * 1) a file named index.js in the given directory
+	 * 2) the value of 'main' in a package.json file in the given directory
+	 * 3) a file with the same basename as the given directory
+	 * 4) an only-child file in the given directory
+	 *
+	 * @param string $dirpath Path to directory
+	 * @return string|boolean Returns false if the file is not found
 	 */
 	private function findFileInDirectory($dirpath) {
 
@@ -59,8 +72,8 @@ class FileIdentifierManager implements IdentifierManager {
 
 			// TODO: catch and report errors
 			$packagejson = json_decode(file_get_contents($packagejsonpath));
-			if ($packagejson and !empty($packagejson['main'])) {
-				$mainpath = $dirpath . '/' . $packagejson['main'];
+			if ($packagejson and !empty($packagejson->main)) {
+				$mainpath = $dirpath . '/' . $this->addExtension($packagejson->main);
 				if (is_file($mainpath)) {
 					return $mainpath;
 				}
@@ -76,7 +89,7 @@ class FileIdentifierManager implements IdentifierManager {
 		if ($realpath === false) {
 			$filesindir = glob($dirpath . '/*.' . self::EXT_JS);
 			if (count($filesindir) == 1) {
-				$realpath = realpath($dirpath . '/' . $filesindir[0]);
+				$realpath = realpath($filesindir[0]);
 			}
 		}
 
@@ -89,7 +102,10 @@ class FileIdentifierManager implements IdentifierManager {
 
 
 	/**
-	 * @return string|boolean
+	 * Loop through the specified list of include directories (if available) searching for a match against the given relative path.
+	 *
+	 * @param string $filepath Relative path to module file
+	 * @return string|boolean Returns false if the file is not found
 	 */
 	private function findFileInIncludes($filepath) {
 		foreach ($this->includes as $include) {

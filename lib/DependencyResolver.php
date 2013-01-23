@@ -23,9 +23,19 @@ interface DependencyResolver {
 
 
 	/**
+	 * Check whether a module has been added.
+	 *
+	 * @param string $canonicalidentifier Canonicalised identifier for the module
+	 * @returns boolean
+	 */
+	public function hasModule($canonicalidentifier);
+
+
+	/**
 	 * Add a module. The module code will be parsed for 'require' statements to resolve dependencies
 	 *
-	 * @param string $identifier Identifier for the module file
+	 * @param string $identifier Identifier for the module
+	 * @returns string Unique (but not canonicalized) identifier for the module
 	 */
 	public function addModule($identifier);
 
@@ -33,7 +43,7 @@ interface DependencyResolver {
 	/**
 	 * Get all the resolved dependencies up to the current point
 	 *
-	 * @returns module[]
+	 * @returns Module[]
 	 */
 	public function getAllDependencies();
 

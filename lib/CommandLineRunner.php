@@ -42,7 +42,7 @@ class CommandLineRunner {
 	}
 
 	public function run(array $options, \Closure $debugfunc) {
-		if (empty($options[self::OPT_MODULE])) {
+		if (empty($options[self::OPT_MODULE]) and empty($options[self::LONGOPT_MAIN])) {
 			throw new Exception('No module specified', Exception::NOTHING_TO_BUILD);
 		}
 
@@ -81,6 +81,13 @@ class CommandLineRunner {
 			}
 		}
 
+		if (!empty($options[self::LONGOPT_MAIN])) {
+			$mainmodule = $options[self::LONGOPT_MAIN];
+			$this->maybeDebugOut('Setting main module "'.$mainmodule.'"');
+			$delivery->addModule($mainmodule);
+			$delivery->setMainModule($mainmodule);
+		}
+
 		$moptions =& $options[self::OPT_MODULE];
 		if (is_array($moptions)) {
 			foreach($moptions as &$module) {
@@ -90,12 +97,6 @@ class CommandLineRunner {
 		} else {
 			$this->maybeDebugOut('Adding module "'.$moptions.'"');
 			$delivery->addModule($moptions);
-		}
-
-		if (!empty($options[self::LONGOPT_MAIN])) {
-			$mainmodule = $options[self::LONGOPT_MAIN];
-			$this->maybeDebugOut('Setting main module "'.$mainmodule.'"');
-			$delivery->setMainModule($mainmodule);
 		}
 
 		return $delivery->getOutput();

@@ -14,21 +14,21 @@ class CommandLineRunner {
 	const LONGOPT_MINIFY = 'minify_identifiers';
 	const LONGOPT_MAIN   = 'main_module';
 	const LONGOPT_PFMT   = 'pragma_format';
+	const LONGOPT_INCLD  = 'include';
 
-	const OPT_MODULE   = 'm';
-	const OPT_PRAGMA   = 'p';
-	const OPT_DEBUG    = 'd';
-	const OPT_INCLUDES = 'i';
+	const OPT_MODULE  = 'm';
+	const OPT_PRAGMA  = 'p';
+	const OPT_DEBUG   = 'd';
 
 	private $debugmode = false;
 	private $debugfunc = null;
 
 	public function getOptions() {
-		return self::OPT_MODULE.':'.self::OPT_PRAGMA.'::'.self::OPT_INCLUDES.'::'.self::OPT_DEBUG;
+		return self::OPT_MODULE.':'.self::OPT_PRAGMA.'::'.self::OPT_DEBUG;
 	}
 
 	public function getLongOptions() {
-		return array(self::LONGOPT_MINIFY, self::LONGOPT_MAIN.'::', self::LONGOPT_PFMT.'::');
+		return array(self::LONGOPT_MINIFY, self::LONGOPT_MAIN.'::', self::LONGOPT_INCLD.'::', self::LONGOPT_PFMT.'::');
 	}
 
 	public function inDebugMode() {
@@ -52,8 +52,8 @@ class CommandLineRunner {
 		}
 
 		$includes = null;
-		if (isset($options[self::OPT_INCLUDES])) {
-			$includes = explode(':', $options[self::OPT_INCLUDES]);
+		if (isset($options[self::LONGOPT_INCLD])) {
+			$includes = explode(':', $options[self::LONGOPT_INCLD]);
 		}
 
 		$minifyidentifiers = isset($options[self::LONGOPT_MINIFY]);

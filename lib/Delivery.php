@@ -115,8 +115,8 @@ class Delivery extends \hookManager\Pluggable {
 
 		$globalscode = '';
 		if ($this->globals) {
-			foreach ($this->globals as $globals) {
-				$globalscode .= $this->dependencyresolver->getModuleContents($globals);
+			foreach ($this->globals as $global) {
+				$globalscode .= $this->dependencyresolver->resolveDependencies($global);
 			}
 		}
 

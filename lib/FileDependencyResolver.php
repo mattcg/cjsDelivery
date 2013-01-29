@@ -34,7 +34,7 @@ class FileDependencyResolver implements \hookManager\Client, DependencyResolver 
 
 
 	/**
-	 * @see dependencyResolve::getAllDependencies
+	 * @see DependencyResolver::getAllDependencies
 	 */
 	public function getAllDependencies() {
 		return $this->modules;
@@ -59,7 +59,7 @@ class FileDependencyResolver implements \hookManager\Client, DependencyResolver 
 
 
 	/**
-	 * @see dependencyResolve::hasModule
+	 * @see DependencyResolver::hasModule
 	 * @param string $realpath Absolute path to the module file
 	 */
 	public function hasModule($realpath) {
@@ -68,12 +68,10 @@ class FileDependencyResolver implements \hookManager\Client, DependencyResolver 
 
 
 	/**
-	 * @see dependencyResolve::addModule
+	 * @see DependencyResolver::addModule
 	 * @param string $filepath Path to the module file
 	 */
 	public function addModule($filepath) {
-		$queue = array();
-
 		$realpath = $this->identifiermanager->addIdentifier($filepath);
 
 		// Check if the module has already been added
@@ -81,18 +79,8 @@ class FileDependencyResolver implements \hookManager\Client, DependencyResolver 
 			return $this->identifiermanager->getFlattenedIdentifier($realpath);
 		}
 
-		try {
-			$code = $this->resolveDependencies($realpath, $queue);
-			$identifier = $this->addModuleToList($realpath, $code);
-			while (count($queue)) {
-				$filepath = array_pop($queue);
-				$realpath = $this->identifiermanager->addIdentifier($filepath);
-				$code = $this->resolveDependencies($realpath, $queue);
-				$this->addModuleToList($realpath, $code);
-			}
-		} catch (Exception $e) {
-			throw new Exception("Could not resolve dependency in '$filepath'", Exception::UNABLE_TO_RESOLVE, $e);
-		}
+		$code = $this->resolveDependencies($realpath);
+		$identifier = $this->addModuleToList($realpath, $code);
 
 		return $identifier;
 	}
@@ -116,12 +104,41 @@ class FileDependencyResolver implements \hookManager\Client, DependencyResolver 
 
 
 	/**
-	 * Look for require statements in the code and add referenced modules
+	 * @see DependencyResolver::resolveDependencies
+	 * @param string $filepath Path to the module file
+	 */
+	public function resolveDependencies($filepath) {
+		$queue = array();
+
+		try {
+			$code = $this->queueDependencies($filepath, $queue);
+		} catch (Exception $e) {
+			throw new Exception("Could not resolve dependencies in '$filepath'", Exception::UNABLE_TO_RESOLVE, $e);
+		}
+
+		try {
+			while (count($queue)) {
+				$dependencyfilepath = array_pop($queue);
+				$dependencyrealpath = $this->identifiermanager->addIdentifier($dependencyfilepath);
+				$dependencycode = $this->queueDependencies($dependencyrealpath, $queue);
+				$this->addModuleToList($dependencyrealpath, $dependencycode);
+			}
+		} catch (Exception $e) {
+			throw new Exception("Could not resolve dependency '$dependencyfilepath' in '$dependencyrealpath'", Exception::UNABLE_TO_RESOLVE, $e);
+		}
+
+		return $code;
+	}
+
+
+	/**
+	 * Look for required module identifiers and add them to the given queue.
 	 *
-	 * @param string $realpath The resolved path to the module file
+	 * @param string $realpath Canonicalized path to the module file
+	 * @param array $queue Queue of identifiers to resolve
 	 * @return string The code with resolved dependencies
 	 */
-	private function resolveDependencies($realpath, &$queue) {
+	private function queueDependencies($realpath, &$queue) {
 		$that = $this;
 		$code = $this->getModuleContents($realpath);
 		$relativetodir = dirname($realpath);
@@ -148,7 +165,7 @@ class FileDependencyResolver implements \hookManager\Client, DependencyResolver 
 				}
 				$newidentifier = $that->getIdentifierManager()->getFlattenedIdentifier($realpath);
 			} catch (Exception $e)  {
-				throw new Exception("Could not resolve dependency for '$filepath'", Exception::UNABLE_TO_RESOLVE, $e);
+				throw new Exception("Could not resolve dependency '$filepath'", Exception::UNABLE_TO_RESOLVE, $e);
 			}
 
 			return "require('$newidentifier')";

@@ -9,7 +9,7 @@ namespace cjsDelivery;
 
 require 'Delivery.php';
 
-function create($minifyidentifiers = false, array $includes = null) {
+function create($minifyidentifiers = false, array $includes = null, $globals = '') {
 	$hookmanager = \hookManager\create();
 
 	if ($minifyidentifiers) {
@@ -32,6 +32,10 @@ function create($minifyidentifiers = false, array $includes = null) {
 	$delivery->setHookManager($hookmanager);
 	$delivery->setOutputGenerator($outputgenerator);
 	$delivery->setDependencyResolver($dependencyresolver);
+
+	if ($globals) {
+		$delivery->setGlobals($globals);
+	}
 
 	return $delivery;
 }

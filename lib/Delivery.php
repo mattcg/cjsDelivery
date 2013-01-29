@@ -34,6 +34,8 @@ class Delivery extends \hookManager\Pluggable {
 	private $outputgenerator = null;
 	private $dependencyresolver = null;
 
+	private $globals = null;
+
 	private $mainmodule;
 
 	public function setOutputGenerator(OutputGenerator $generator) {
@@ -80,6 +82,20 @@ class Delivery extends \hookManager\Pluggable {
 
 
 	/**
+	 * Set list of modules containing code to include globally, just outside normal module scope.
+	 *
+	 * @param array $identifies List of identifiers
+	 */
+	public function setGlobals(array $identifiers = null) {
+		$this->globals = $identifiers;
+	}
+
+	public function getGlobals() {
+		return $this->globals;
+	}
+
+
+	/**
 	 * Get complete module output, including all added modules and dependencies
 	 *
 	 * This method is useful for generating a single file that can be loaded in one HTTP request.
@@ -97,8 +113,15 @@ class Delivery extends \hookManager\Pluggable {
 			$mainmodule = $identifiermanager->getFlattenedIdentifier($this->mainmodule);
 		}
 
+		$globalscode = '';
+		if ($this->globals) {
+			foreach ($this->globals as $globals) {
+				$globalscode .= $this->dependencyresolver->getModuleContents($globals);
+			}
+		}
+
 		$allmodules = $this->dependencyresolver->getAllDependencies();
-		return $this->outputgenerator->buildOutput($allmodules, $mainmodule);
+		return $this->outputgenerator->buildOutput($allmodules, $mainmodule, $globalscode);
 	}
 
 

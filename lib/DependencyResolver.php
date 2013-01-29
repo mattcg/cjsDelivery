@@ -23,6 +23,16 @@ interface DependencyResolver {
 
 
 	/**
+	 * Get the raw contents from a module
+	 *
+	 * @throws Exception If the module is unreadable
+	 * @param string $canonicalidentifier Canonicalised identifier for the module
+	 * @return string Raw module code
+	 */
+	public function getModuleContents($canonicalidentifier);
+
+
+	/**
 	 * Check whether a module has been added.
 	 *
 	 * @param string $canonicalidentifier Canonicalised identifier for the module

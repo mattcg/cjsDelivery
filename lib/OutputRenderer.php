@@ -24,7 +24,8 @@ interface OutputRenderer {
 	 *
 	 * @param string $output Concatenated module code
 	 * @param string $main Identifier of the main module
+	 * @param string $globals Raw JavaScript included just outside module scope
 	 * @return string
 	 */
-	public function renderOutput(&$output, $main = '');
+	public function renderOutput(&$output, $main = '', &$globals = '');
 }

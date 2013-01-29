@@ -1,4 +1,5 @@
 (function(modules) {
+{{globals}}
 
 var require = function(identifier) {
 	var module, exports, req, func;

@@ -16,15 +16,16 @@ class CommandLineRunner {
 	const LONGOPT_PFMT   = 'pragma_format';
 	const LONGOPT_INCLD  = 'include';
 
-	const OPT_MODULE  = 'm';
-	const OPT_PRAGMA  = 'p';
-	const OPT_DEBUG   = 'd';
+	const OPT_MODULE = 'm';
+	const OPT_PRAGMA = 'p';
+	const OPT_DEBUG  = 'd';
+	const OPT_GLOBAL = 'g';
 
 	private $debugmode = false;
 	private $debugfunc = null;
 
 	public function getOptions() {
-		return self::OPT_MODULE.':'.self::OPT_PRAGMA.'::'.self::OPT_DEBUG;
+		return self::OPT_MODULE.':'.self::OPT_GLOBAL.':'.self::OPT_PRAGMA.'::'.self::OPT_DEBUG;
 	}
 
 	public function getLongOptions() {
@@ -56,9 +57,15 @@ class CommandLineRunner {
 			$includes = explode(':', $options[self::LONGOPT_INCLD]);
 		}
 
+		$globals = null;
+		if (isset($options[self::OPT_GLOBAL])) {
+			$globals = (array) $options[self::OPT_GLOBAL];
+			$this->maybeDebugOut('Adding globals "'.explode(', ', $global).'"');
+		}
+
 		$minifyidentifiers = isset($options[self::LONGOPT_MINIFY]);
 		$this->maybeDebugOut('Setting identifier minification: '.($minifyidentifiers ? 'true' : 'false'));
-		$delivery = create($minifyidentifiers, $includes);
+		$delivery = create($minifyidentifiers, $includes, $globals);
 
 		if (isset($options[self::OPT_PRAGMA])) {
 			$pragmamanager = new PragmaManager();

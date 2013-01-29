@@ -48,7 +48,7 @@ class FileDependencyResolver implements \hookManager\Client, DependencyResolver 
 	 * @param string $realpath The resolved path to the module file
 	 * @return string Raw module code
 	 */
-	private function getModuleContents($realpath) {
+	public function getModuleContents($realpath) {
 		$code = @file_get_contents($realpath, false);
 		if ($code === false) {
 			throw new Exception("Unable to read '$realpath'", Exception::UNABLE_TO_READ);

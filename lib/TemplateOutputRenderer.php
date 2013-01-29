@@ -29,7 +29,7 @@ class TemplateOutputRenderer implements OutputRenderer {
 	 * @param array $values
 	 * @return string
 	 */
-	private function renderTemplate($name, $keys, $values) {
+	private function renderTemplate($name, &$keys, &$values) {
 		if (!isset($this->templates[$name])) {
 			$filepath = self::DIR_LIB . self::DIR_TEMPLATES . '/' . $name . self::EXT_MS;
 			$this->templates[$name] = file_get_contents($filepath, false);
@@ -43,24 +43,23 @@ class TemplateOutputRenderer implements OutputRenderer {
 	 * @see outputRender::renderModule
 	 */
 	public function renderModule(&$module) {
-		return $this->renderTemplate(self::TEMPLATE_MODULE,
-			array('{{identifier}}', '{{code}}'),
-			array($module->getUniqueIdentifier(), $module->getCode())
-		);
+		$keys = array('{{identifier}}', '{{code}}');
+		$values = array($module->getUniqueIdentifier(), $module->getCode());
+		return $this->renderTemplate(self::TEMPLATE_MODULE, $keys, $values);
 	}
 
 
 	/**
 	 * @see OutputRenderer::renderOutput
 	 */
-	public function renderOutput(&$output, $main = '') {
+	public function renderOutput(&$output, $main = '', &$globals = '') {
+		$keys = '{{main}}';
 		if ($main) {
-			$main = $this->renderTemplate(self::TEMPLATE_MAIN, '{{main}}', $main);
+			$main = $this->renderTemplate(self::TEMPLATE_MAIN, $keys, $main);
 		}
 
-		return $output = $this->renderTemplate(self::TEMPLATE_FULL,
-			array('{{output}}', '{{main}}'),
-			array($output, $main)
-		);
+		$keys = array('{{output}}', '{{main}}', '{{globals}}');
+		$values = array($output, $main, $globals);
+		return $output = $this->renderTemplate(self::TEMPLATE_FULL, $keys, $values);
 	}
 }

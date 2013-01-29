@@ -94,7 +94,7 @@ class CommandLineRunner {
 				$this->maybeDebugOut('Adding module "'.$module.'"');
 				$delivery->addModule($module);
 			}
-		} else {
+		} else if ($moptions) {
 			$this->maybeDebugOut('Adding module "'.$moptions.'"');
 			$delivery->addModule($moptions);
 		}

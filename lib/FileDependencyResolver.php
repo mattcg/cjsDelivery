@@ -124,7 +124,7 @@ class FileDependencyResolver implements \hookManager\Client, DependencyResolver 
 				$this->addModuleToList($dependencyrealpath, $dependencycode);
 			}
 		} catch (Exception $e) {
-			throw new Exception("Could not resolve dependency '$dependencyfilepath' in '$dependencyrealpath'", Exception::UNABLE_TO_RESOLVE, $e);
+			throw new Exception("Could not resolve dependency in '$dependencyrealpath'", Exception::UNABLE_TO_RESOLVE, $e);
 		}
 
 		return $code;

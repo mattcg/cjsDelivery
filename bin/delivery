@@ -11,7 +11,7 @@ $debugfunc = function($message) {
 };
 
 try {
-	echo $clr->run($options, $debugfunc), PHP_EOL;
+	$output = $clr->run($options, $debugfunc);
 } catch (cjsDelivery\Exception $e) {
 
 	$reporterror = function($e, $reporterror) {
@@ -24,4 +24,8 @@ try {
 	$reporterror($e, $reporterror);
 	
 	exit(1);
+}
+
+if (!$clr->inDebugMode()) {
+	echo $output, PHP_EOL;
 }

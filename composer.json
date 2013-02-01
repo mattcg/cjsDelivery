@@ -1,5 +1,19 @@
 {
 	"name": "mattcg/cjsdelivery",
-	"php": ">=5.3.0",
-	"version": "0.1.0"
+	"version": "0.1.0",
+	"homepage": "https://github.com/mattcg/cjsdelivery",
+	"description": "Deliver CommonJS-syntax JavaScript modules to clients as a single file.",
+	"keywords": ["commonjs", "javascript", "modules"],
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Matthew Caruana Galizia",
+			"email": "m@m.cg",
+			"homepage": "http://m.cg/"
+		}
+	],
+	"require": {
+		"php": ">=5.3.0"
+	},
+	"bin": ["bin/delivery"]
 }

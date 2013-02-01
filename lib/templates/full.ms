@@ -1,23 +1,14 @@
 (function(modules) {
 
 var require = function(identifier) {
-	var module, exports, req, func;
+	var module, exports, closure;
 
 	if (!modules[identifier].hasOwnProperty('exports')) {
 		exports = {};
 		module = {id: identifier, exports: exports};
-		func = modules[identifier];
-
-		req = function(n) {
-			if (n !== identifier) {
-				return require(n);
-			}
-
-			return module.exports;
-		};
-
-		req.main = require.main;
-		modules[identifier] = {exports: func.call(module, req, exports, module)};
+		closure = modules[identifier];
+		modules[identifier] = module;
+		closure.call(module, require, exports, module);
 	}
 
 	return modules[identifier].exports;

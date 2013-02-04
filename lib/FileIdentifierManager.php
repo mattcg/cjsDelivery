@@ -45,7 +45,7 @@ class FileIdentifierManager implements IdentifierManager {
 	 * @param string $realpath The canonicalized absolute pathname of the module
 	 */
 	public function getFlattenedIdentifier($realpath) {
-		if (!in_array($realpath, $this->modules)) {
+		if (!isset($this->modules[$realpath])) {
 			throw new Exception("Unknown module '$realpath'", Exception::UNKNOWN_MODULE);
 		}
 
@@ -137,7 +137,7 @@ class FileIdentifierManager implements IdentifierManager {
 	 * @return string The canonicalized absolute pathname of the module
 	 */
 	public function getTopLevelIdentifier($filepath) {
-		if (array_key_exists($filepath, $this->tlicache)) {
+		if (isset($this->tlicache[$filepath])) {
 			return $this->tlicache[$filepath];
 		}
 
@@ -178,8 +178,8 @@ class FileIdentifierManager implements IdentifierManager {
 	 */
 	public function addIdentifier($filepath) {
 		$realpath = $this->getTopLevelIdentifier($filepath);
-		if (!in_array($realpath, $this->modules)) {
-			$this->modules[] = $realpath;
+		if (!isset($this->modules[$realpath])) {
+			$this->modules[$realpath] = true;
 	 	}
 
 		return $realpath;

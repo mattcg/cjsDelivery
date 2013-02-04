@@ -156,14 +156,15 @@ class FileDependencyResolver implements \hookManager\Client, DependencyResolver 
 				$filepath = $relativetodir . '/' . $filepath;
 			}
 	
+			$identifiermanager = $that->getIdentifierManager();
 			try {
 
 				// Add the module and get the new identifier
-				$realpath = $that->getIdentifierManager()->addIdentifier($filepath);
+				$realpath = $identifiermanager->addIdentifier($filepath);
 				if (!in_array($realpath, $queue) and !$that->hasModule($realpath)) {
 					$queue[] = $realpath;
 				}
-				$newidentifier = $that->getIdentifierManager()->getFlattenedIdentifier($realpath);
+				$newidentifier = $identifiermanager->getFlattenedIdentifier($realpath);
 			} catch (Exception $e)  {
 				throw new Exception("Could not resolve dependency '$filepath'", Exception::UNABLE_TO_RESOLVE, $e);
 			}

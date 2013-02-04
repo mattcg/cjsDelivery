@@ -105,15 +105,15 @@ class FileDependencyResolver implements \hookManager\Client, DependencyResolver 
 
 	/**
 	 * @see DependencyResolver::resolveDependencies
-	 * @param string $filepath Path to the module file
+	 * @param string $realpath Canonicalized path to the module file
 	 */
-	public function resolveDependencies($filepath) {
+	public function resolveDependencies($realpath) {
 		$queue = array();
 
 		try {
-			$code = $this->queueDependencies($filepath, $queue);
+			$code = $this->queueDependencies($realpath, $queue);
 		} catch (Exception $e) {
-			throw new Exception("Could not resolve dependencies in '$filepath'", Exception::UNABLE_TO_RESOLVE, $e);
+			throw new Exception("Could not resolve dependencies in '$realpath'", Exception::UNABLE_TO_RESOLVE, $e);
 		}
 
 		try {

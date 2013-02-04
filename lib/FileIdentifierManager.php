@@ -15,6 +15,8 @@ class FileIdentifierManager implements IdentifierManager {
 	private $modules = array();
 	private $includes = null;
 
+	private $tlicache = array();
+
 	public function __construct(identifierGenerator $identifiergenerator) {
 		$this->setIdentifierGenerator($identifiergenerator);
 	}
@@ -135,9 +137,14 @@ class FileIdentifierManager implements IdentifierManager {
 	 * @return string The canonicalized absolute pathname of the module
 	 */
 	public function getTopLevelIdentifier($filepath) {
+		if (array_key_exists($filepath, $this->tlicache)) {
+			return $this->tlicache[$filepath];
+		}
+
 		$filepathwithext = $this->addExtension($filepath);
 		$realpath = realpath($filepathwithext);
 		if (is_file($realpath)) {
+			$this->tlicache[$filepath] = $realpath;
 			return $realpath;
 		}
 
@@ -146,6 +153,7 @@ class FileIdentifierManager implements IdentifierManager {
 		if (is_dir($realpath)) {
 			$realpath = $this->findFileInDirectory($realpath);
 			if ($realpath !== false) {
+				$this->tlicache[$filepath] = $realpath;
 				return $realpath;
 			}
 		}
@@ -154,6 +162,7 @@ class FileIdentifierManager implements IdentifierManager {
 		if ($this->includes) {
 			$realpath = $this->findFileInIncludes($filepath);
 			if ($realpath !== false) {
+				$this->tlicache[$filepath] = $realpath;
 				return $realpath;
 			}
 		}

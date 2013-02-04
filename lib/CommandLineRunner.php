@@ -94,7 +94,7 @@ class CommandLineRunner {
 		$globals = null;
 		if (isset($options[self::OPT_GLOBAL])) {
 			$globals = (array) $options[self::OPT_GLOBAL];
-			$this->maybeDebugOut('Adding globals "'.explode(', ', $global).'"');
+			$this->maybeDebugOut('Adding globals "'.implode(', ', $globals).'"');
 		}
 
 		$minifyidentifiers = isset($options[self::LONGOPT_MINIFY]);

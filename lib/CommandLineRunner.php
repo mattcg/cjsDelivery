@@ -37,7 +37,7 @@ class CommandLineRunner {
 		return $this->debugmode;
 	}
 
-	private function maybeDebugOut(&$message) {
+	private function maybeDebugOut($message) {
 		if ($this->debugmode) {
 			call_user_func($this->debugfunc, $message);
 		}

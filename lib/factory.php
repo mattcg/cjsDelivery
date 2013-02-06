@@ -9,7 +9,7 @@ namespace cjsDelivery;
 
 require 'Delivery.php';
 
-function create($minifyidentifiers = false, array $includes = null, $globals = '') {
+function create($minifyidentifiers = false, array $includes = null, array $globals = null) {
 	$hookmanager = \hookManager\create();
 
 	if ($minifyidentifiers) {

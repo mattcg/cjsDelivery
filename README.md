@@ -15,6 +15,12 @@ Features, in summary:
 
 ## Installation ##
 
+Install globally by running this one-line command in your bash terminal:
+
+```
+bash <(curl -s https://raw.github.com/mattcg/cjsdelivery/go)
+```
+
 ### Using composer ###
 
 Get [composer](http://getcomposer.org/) and install cjsDelivery to your project using:

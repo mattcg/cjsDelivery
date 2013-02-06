@@ -38,7 +38,7 @@ composer require mattcg/cjsdelivery:0.1.0
 The `bin/delivery` executable is provided for command-line use. Run the following example to compiled the bundled example `fruit` application:
 
 ```
-delivery --main_module='examples/fruit/modules/main'
+delivery --main_module='./examples/fruit/modules/main'
 ```
 
 ### PHP API ###
@@ -64,7 +64,7 @@ If you have many dependencies in folders external to your project, then it's wor
 
 ```
 cd projects/myproject
-delivery --main_module='main' --include='../mycompany/javascript:../othercompany/modules'
+delivery --main_module='./main' --include='../mycompany/javascript:../othercompany/modules'
 ```
 
 Multiple paths can be specified in a colon-separated list.
@@ -112,13 +112,13 @@ log.print(require('banana').message);
 Run the following example command to compile the `fruit` application without the `banana` module:
 
 ```
-delivery --main_module='examples/fruit/modules/main' -p
+delivery --main_module='./examples/fruit/modules/main' -p
 ```
 
 Now try the opposite:
 
 ```
-delivery --main_module='examples/fruit/modules/main' -p='BANANA'
+delivery --main_module='./examples/fruit/modules/main' -p='BANANA'
 ```
 
 ### Minified identifiers ###
@@ -128,7 +128,7 @@ By default, cjsDelivery will flatten the module tree internally, rewriting `path
 Try this example:
 
 ```
-delivery --main_module='examples/fruit/modules/main' --minify_identifiers
+delivery --main_module='./examples/fruit/modules/main' --minify_identifiers
 ```
 
 ### Globals ###
@@ -136,7 +136,7 @@ delivery --main_module='examples/fruit/modules/main' --minify_identifiers
 You might have a `globals.js` or `utilities.js` file (or both!) as part of your project, each containing variables or helper functions that you want to have available across all modules. To save you having to `require` these in your other modules, you can compile them in as globals:
 
 ```
-delivery --main_module='examples/globals/main' -g 'examples/globals/utilities' -g 'examples/globals/globals'
+delivery --main_module='./examples/globals/main' -g 'examples/globals/utilities' -g 'examples/globals/globals'
 ```
 
 Global files have `require` within their scope and are parsed for dependencies.

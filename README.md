@@ -43,7 +43,7 @@ An include path can be useful even with internal dependencies. Suppose your proj
 |-|- version1
 ```
 
-If you want to avoid having to type `require('../../moduleB/version1')` from within `moduleA/version1/index.js` then you could set `myproject` to be include path. Then you would type `require('moduleB/version1')`.
+If you want to avoid having to type `require('../../moduleB/version1')` from within `moduleA/version1/index.js` then you could set `myproject` to be an include path. Then you would type `require('moduleB/version1')`.
 
 ## Pragmas ##
 

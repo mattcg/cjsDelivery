@@ -36,6 +36,12 @@ class FileIdentifierManager implements IdentifierManager {
 	 * @param array $includes
 	 */
 	public function setIncludes(array $includes = null) {
+
+		// Normalize empty array to null
+		if (is_array($includes) and !count($includes)) {
+			$includes = null;
+		}
+
 		$this->includes = $includes;
 	}
 
@@ -110,6 +116,10 @@ class FileIdentifierManager implements IdentifierManager {
 	 * @return string|boolean Returns false if the file is not found
 	 */
 	private function findFileInIncludes($filepath) {
+		if (!$this->inludes) {
+			return false;
+		}
+
 		foreach ($this->includes as $include) {
 
 			// First try with appended extension
@@ -133,7 +143,7 @@ class FileIdentifierManager implements IdentifierManager {
 
 	/**
 	 * @see IdentifierManager::getTopLevelIdentifier()
-	 * @param string $filepath Path to the module file
+	 * @param string $filepath Path to the module file, absolute (but not necessarily canonicalized) or relative to includes path
 	 * @return string The canonicalized absolute pathname of the module
 	 */
 	public function getTopLevelIdentifier($filepath) {
@@ -141,29 +151,29 @@ class FileIdentifierManager implements IdentifierManager {
 			return $this->tlicache[$filepath];
 		}
 
-		$filepathwithext = $this->addExtension($filepath);
-		$realpath = realpath($filepathwithext);
-		if (is_file($realpath)) {
-			$this->tlicache[$filepath] = $realpath;
-			return $realpath;
-		}
-
-		// Try again without the .js suffix on the given path
-		$realpath = realpath($filepath);
-		if (is_dir($realpath)) {
-			$realpath = $this->findFileInDirectory($realpath);
-			if ($realpath !== false) {
-				$this->tlicache[$filepath] = $realpath;
-				return $realpath;
-			}
-		}
-
-		// If the path wasn't resolved, check the includes directory
-		if ($this->includes) {
+		// If the path is not absolute, check the includes directory
+		if ($filepath[0] !== '/') {
 			$realpath = $this->findFileInIncludes($filepath);
 			if ($realpath !== false) {
 				$this->tlicache[$filepath] = $realpath;
 				return $realpath;
+			}
+		} else {
+			$filepathwithext = $this->addExtension($filepath);
+			$realpath = realpath($filepathwithext);
+			if (is_file($realpath)) {
+				$this->tlicache[$filepath] = $realpath;
+				return $realpath;
+			}
+	
+			// Try again without the .js suffix on the given path
+			$realpath = realpath($filepath);
+			if (is_dir($realpath)) {
+				$realpath = $this->findFileInDirectory($realpath);
+				if ($realpath !== false) {
+					$this->tlicache[$filepath] = $realpath;
+					return $realpath;
+				}
 			}
 		}
 

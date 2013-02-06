@@ -151,8 +151,8 @@ class FileIdentifierManager implements IdentifierManager {
 			return $this->tlicache[$filepath];
 		}
 
-		// If the path is not absolute, check the includes directory
-		if ($filepath[0] !== '/') {
+		// If the path is not absolute or relative, check the includes directory
+		if ($filepath[0] !== '/' and $filepath[0] !== '.') {
 			$realpath = $this->findFileInIncludes($filepath);
 			if ($realpath !== false) {
 				$this->tlicache[$filepath] = $realpath;

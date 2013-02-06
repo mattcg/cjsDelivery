@@ -112,6 +112,4 @@ The following algorithm is used when resolving the given path to a dependency:
 
 ## Credits and license ##
 
-CommonJS is copyright © 2009 - Kevin Dangoor and many CommonJS contributors, licensed under an MIT license.
-
-cjsDelivery is copyright © 2012 - [Matthew Caruana Galizia](http://twitter.com/mcaruanagalizia), licensed under an MIT license.
+cjsDelivery is copyright © 2012 - [Matthew Caruana Galizia](http://twitter.com/mcaruanagalizia), licensed under an MIT license. CommonJS is copyright © 2009 - Kevin Dangoor and many CommonJS contributors, licensed under an MIT license.

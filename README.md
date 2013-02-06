@@ -47,7 +47,7 @@ If you want to avoid having to type `require('../../moduleB/version1')` from wit
 
 ## Pragmas ##
 
-The pragma manager plugin is bundled with this package. Use it to include or exclude pieces of code from the final output.
+Use pragmas to include or exclude pieces of code from the final output.
 
 When passed to the `delivery` executable, the `-p` option will turn on the manager and any code contained between undefined pragmas will be 'compiled out'.
 

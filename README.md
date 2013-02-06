@@ -1,18 +1,47 @@
 # cjsDelivery #
 
-Use this library to deliver [CommonJS-syntax](http://wiki.commonjs.org/wiki/Modules/1.1.1) JavaScript modules to clients as a single file. Any modules you add manually will have dependencies resolved statically. This typically means you only have to point cjsDelivery to your entry module and all dependencies will be magically resolved.
+cjsDelivery allows you to deliver [CommonJS-syntax](http://wiki.commonjs.org/wiki/Modules/1.1.1) JavaScript modules to clients as a single file. Any modules you add manually will have dependencies resolved statically. This typically means you only have to point cjsDelivery to your entry module and all dependencies will be magically resolved.
 
-Features include support for shortening ('minifying') identifiers, a plugin architecture, and enabling and disabling static code pragmas.
+The output is designed to have as little overhead over your module code as possible. In all, only 13 short lines of code will be added by the compiler.
 
-The output is designed to be suitable for compilation with the [Google Closure Compiler](https://developers.google.com/closure/compiler/) in advanced optimizations mode.
+Features, in summary:
+
+- `require` dependencies in your code and define APIs on `exports` like you do with node.js on the server
+- compiles all your code, including dependencies, into a single file, ready for delivery to browsers
+- point cjsDelivery at your bootstrap (startup) file to compile the entire application
+- exclude and include sections of code from compilation using pragmas
+- specify multiple include paths to avoid typing long require statements
+- add your own globals
 
 ## Executable ##
 
 The `bin/delivery` executable is provided for command-line use. Run the following example to compiled the bundled example `fruit` application:
 
 ```
-./bin/delivery -m='examples/fruit/modules/main' --main_module='examples/fruit/modules/main'
+delivery --main_module='examples/fruit/modules/main'
 ```
+
+## Include paths ##
+
+If you have many dependencies in folders external to your project, then it's worth setting an include path to avoid having long, absolute paths in your require statements. If your company's standard modules are in `projects/mycompany/javascript` and your project is in `projects/myproject`, then you can require a standard module using `require('standardmodule')` instead of `require('projects/mycompany/javascript')` by adding the include path `projects/mycompany/javascript`:
+
+```
+cd projects/myproject
+delivery --main_module='main' --include='../mycompany/javascript:../othercompany/modules'
+```
+
+Multiple paths can be specified in a colon-separated list.
+
+An include path can be useful even with internal dependencies. Suppose your project has the following directory structure:
+
+- myproject
+|- moduleA
+|-|- version1
+|-|- version2
+|- moduleB
+|-|- version1
+
+If you want to avoid having to type `require('../../moduleB/version1')` from within `moduleA/version1/index.js` then you could set `myproject` to be include path. Then you would type `require('moduleB/version1')`.
 
 ## Pragmas ##
 
@@ -31,26 +60,56 @@ log.print(require('banana').message);
 Run the following example command to compile the `fruit` application without the `banana` module:
 
 ```
-./bin/delivery -m='examples/fruit/modules/main' --main_module='examples/fruit/modules/main' -p
+delivery --main_module='examples/fruit/modules/main' -p
 ```
 
 Now try the opposite:
 
 ```
-./bin/delivery -m='examples/fruit/modules/main' --main_module='examples/fruit/modules/main' -p='BANANA'
+delivery --main_module='examples/fruit/modules/main' -p='BANANA'
 ```
 
 ## Minified identifiers ##
 
-cjsDelivery will flatten the module tree internally, rewriting `path/to/module` as `module`, for example. In a production environment it makes sense to use non-mnemonic identifiers. If enabled, cjsDelivery will rewrite `path/to/module` as `A`, `path/to/othermodule` as `B` and so on.
+By default, cjsDelivery will flatten the module tree internally, rewriting `path/to/module` as `module`, for example. In a production environment it makes sense to use non-mnemonic identifiers to save space. If enabled, cjsDelivery will rewrite `path/to/module` as `A`, `path/to/othermodule` as `B` and so on.
 
 Try this example:
 
 ```
-./bin/delivery -m='examples/fruit/modules/main' --main_module='examples/fruit/modules/main' --minify_identifiers
+delivery --main_module='examples/fruit/modules/main' --minify_identifiers
 ```
 
-## License ##
+## Globals ##
+
+You might have a `globals.js` or `utilities.js` file (or both!) as part of your project, each containing variables or helper functions that you want to have available across all modules. To save you having to `require` these in your other modules, you can compile them in as globals:
+
+```
+delivery --main_module='examples/globals/main' -g 'examples/globals/utilities' -g 'examples/globals/globals'
+```
+
+Global files have `require` within their scope and are parsed for dependencies.
+
+## How dependencies are resolved ##
+
+Code is always parsed statically, meaning statements like `require(pathVariable + '/mymodule')` will not be handled. You should use only a string literal as the argument to `require`.
+
+The `.js` extension should not be added to module paths in require statements.
+
+The following algorithm is used when resolving the given path to a dependency:
+
+1. if `path` does not start with `.` or `/`
+    1. for each include path, append `path` and go to 2.
+2. if a file is at `path`
+    1. add the file at `path` to the list of dependencies
+3. if a directory is at `path`
+    1. check for for the file `index.js` in directory `path` and if positive, append `index.js` to path and go to 2.
+    2. check `package.json` in path and if the `main` property exists set `path` to its value and go to 2.
+    3. check for a file with the same as the directory and if positive, append to `path` and go to 2.
+    4. check whether the directory only contains one file and if positive, append to `path` and go to 2.
+4. throw an exception
+
+## Credits and license ##
 
 CommonJS is copyright © 2009 - Kevin Dangoor and many CommonJS contributors, licensed under an MIT license.
-cjsDelivery is copyright © 2012 - Matthew Caruana Galizia, licensed under an MIT license.
+
+cjsDelivery is copyright © 2012 - [Matthew Caruana Galizia](http://twitter.com/mcaruanagalizia), licensed under an MIT license.

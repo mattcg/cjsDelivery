@@ -1,0 +1,3 @@
+var messages = {
+	test: 'Hello'
+};

@@ -145,7 +145,7 @@ Global files have `require` within their scope and are parsed for dependencies.
 
 Code is always parsed statically, meaning statements like `require(pathVariable + '/mymodule')` will not be handled. You should use only a string literal as the argument to `require`.
 
-The `.js` extension should not be added to module paths in require statements.
+The `.js` extension [may not](http://wiki.commonjs.org/wiki/Modules/1.1.1#Module_Identifiers) be added to module paths in require statements.
 
 The following algorithm is used when resolving the given path to a dependency:
 

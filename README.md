@@ -110,6 +110,21 @@ The following algorithm is used when resolving the given path to a dependency:
     4. check whether the directory only contains one file and if positive, append to `path` and go to 2.
 4. throw an exception
 
+## PHP API ##
+
+Instances can be created using the provided factory function.
+
+```PHP
+require '../cjsdelivery/cjsDelivery.php';
+$minifyidentifiers = false;
+$globals = array('utilities.js', 'globals.js');
+$includes = array('../mycompany/javascript', '../othercompany/modules');
+$delivery = cjsDelivery\create($minifyidentifiers, includes, $globals);
+echo $delivery->getOutput();
+```
+
+Full PHP API documentation to come.
+
 ## Credits and license ##
 
 cjsDelivery is copyright © 2012 - [Matthew Caruana Galizia](http://twitter.com/mcaruanagalizia), licensed under an MIT license. CommonJS is copyright © 2009 - Kevin Dangoor and many CommonJS contributors, licensed under an MIT license.

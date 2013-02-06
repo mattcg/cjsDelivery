@@ -1,0 +1,18 @@
+#!/bin/sh
+
+CJSDELIVERY_TMP="/tmp"
+CJSDELIVERY_URL="https://github.com/mattcg/cjsdelivery/archive/master.zip"
+
+# Stop on first error
+set -e
+
+echo "Downloading:"
+echo "$CJSDELIVERY_URL"
+
+curl "$CJSDELIVERY_URL" -o "$CJSDELIVERY_TMP/cjsdelivery-master.zip" --silent --location
+unzip -q "$CJSDELIVERY_TMP/cjsdelivery-master.zip" -d "$CJSDELIVERY_TMP/"
+
+"$CJSDELIVERY_TMP/cjsdelivery-master/install.sh"
+
+rm -f "$CJSDELIVERY_TMP/cjsdelivery-master.zip"
+rm -rf "$CJSDELIVERY_TMP/cjsdelivery-master"

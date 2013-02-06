@@ -27,7 +27,7 @@ composer require mattcg/cjsdelivery:0.1.0
 
 ## Usage ##
 
-## Executable ##
+### Executable ###
 
 The `bin/delivery` executable is provided for command-line use. Run the following example to compiled the bundled example `fruit` application:
 
@@ -35,7 +35,7 @@ The `bin/delivery` executable is provided for command-line use. Run the followin
 delivery --main_module='examples/fruit/modules/main'
 ```
 
-## PHP API ##
+### PHP API ###
 
 Instances can be created using the provided factory function.
 

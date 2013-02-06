@@ -13,6 +13,18 @@ Features, in summary:
 - specify multiple include paths to avoid typing long require statements
 - add your own globals
 
+## Installation ##
+
+### Using composer ###
+
+Get [composer](http://getcomposer.org/) and install cjsDelivery to your project using:
+
+```
+cd myproject/
+echo -e '{\n\t"minimum-stability": "dev"\n}' > composer.json
+composer require mattcg/cjsdelivery:0.1.0
+```
+
 ## Executable ##
 
 The `bin/delivery` executable is provided for command-line use. Run the following example to compiled the bundled example `fruit` application:

@@ -69,6 +69,19 @@ delivery --main_module='main' --include='../mycompany/javascript:../othercompany
 
 Multiple paths can be specified in a colon-separated list.
 
+#### For external components ####
+
+Suppose that as part of your project build process, you use [bower](http://twitter.github.com/bower/) to install external components to a `components/` directory in your project:
+
+```
+cd myproject/lib/javascript
+bower install
+```
+
+You could then add `myproject/lib/javascript/components` to your cjsDelivery include path.
+
+#### For internal components ####
+
 An include path can be useful even with internal dependencies. Suppose your project has the following directory structure:
 
 ```

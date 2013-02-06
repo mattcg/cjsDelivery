@@ -116,7 +116,7 @@ class FileIdentifierManager implements IdentifierManager {
 	 * @return string|boolean Returns false if the file is not found
 	 */
 	private function findFileInIncludes($filepath) {
-		if (!$this->inludes) {
+		if (!$this->includes) {
 			return false;
 		}
 

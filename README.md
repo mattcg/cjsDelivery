@@ -25,6 +25,8 @@ echo -e '{\n\t"minimum-stability": "dev"\n}' > composer.json
 composer require mattcg/cjsdelivery:0.1.0
 ```
 
+## Usage ##
+
 ## Executable ##
 
 The `bin/delivery` executable is provided for command-line use. Run the following example to compiled the bundled example `fruit` application:
@@ -33,7 +35,24 @@ The `bin/delivery` executable is provided for command-line use. Run the followin
 delivery --main_module='examples/fruit/modules/main'
 ```
 
-## Include paths ##
+## PHP API ##
+
+Instances can be created using the provided factory function.
+
+```PHP
+require '../cjsdelivery/cjsDelivery.php';
+$minifyidentifiers = false;
+$globals = array('utilities.js', 'globals.js');
+$includes = array('../mycompany/javascript', '../othercompany/modules');
+$delivery = cjsDelivery\create($minifyidentifiers, includes, $globals);
+echo $delivery->getOutput();
+```
+
+Full PHP API documentation to come.
+
+## Features ##
+
+### Include paths ###
 
 If you have many dependencies in folders external to your project, then it's worth setting an include path to avoid having long, absolute paths in your require statements. If your company's standard modules are in `projects/mycompany/javascript` and your project is in `projects/myproject`, then you can require a standard module using `require('standardmodule')` instead of `require('projects/mycompany/javascript')` by adding the include path `projects/mycompany/javascript`:
 
@@ -57,7 +76,7 @@ An include path can be useful even with internal dependencies. Suppose your proj
 
 If you want to avoid having to type `require('../../moduleB/version1')` from within `moduleA/version1/index.js` then you could set `myproject` to be an include path. Then you would type `require('moduleB/version1')`.
 
-## Pragmas ##
+### Pragmas ###
 
 Use pragmas to include or exclude pieces of code from the final output.
 
@@ -83,7 +102,7 @@ Now try the opposite:
 delivery --main_module='examples/fruit/modules/main' -p='BANANA'
 ```
 
-## Minified identifiers ##
+### Minified identifiers ###
 
 By default, cjsDelivery will flatten the module tree internally, rewriting `path/to/module` as `module`, for example. In a production environment it makes sense to use non-mnemonic identifiers to save space. If enabled, cjsDelivery will rewrite `path/to/module` as `A`, `path/to/othermodule` as `B` and so on.
 
@@ -93,7 +112,7 @@ Try this example:
 delivery --main_module='examples/fruit/modules/main' --minify_identifiers
 ```
 
-## Globals ##
+### Globals ###
 
 You might have a `globals.js` or `utilities.js` file (or both!) as part of your project, each containing variables or helper functions that you want to have available across all modules. To save you having to `require` these in your other modules, you can compile them in as globals:
 
@@ -121,21 +140,6 @@ The following algorithm is used when resolving the given path to a dependency:
     3. check for a file with the same as the directory and if positive, append to `path` and go to 2.
     4. check whether the directory only contains one file and if positive, append to `path` and go to 2.
 4. throw an exception
-
-## PHP API ##
-
-Instances can be created using the provided factory function.
-
-```PHP
-require '../cjsdelivery/cjsDelivery.php';
-$minifyidentifiers = false;
-$globals = array('utilities.js', 'globals.js');
-$includes = array('../mycompany/javascript', '../othercompany/modules');
-$delivery = cjsDelivery\create($minifyidentifiers, includes, $globals);
-echo $delivery->getOutput();
-```
-
-Full PHP API documentation to come.
 
 ## Credits and license ##
 

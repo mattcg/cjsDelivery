@@ -1,4 +1,4 @@
-# cjsDelivery
+# cjsDelivery #
 
 Use this library to deliver [CommonJS-syntax](http://wiki.commonjs.org/wiki/Modules/1.1.1) JavaScript modules to clients as a single file. Any modules you add manually will have dependencies resolved statically. This typically means you only have to point cjsDelivery to your entry module and all dependencies will be magically resolved.
 
@@ -6,7 +6,7 @@ Features include support for shortening ('minifying') identifiers, a plugin arch
 
 The output is designed to be suitable for compilation with the [Google Closure Compiler](https://developers.google.com/closure/compiler/) in advanced optimizations mode.
 
-## Executable
+## Executable ##
 
 The `bin/delivery` executable is provided for command-line use. Run the following example to compiled the bundled example `fruit` application:
 
@@ -14,7 +14,7 @@ The `bin/delivery` executable is provided for command-line use. Run the followin
 ./bin/delivery -m='examples/fruit/modules/main' --main_module='examples/fruit/modules/main'
 ```
 
-## Pragmas
+## Pragmas ##
 
 The pragma manager plugin is bundled with this package. Use it to include or exclude pieces of code from the final output.
 
@@ -40,7 +40,7 @@ Now try the opposite:
 ./bin/delivery -m='examples/fruit/modules/main' --main_module='examples/fruit/modules/main' -p='BANANA'
 ```
 
-## Minified identifiers
+## Minified identifiers ##
 
 cjsDelivery will flatten the module tree internally, rewriting `path/to/module` as `module`, for example. In a production environment it makes sense to use non-mnemonic identifiers. If enabled, cjsDelivery will rewrite `path/to/module` as `A`, `path/to/othermodule` as `B` and so on.
 
@@ -50,7 +50,7 @@ Try this example:
 ./bin/delivery -m='examples/fruit/modules/main' --main_module='examples/fruit/modules/main' --minify_identifiers
 ```
 
-## License
+## License ##
 
 CommonJS is copyright © 2009 - Kevin Dangoor and many CommonJS contributors, licensed under an MIT license.
 cjsDelivery is copyright © 2012 - Matthew Caruana Galizia, licensed under an MIT license.

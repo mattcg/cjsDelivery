@@ -15,6 +15,7 @@ class CommandLineRunner {
 	const LONGOPT_MAIN = 'main_module';
 	const LONGOPT_PFMT = 'pragma_format';
 	const LONGOPT_INCL = 'include';
+	const LONGOUT_OUTP = 'output';
 
 	const OPT_MODULE = 'm';
 	const OPT_PRAGMA = 'p';
@@ -30,7 +31,7 @@ class CommandLineRunner {
 	}
 
 	public function getLongOptions() {
-		return array(self::LONGOPT_MINI, self::LONGOPT_MAIN.'::', self::LONGOPT_INCL.'::', self::LONGOPT_PFMT.'::');
+		return array(self::LONGOPT_MINI, self::LONGOPT_MAIN.'::', self::LONGOPT_INCL.'::', self::LONGOPT_PFMT.'::', self::LONGOUT_OUTP.'::');
 	}
 
 	public function inDebugMode() {
@@ -64,10 +65,11 @@ class CommandLineRunner {
 		));
 
 		$out(array(
-			self::LONGOPT_MAIN   => 'Specify the main "bootstrap" module that will be automatically required at the end of the output. A module specified using this option will be added automatically so it doesn\'t need to be specified using -' . self::OPT_MODULE . '.',
-			self::LONGOPT_INCL  => 'Specify the include path as a colon-separated list.',
-			self::LONGOPT_PFMT   => 'Specify the pragma format. Defaults to ' . PragmaManager::DEFAULT_PFMT . '.',
-			self::LONGOPT_MINI => 'Use tiny identifiers in output.'
+			self::LONGOPT_MAIN => 'Specify the main "bootstrap" module that will be automatically required at the end of the output. A module specified using this option will be added automatically so it doesn\'t need to be specified using -' . self::OPT_MODULE . '.',
+			self::LONGOPT_INCL => 'Specify the include path as a colon-separated list.',
+			self::LONGOPT_PFMT => 'Specify the pragma format. Defaults to ' . PragmaManager::DEFAULT_PFMT . '.',
+			self::LONGOPT_MINI => 'Use tiny identifiers in output.',
+			self::LONGOUT_OUTP => 'Output to file.'
 		), true);
 	}
 
@@ -138,6 +140,11 @@ class CommandLineRunner {
 		} else if ($moptions) {
 			$this->maybeDebugOut('Adding module "'.$moptions.'"');
 			$delivery->addModule($moptions);
+		}
+
+		if (isset($options[self::LONGOUT_OUTP])) {
+			file_put_contents($options[self::LONGOUT_OUTP], $delivery->getOutput());
+			return;
 		}
 
 		return $delivery->getOutput();

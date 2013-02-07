@@ -27,5 +27,7 @@ try {
 }
 
 if (!$clr->inDebugMode()) {
-	echo $output, PHP_EOL;
+	if ($output) {
+		echo $output, PHP_EOL;
+	}
 }

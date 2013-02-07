@@ -11,10 +11,10 @@ require 'factory.php';
 require 'plugins/pragmaManager/PragmaManager.php';
 
 class CommandLineRunner {
-	const LONGOPT_MINIFY = 'minify_identifiers';
-	const LONGOPT_MAIN   = 'main_module';
-	const LONGOPT_PFMT   = 'pragma_format';
-	const LONGOPT_INCLD  = 'include';
+	const LONGOPT_MINI = 'minify_identifiers';
+	const LONGOPT_MAIN = 'main_module';
+	const LONGOPT_PFMT = 'pragma_format';
+	const LONGOPT_INCL = 'include';
 
 	const OPT_MODULE = 'm';
 	const OPT_PRAGMA = 'p';
@@ -30,7 +30,7 @@ class CommandLineRunner {
 	}
 
 	public function getLongOptions() {
-		return array(self::LONGOPT_MINIFY, self::LONGOPT_MAIN.'::', self::LONGOPT_INCLD.'::', self::LONGOPT_PFMT.'::');
+		return array(self::LONGOPT_MINI, self::LONGOPT_MAIN.'::', self::LONGOPT_INCL.'::', self::LONGOPT_PFMT.'::');
 	}
 
 	public function inDebugMode() {
@@ -65,9 +65,9 @@ class CommandLineRunner {
 
 		$out(array(
 			self::LONGOPT_MAIN   => 'Specify the main "bootstrap" module that will be automatically required at the end of the output. A module specified using this option will be added automatically so it doesn\'t need to be specified using -' . self::OPT_MODULE . '.',
-			self::LONGOPT_INCLD  => 'Specify the include path as a colon-separated list.',
+			self::LONGOPT_INCL  => 'Specify the include path as a colon-separated list.',
 			self::LONGOPT_PFMT   => 'Specify the pragma format. Defaults to ' . PragmaManager::DEFAULT_PFMT . '.',
-			self::LONGOPT_MINIFY => 'Use tiny identifiers in output.'
+			self::LONGOPT_MINI => 'Use tiny identifiers in output.'
 		), true);
 	}
 
@@ -87,8 +87,8 @@ class CommandLineRunner {
 		}
 
 		$includes = null;
-		if (isset($options[self::LONGOPT_INCLD])) {
-			$includes = explode(':', $options[self::LONGOPT_INCLD]);
+		if (isset($options[self::LONGOPT_INCL])) {
+			$includes = explode(':', $options[self::LONGOPT_INCL]);
 		}
 
 		$globals = null;
@@ -97,7 +97,7 @@ class CommandLineRunner {
 			$this->maybeDebugOut('Adding globals "'.implode(', ', $globals).'"');
 		}
 
-		$minifyidentifiers = isset($options[self::LONGOPT_MINIFY]);
+		$minifyidentifiers = isset($options[self::LONGOPT_MINI]);
 		$this->maybeDebugOut('Setting identifier minification: '.($minifyidentifiers ? 'true' : 'false'));
 		$delivery = create($minifyidentifiers, $includes, $globals);
 

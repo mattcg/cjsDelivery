@@ -81,7 +81,7 @@ class FileIdentifierManager implements IdentifierManager {
 			// TODO: catch and report errors
 			$packagejson = json_decode(file_get_contents($packagejsonpath));
 			if ($packagejson and !empty($packagejson->main)) {
-				$mainpath = $dirpath . '/' . $this->addExtension($packagejson->main);
+				$mainpath = $dirpath . '/' . $this->addExtensionIfMissing($packagejson->main);
 				if (is_file($mainpath)) {
 					return $mainpath;
 				}
@@ -121,19 +121,41 @@ class FileIdentifierManager implements IdentifierManager {
 		}
 
 		foreach ($this->includes as $include) {
-
-			// First try with appended extension
-			$realpath = realpath($include . '/' . $this->addExtension($filepath));
-			if (is_file($realpath)) {
+			$realpath = $this->findFile($include . '/' . $filepath);
+			if ($realpath !== false) {
 				return $realpath;
 			}
+		}
 
-			$realpath = realpath($include . '/' . $filepath);
-			if (is_dir($realpath)) {
-				$realpath = $this->findFileInDirectory($realpath);
-				if ($realpath !== false) {
-					return $realpath;
-				}
+		return false;
+	}
+
+
+	/**
+	 * Searching for a file match against the given relative path.
+	 *
+	 * @param string $filepath Relative path to module file
+	 * @return string|boolean Returns false if the file is not found
+	 */
+	private function findFile($filepath) {
+
+		// First try with appended extension
+		$filepathwithext = $this->addExtensionIfMissing($filepath);
+		$realpath = realpath($filepathwithext);
+		if (is_file($realpath)) {
+			if ($filepathwithext !== $filepath) {
+
+				// TODO: trigger notice
+			}
+
+			return $realpath;
+		}
+
+		$realpath = realpath($filepath);
+		if (is_dir($realpath)) {
+			$realpath = $this->findFileInDirectory($realpath);
+			if ($realpath !== false) {
+				return $realpath;
 			}
 		}
 
@@ -159,21 +181,10 @@ class FileIdentifierManager implements IdentifierManager {
 				return $realpath;
 			}
 		} else {
-			$filepathwithext = $this->addExtension($filepath);
-			$realpath = realpath($filepathwithext);
-			if (is_file($realpath)) {
+			$realpath = $this->findFile($filepath);
+			if ($realpath !== false) {
 				$this->tlicache[$filepath] = $realpath;
 				return $realpath;
-			}
-	
-			// Try again without the .js suffix on the given path
-			$realpath = realpath($filepath);
-			if (is_dir($realpath)) {
-				$realpath = $this->findFileInDirectory($realpath);
-				if ($realpath !== false) {
-					$this->tlicache[$filepath] = $realpath;
-					return $realpath;
-				}
 			}
 		}
 
@@ -202,7 +213,7 @@ class FileIdentifierManager implements IdentifierManager {
 	 * @param string $filepath
 	 * @returns string The path with a file extension added if needed
 	 */
-	private function addExtension($filepath) {
+	private function addExtensionIfMissing($filepath) {
 		if ((pathinfo($filepath, PATHINFO_EXTENSION)) !== self::EXT_JS) {
 			$filepath .= '.' . self::EXT_JS;
 		}

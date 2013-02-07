@@ -118,8 +118,7 @@ class FileDependencyResolver implements \hookManager\Client, DependencyResolver 
 
 		try {
 			while (count($queue)) {
-				$dependencyfilepath = array_pop($queue);
-				$dependencyrealpath = $this->identifiermanager->addIdentifier($dependencyfilepath);
+				$dependencyrealpath = array_pop($queue);
 				$dependencycode = $this->queueDependencies($dependencyrealpath, $queue);
 				$this->addModuleToList($dependencyrealpath, $dependencycode);
 			}

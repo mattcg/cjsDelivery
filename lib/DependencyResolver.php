@@ -51,7 +51,7 @@ interface DependencyResolver {
 
 
 	/**
-	 * Look for require statements in the code of the module with the given identifier and add referenced modules. Allows dependencies in arbitary modules to resolved without adding the module itself to the final output.
+	 * Look for require statements in the code of the module with the given identifier and add referenced modules. Allows dependencies in arbitary modules to be resolved without adding the module itself to the final output.
 	 *
 	 * @param string $canonicalidentifier Canonicalised identifier for the module
 	 * @return string The code with resolved dependencies

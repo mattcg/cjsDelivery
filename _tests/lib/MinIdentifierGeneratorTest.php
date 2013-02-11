@@ -3,7 +3,7 @@
  * PHPUnit tests for identifier generators
  *
  * @author Matthew Caruana Galizia <m@m.cg>
- * @copyright Copyright (c) 2012, Matthew Caruana Galizia
+ * @copyright Copyright (c) 2013, Matthew Caruana Galizia
  */
 
 // Dependencies of class under test

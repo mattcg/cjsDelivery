@@ -2,7 +2,9 @@
 
 [![Build Status](https://travis-ci.org/mattcg/cjsdelivery.png?branch=master)](https://travis-ci.org/mattcg/cjsdelivery)
 
-cjsDelivery allows you to deliver [CommonJS-syntax](http://wiki.commonjs.org/wiki/Modules/1.1.1) JavaScript modules to clients as a single file. Any modules you add will have dependencies resolved statically. This typically means you only have to point cjsDelivery to your entry module and all dependencies will be magically resolved.
+## A CommonJS compiler written in PHP ##
+
+cjsDelivery allows you to deliver [CommonJS-syntax](http://wiki.commonjs.org/wiki/Modules/1.1.1) JavaScript modules to clients as a **single file**. Any modules you add will have dependencies **resolved statically**. This typically means you only have to point cjsDelivery to your entry module and all dependencies will be magically resolved.
 
 The output is designed to have as little overhead over your module code as possible. In all, only 13 short lines of code will be added by the compiler.
 

@@ -54,7 +54,7 @@ require '../cjsdelivery/cjsDelivery.php';
 $minifyidentifiers = false;
 $globals = array('utilities.js', 'globals.js');
 $includes = array('../mycompany/javascript', '../othercompany/modules');
-$delivery = cjsDelivery\create($minifyidentifiers, includes, $globals);
+$delivery = cjsDelivery\create($minifyidentifiers, $includes, $globals);
 echo $delivery->getOutput();
 ```
 

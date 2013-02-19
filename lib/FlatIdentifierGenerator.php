@@ -9,24 +9,7 @@ namespace cjsDelivery;
 
 class FlatIdentifierGenerator implements IdentifierGenerator {
 	private $modules = array();
-
-
-	/**
-	 * Check for modules with the same base name
-	 *
-	 * @param string $basename The base name of a module identifier to check for duplicates of
-	 * @return integer Number of modules with the same base name
-	 */
-	private function checkSameBaseName($basename) {
-		$i = 0;
-		foreach ($this->modules as &$module) {
-			if ($basename === $module['basename']) {
-				$i++;
-			}
-		}
-
-		return $i;
-	}
+	private $counts = array();
 
 
 	/**
@@ -35,17 +18,24 @@ class FlatIdentifierGenerator implements IdentifierGenerator {
 	public function generateFlattenedIdentifier($toplevelidentifier)  {
 		if (!isset($this->modules[$toplevelidentifier])) {
 			$basename = basename($toplevelidentifier, '.' . pathinfo($toplevelidentifier, PATHINFO_EXTENSION));
-	 		$this->modules[$toplevelidentifier] = array(
-	 			'basename' => $basename,
-	 			'basenamecount' => $this->checkSameBaseName($basename)
-	 		);
+	 		$this->modules[$toplevelidentifier] = $basename;
+
+	 		if (!isset($this->counts[$basename])) {
+		 		$count = 0;
+		 		$this->counts[$basename] = array($toplevelidentifier => $count);
+		 	} else {
+			 	$count = count($this->counts[$basename]);
+			 	$this->counts[$basename][$toplevelidentifier] = $count;
+	 		}
+		} else {
+			$basename = $this->modules[$toplevelidentifier];
+			$count = $this->counts[$basename][$toplevelidentifier];
 		}
 
-		$module = $this->modules[$toplevelidentifier];
-		if ($module['basenamecount'] > 0) {
-			return $module['basename'] . $module['basenamecount'];
+		if ($count > 0) {
+			return $basename . $count;
 		}
 
-		return $module['basename'];
+		return $basename;
 	}
 }

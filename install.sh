@@ -16,10 +16,12 @@ if [ -d "$CJSDELIVERY_PREFIX/lib/cjsdelivery" ]; then
 fi
 mkdir "$CJSDELIVERY_PREFIX/lib/cjsdelivery"
 
-echo "Installing $CJSDELIVERY_PREFIX/lib/cjsdelivery/bin"
+echo "Copying $CJSDELIVERY_PREFIX/lib/cjsdelivery/bin"
 cp -R "$CJSDELIVERY_CHECKOUT/bin" "$CJSDELIVERY_PREFIX/lib/cjsdelivery/bin"
 
-echo "Installing $CJSDELIVERY_PREFIX/lib/cjsdelivery/lib"
+echo "Copying $CJSDELIVERY_PREFIX/lib/cjsdelivery/lib"
 cp -R "$CJSDELIVERY_CHECKOUT/lib" "$CJSDELIVERY_PREFIX/lib/cjsdelivery/lib"
 
 ln -si "$CJSDELIVERY_PREFIX/lib/cjsdelivery/bin/delivery" "$CJSDELIVERY_PREFIX/bin/delivery"
+
+echo "Done"

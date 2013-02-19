@@ -51,10 +51,13 @@ Instances can be created using the provided factory function.
 
 ```PHP
 require '../cjsdelivery/cjsDelivery.php';
+
 $minifyidentifiers = false;
-$globals = array('utilities.js', 'globals.js');
+$globals  = array('utilities.js', 'globals.js');
 $includes = array('../mycompany/javascript', '../othercompany/modules');
 $delivery = cjsDelivery\create($minifyidentifiers, $includes, $globals);
+
+$delivery->addModule('./path/to/module');
 echo $delivery->getOutput();
 ```
 

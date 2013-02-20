@@ -21,7 +21,7 @@ Features, in summary:
 
 Install globally by running this one-line command in your bash terminal:
 
-```
+```bash
 bash <(curl -s https://raw.github.com/mattcg/cjsdelivery/go)
 ```
 
@@ -29,7 +29,7 @@ bash <(curl -s https://raw.github.com/mattcg/cjsdelivery/go)
 
 Get [composer](http://getcomposer.org/) and install cjsDelivery to your project using:
 
-```
+```bash
 cd myproject/
 echo -e '{\n\t"minimum-stability": "dev"\n}' > composer.json
 composer require mattcg/cjsdelivery:0.1.0
@@ -41,7 +41,7 @@ composer require mattcg/cjsdelivery:0.1.0
 
 The `bin/delivery` executable is provided for command-line use. Run the following example to compiled the bundled example `fruit` application:
 
-```
+```bash
 delivery --main_module='./examples/fruit/modules/main'
 ```
 
@@ -69,7 +69,7 @@ Full PHP API documentation to come.
 
 If you have many dependencies in folders external to your project, then it's worth setting an include path to avoid having long, absolute paths in your require statements. If your company's standard modules are in `projects/mycompany/javascript` and your project is in `projects/myproject`, then you can require a standard module using `require('standardmodule')` instead of `require('projects/mycompany/javascript')` by adding the include path `projects/mycompany/javascript`:
 
-```
+```bash
 cd projects/myproject
 delivery --main_module='./main' --include='../mycompany/javascript:../othercompany/modules'
 ```
@@ -80,7 +80,7 @@ Multiple paths can be specified in a colon-separated list.
 
 Suppose that as part of your project build process, you use [bower](http://twitter.github.com/bower/) to install external components to a `components/` directory in your project:
 
-```
+```bash
 cd myproject/lib/javascript
 bower install
 ```
@@ -110,7 +110,7 @@ When passed to the `delivery` executable, the `-p` option will turn on the manag
 
 The bundled example module in `examples/fruit/modules/main.js` includes the following lines:
 
-```
+```JavaScript
 // ifdef BANANA
 log.print(require('banana').message);
 // endif BANANA
@@ -118,13 +118,13 @@ log.print(require('banana').message);
 
 Run the following example command to compile the `fruit` application without the `banana` module:
 
-```
+```bash
 delivery --main_module='./examples/fruit/modules/main' -p
 ```
 
 Now try the opposite:
 
-```
+```bash
 delivery --main_module='./examples/fruit/modules/main' -p='BANANA'
 ```
 
@@ -134,7 +134,7 @@ By default, cjsDelivery will flatten the module tree internally, rewriting `path
 
 Try this example:
 
-```
+```bash
 delivery --main_module='./examples/fruit/modules/main' --minify_identifiers
 ```
 
@@ -142,7 +142,7 @@ delivery --main_module='./examples/fruit/modules/main' --minify_identifiers
 
 You might have a `globals.js` or `utilities.js` file (or both!) as part of your project, each containing variables or helper functions that you want to have available across all modules. To save you having to `require` these in your other modules, you can compile them in as globals:
 
-```
+```bash
 delivery --main_module='./examples/globals/main' -g 'examples/globals/utilities' -g 'examples/globals/globals'
 ```
 

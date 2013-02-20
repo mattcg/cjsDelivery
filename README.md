@@ -16,6 +16,7 @@ Features, in summary:
 - exclude and include sections of code from compilation using pragmas
 - specify multiple include paths to avoid typing long require statements
 - add your own globals
+- minify module identifiers
 
 ## Installation ##
 

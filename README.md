@@ -13,7 +13,7 @@ Features, in summary:
 - `require` dependencies in your code and define APIs on `exports` like you do with node.js on the server
 - compiles all your code, including dependencies, into a single file, ready for delivery to browsers
 - point cjsDelivery at your bootstrap (startup) file to compile the entire application
-- exclude and include sections of code from compilation using pragmas
+- exclude and include sections of code at compile-time using pragmas
 - specify multiple include paths to avoid typing long require statements
 - add your own globals
 - minify module identifiers

@@ -1,6 +1,7 @@
 #!/bin/sh
 
-CJSDELIVERY_PREFIX='/usr/local'
+CJSDELIVERY_PREFIX="/usr/local"
+CJSDELIVERY_INSTALL="$CJSDELIVERY_PREFIX/lib/cjsdelivery"
 CJSDELIVERY_CHECKOUT=`dirname $0`
 
 # Stop on first error
@@ -8,20 +9,25 @@ set -e
 
 echo "This script will install:"
 echo "$CJSDELIVERY_PREFIX/bin/delivery"
-echo "$CJSDELIVERY_PREFIX/lib/cjsdelivery"
+echo "$CJSDELIVERY_INSTALL"
 
-if [ -d "$CJSDELIVERY_PREFIX/lib/cjsdelivery" ]; then
-	echo "Old version found at install path"
+if [ -d "$CJSDELIVERY_INSTALL" ]; then
+	echo "Old version found at install path."
 	"$CJSDELIVERY_CHECKOUT/uninstall.sh"
 fi
-mkdir "$CJSDELIVERY_PREFIX/lib/cjsdelivery"
+mkdir "$CJSDELIVERY_INSTALL"
 
-echo "Copying $CJSDELIVERY_PREFIX/lib/cjsdelivery/bin"
-cp -R "$CJSDELIVERY_CHECKOUT/bin" "$CJSDELIVERY_PREFIX/lib/cjsdelivery/bin"
+echo "Copying:"
 
-echo "Copying $CJSDELIVERY_PREFIX/lib/cjsdelivery/lib"
-cp -R "$CJSDELIVERY_CHECKOUT/lib" "$CJSDELIVERY_PREFIX/lib/cjsdelivery/lib"
+echo "$CJSDELIVERY_INSTALL/bin"
+cp -R "$CJSDELIVERY_CHECKOUT/bin" "$CJSDELIVERY_INSTALL/bin"
 
-ln -si "$CJSDELIVERY_PREFIX/lib/cjsdelivery/bin/delivery" "$CJSDELIVERY_PREFIX/bin/delivery"
+echo "$CJSDELIVERY_INSTALL/lib"
+cp -R "$CJSDELIVERY_CHECKOUT/lib" "$CJSDELIVERY_INSTALL/lib"
 
-echo "Done"
+echo "Linking:"
+
+echo "$CJSDELIVERY_PREFIX/bin/delivery => $CJSDELIVERY_INSTALL/bin/delivery"
+ln -si "$CJSDELIVERY_INSTALL/bin/delivery" "$CJSDELIVERY_PREFIX/bin/delivery"
+
+echo "Install done."

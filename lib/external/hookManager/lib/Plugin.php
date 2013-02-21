@@ -7,6 +7,8 @@
 
 namespace hookManager;
 
+require_once 'Client.php';
+
 interface Plugin {
 
 	public function register(Client $hookclient);

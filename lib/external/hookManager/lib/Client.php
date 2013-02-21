@@ -7,6 +7,8 @@
 
 namespace hookManager;
 
+require_once 'Manager.php';
+
 interface Client {
 
 	public function setHookManager(Manager $manager);

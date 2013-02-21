@@ -7,6 +7,10 @@
 
 namespace hookManager;
 
+require_once 'Client.php';
+require_once 'Manager.php';
+require_once 'Plugin.php';
+
 abstract class Pluggable implements Client {
 
 	private $hookmanager = null;

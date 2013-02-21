@@ -11,10 +11,7 @@
 
 namespace hookManager;
 
-require 'lib/Manager.php';
-require 'lib/Client.php';
-require 'lib/Plugin.php';
-require 'lib/Pluggable.php';
+require_once 'lib/Manager.php';
 
 function create() {
 	return new HookManager();

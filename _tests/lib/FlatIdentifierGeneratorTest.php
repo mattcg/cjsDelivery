@@ -7,10 +7,10 @@
  */
 
 // Dependencies of class under test
-require_once __DIR__ . '/../../lib/IdentifierGenerator.php';
+require_once CJSD_LIB_DIR . '/IdentifierGenerator.php';
 
 // Class under test
-require_once __DIR__ . '/../../lib/FlatIdentifierGenerator.php';
+require_once CJSD_LIB_DIR . '/FlatIdentifierGenerator.php';
 
 class FlatIdentifierGeneratorTest extends PHPUnit_Framework_TestCase {
 

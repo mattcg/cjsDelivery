@@ -9,7 +9,8 @@
 	stopOnIncomplete="false"
 	stopOnSkipped="false"
 	syntaxCheck="true"
-	verbose="true">
+	verbose="true"
+	bootstrap="bootstrap.php">
 	<logging>
 		<log type="junit" target="../build/logs/phpunit.xml" />
 <!--

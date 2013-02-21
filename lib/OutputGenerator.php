@@ -7,8 +7,8 @@
 
 namespace cjsDelivery;
 
-require_once 'external/lib/Client.php';
-require_once 'external/lib/Manager.php';
+require_once 'external/hookManager/lib/Client.php';
+require_once 'external/hookManager/lib/Manager.php';
 
 require_once 'Exception.php';
 require_once 'OutputRenderer.php';

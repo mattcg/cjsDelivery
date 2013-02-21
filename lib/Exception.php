@@ -13,6 +13,7 @@ class Exception extends \Exception {
 	const UNABLE_TO_READ    = 3;
 	const NOTHING_TO_BUILD  = 4;
 	const UNABLE_TO_RESOLVE = 5;
+	const BAD_MODULE_MTIME  = 6;
 
 	public function __construct($message, $code = 0, Exception $previous = null) {
 		parent::__construct($message, $code, $previous);

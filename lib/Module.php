@@ -7,8 +7,10 @@
 
 namespace cjsDelivery;
 
+require_once 'Exception.php';
+
 class Module {
-	private $code, $uniqueidentifier, $modificationtime;
+	private $code, $uniqueidentifier = null, $modificationtime = null;
 
 	public function __construct(&$code) {
 		$this->code = $code;
@@ -27,6 +29,10 @@ class Module {
 	}
 
 	public function setModificationTime($modificationtime) {
+		if (!is_int($modificationtime)) {
+			throw new Exception("Bad module modification time '$modificationtime'", Exception::BAD_MODULE_MTIME);
+		}
+
 		$this->modificationtime = $modificationtime;
 	}
 

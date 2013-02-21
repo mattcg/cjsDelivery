@@ -7,6 +7,13 @@
 
 namespace cjsDelivery;
 
+require_once 'external/lib/Client.php';
+require_once 'external/lib/Manager.php';
+
+require_once 'Exception.php';
+require_once 'OutputRenderer.php';
+require_once 'processHooks.php';
+
 class OutputGenerator implements \hookManager\Client {
 
 	private $hookmanager = null;

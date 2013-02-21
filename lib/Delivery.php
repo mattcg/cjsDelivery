@@ -7,27 +7,10 @@
 
 namespace cjsDelivery;
 
-require 'external/hookManager/hookManager.php';
+require_once 'external/hookManager/lib/Pluggable.php';
 
-require 'Exception.php';
-require 'Module.php';
-
-require 'IdentifierManager.php';
-require 'FileIdentifierManager.php';
-
-require 'IdentifierGenerator.php';
-require 'FlatIdentifierGenerator.php';
-require 'MinIdentifierGenerator.php';
-
-require 'DependencyResolver.php';
-require 'FileDependencyResolver.php';
-
-require 'OutputRenderer.php';
-require 'TemplateOutputRenderer.php';
-
-require 'OutputGenerator.php';
-
-require 'processHooks.php';
+require_once 'OutputGenerator.php';
+require_once 'DependencyResolver.php';
 
 class Delivery extends \hookManager\Pluggable {
 

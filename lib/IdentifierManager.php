@@ -7,6 +7,8 @@
 
 namespace cjsDelivery;
 
+require_once 'IdentifierGenerator.php';
+
 interface IdentifierManager {
 
 	public function __construct(IdentifierGenerator $identifiergenerator);

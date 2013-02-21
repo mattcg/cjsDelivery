@@ -7,6 +7,15 @@
 
 namespace cjsDelivery;
 
+require_once 'external/lib/Client.php';
+require_once 'external/lib/Manager.php';
+
+require_once 'Exception.php';
+require_once 'DependencyResolver.php';
+require_once 'IdentifierManager.php';
+require_once 'Module.php';
+require_once 'processHooks.php';
+
 class FileDependencyResolver implements \hookManager\Client, DependencyResolver {
 
 	const REQUIRE_PREG = '/require\((\'|")(.*?)\1\)/';

@@ -7,7 +7,15 @@
 
 namespace cjsDelivery;
 
-require 'Delivery.php';
+require_once 'external/hookManager/hookManager.php';
+
+require_once 'Delivery.php';
+require_once 'MinIdentifierGenerator.php';
+require_once 'FlatIdentifierGenerator.php';
+require_once 'FileIdentifierManager.php';
+require_once 'FileDependencyResolver.php';
+require_once 'OutputGenerator.php';
+require_once 'TemplateOutputRenderer.php';
 
 function create($minifyidentifiers = false, array $includes = null, array $globals = null) {
 	$hookmanager = \hookManager\create();

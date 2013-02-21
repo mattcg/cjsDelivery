@@ -7,6 +7,10 @@
 
 namespace cjsDelivery;
 
+require_once 'Exception.php';
+require_once 'IdentifierManager.php';
+require_once 'IdentifierGenerator.php';
+
 class FileIdentifierManager implements IdentifierManager {
 	const EXT_JS = 'js';
 
@@ -17,11 +21,11 @@ class FileIdentifierManager implements IdentifierManager {
 
 	private $tlicache = array();
 
-	public function __construct(identifierGenerator $identifiergenerator) {
+	public function __construct(IdentifierGenerator $identifiergenerator) {
 		$this->setIdentifierGenerator($identifiergenerator);
 	}
 
-	public function setIdentifierGenerator(identifierGenerator $identifiergenerator) {
+	public function setIdentifierGenerator(IdentifierGenerator $identifiergenerator) {
 		$this->identifiergenerator = $identifiergenerator;
 	}
 

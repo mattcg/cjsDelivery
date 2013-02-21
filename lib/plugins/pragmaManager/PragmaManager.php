@@ -9,6 +9,11 @@
 
 namespace cjsDelivery;
 
+require_once __DIR__ . '/../../external/hookManager/lib/Plugin.php';
+require_once __DIR__ . '/../../external/hookManager/lib/Client.php';
+
+require_once __DIR__ . '/../../processHooks.php';
+
 class PragmaManager implements \hookManager\Plugin {
 
 	private $pragmas = array();

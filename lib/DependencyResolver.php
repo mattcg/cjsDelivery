@@ -7,6 +7,8 @@
 
 namespace cjsDelivery;
 
+require_once 'IdentifierManager.php';
+
 interface DependencyResolver {
 
 

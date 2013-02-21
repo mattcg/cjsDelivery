@@ -1,18 +1,31 @@
 #!/bin/sh
 
-CJSDELIVERY_TMP="/tmp"
-CJSDELIVERY_URL="https://github.com/mattcg/cjsdelivery/archive/master.zip"
+CJSDELIVERY_VER="0.1.1"
+CJSDELIVERY_TMP="/tmp/cjsdelivery"
+CJSDELIVERY_URL="https://github.com/mattcg/cjsdelivery/archive/v$CJSDELIVERY_VER.zip"
 
 # Stop on first error
 set -e
 
+echo "Creating temporary dir:"
+echo "$CJSDELIVERY_TMP"
+
+mkdir -p "$CJSDELIVERY_TMP"
+
 echo "Downloading:"
 echo "$CJSDELIVERY_URL"
 
-curl "$CJSDELIVERY_URL" -o "$CJSDELIVERY_TMP/cjsdelivery-master.zip" --silent --location
-unzip -q "$CJSDELIVERY_TMP/cjsdelivery-master.zip" -d "$CJSDELIVERY_TMP/"
+CJSDELIVERY_ZIP="$CJSDELIVERY_TMP/v$CJSDELIVERY_VER.zip"
+CJSDELIVERY_DIR="$CJSDELIVERY_TMP/cjsdelivery-$CJSDELIVERY_VER"
 
-"$CJSDELIVERY_TMP/cjsdelivery-master/install.sh"
+curl "$CJSDELIVERY_URL" -o "$CJSDELIVERY_ZIP" --silent --location
+unzip -q "$CJSDELIVERY_ZIP" -d "$CJSDELIVERY_TMP/"
 
-rm -f "$CJSDELIVERY_TMP/cjsdelivery-master.zip"
-rm -rf "$CJSDELIVERY_TMP/cjsdelivery-master"
+"$CJSDELIVERY_DIR/install.sh"
+
+echo "Removing:"
+echo "$CJSDELIVERY_TMP"
+
+rm -rf "$CJSDELIVERY_TMP"
+
+echo "Done."

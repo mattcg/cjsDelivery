@@ -77,6 +77,9 @@ class FileIdentifierManager implements IdentifierManager {
 
 		// 1) check for index file
 		$realpath = realpath($dirpath . '/index.' . self::EXT_JS);
+		if ($realpath !== false and is_file($realpath)) {
+			return $realpath;
+		}
 
 		// 2) check for package.json
 		$packagejsonpath = $dirpath . '/package.json';
@@ -85,28 +88,26 @@ class FileIdentifierManager implements IdentifierManager {
 			// TODO: catch and report errors
 			$packagejson = json_decode(file_get_contents($packagejsonpath));
 			if ($packagejson and !empty($packagejson->main)) {
-				$mainpath = $dirpath . '/' . $this->addExtensionIfMissing($packagejson->main);
-				if (is_file($mainpath)) {
+				$mainpath = realpath($dirpath . '/' . $this->addExtensionIfMissing($packagejson->main));
+				if ($mainpath !== false and is_file($mainpath)) {
 					return $mainpath;
 				}
 			}
 		}
 
 		// 3) check for file with same name as folder
-		if ($realpath === false) {
-			$realpath = realpath($dirpath . '/' . basename($dirpath) . '.' . self::EXT_JS);
+		$realpath = realpath($dirpath . '/' . basename($dirpath) . '.' . self::EXT_JS);
+		if ($realpath !== false and is_file($realpath)) {
+			return $realpath;
 		}
 
 		// 4) check for one file
-		if ($realpath === false) {
-			$filesindir = glob($dirpath . '/*.' . self::EXT_JS);
-			if (count($filesindir) == 1) {
-				$realpath = realpath($filesindir[0]);
+		$filesindir = glob($dirpath . '/*.' . self::EXT_JS);
+		if (count($filesindir) == 1) {
+			$realpath = realpath($filesindir[0]);
+			if ($realpath !== false and is_file($realpath)) {
+				return $realpath;
 			}
-		}
-
-		if ($realpath !== false and is_file($realpath)) {
-			return $realpath;
 		}
 
 		return false;

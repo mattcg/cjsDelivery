@@ -7,6 +7,8 @@
 
 namespace cjsDelivery;
 
+require_once 'IdentifierGenerator.php';
+
 class FlatIdentifierGenerator implements IdentifierGenerator {
 	private $modules = array();
 	private $counts = array();

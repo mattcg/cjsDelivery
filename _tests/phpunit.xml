@@ -3,7 +3,7 @@
 	convertErrorsToExceptions="true"
 	convertNoticesToExceptions="true"
 	convertWarningsToExceptions="true"
-	processIsolation="true"
+	processIsolation="false"
 	stopOnError="false"
 	stopOnFailure="false"
 	stopOnIncomplete="false"
@@ -32,6 +32,9 @@
 		</testsuite>
 		<testsuite name="Model tests">
 			<file>lib/ModuleTest.php</file>
+		</testsuite>
+		<testsuite name="Output tests">
+			<file>lib/OutputGeneratorTest.php</file>
 		</testsuite>
 	</testsuites>
 </phpunit>

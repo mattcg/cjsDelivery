@@ -6,9 +6,6 @@
  * @copyright Copyright (c) 2013, Matthew Caruana Galizia
  */
 
-// Dependencies of class under test
-require_once CJSD_LIB_DIR . '/IdentifierGenerator.php';
-
 // Class under test
 require_once CJSD_LIB_DIR . '/MinIdentifierGenerator.php';
 

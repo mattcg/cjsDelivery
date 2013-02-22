@@ -37,6 +37,7 @@ class FileIdentifierManager implements IdentifierManager {
 	/**
 	 * Set the list of file include directories to use when searching for module files.
 	 *
+	 * @see IdentifierManager::setIncludes()
 	 * @param array $includes
 	 */
 	public function setIncludes(array $includes = null) {

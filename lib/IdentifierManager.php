@@ -15,6 +15,13 @@ interface IdentifierManager {
 	public function setIdentifierGenerator(IdentifierGenerator $identifiergenerator);
 	public function getIdentifierGenerator();
 
+	/**
+	 * Set the list of location stubs to use when searching for module files.
+	 *
+	 * @param array $includes
+	 */
+	public function setIncludes(array $includes = null);
+
 
 	/**
 	 * Get the 'resolved' identifier of a module that will actually be used in the JavaScript output

@@ -147,7 +147,7 @@ class FileIdentifierManager implements IdentifierManager {
 		// First try with appended extension
 		$filepathwithext = $this->addExtensionIfMissing($filepath);
 		$realpath = realpath($filepathwithext);
-		if (is_file($realpath)) {
+		if ($realpath !== false and is_file($realpath)) {
 			if ($filepathwithext === $filepath) {
 				trigger_error('Module identifiers may not have file-name extensions like ".js" (found "' . basename($filepath) . '").', E_USER_NOTICE);
 			}
@@ -156,7 +156,7 @@ class FileIdentifierManager implements IdentifierManager {
 		}
 
 		$realpath = realpath($filepath);
-		if (is_dir($realpath)) {
+		if ($realpath !== false and is_dir($realpath)) {
 			$realpath = $this->findFileInDirectory($realpath);
 			if ($realpath !== false) {
 				return $realpath;

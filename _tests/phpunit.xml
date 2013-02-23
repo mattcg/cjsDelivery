@@ -30,6 +30,9 @@
 			<file>lib/FlatIdentifierGeneratorTest.php</file>
 			<file>lib/MinIdentifierGeneratorTest.php</file>
 		</testsuite>
+		<testsuite name="Identifier manager tests">
+			<file>lib/FileIdentifierManagerTest.php</file>
+		</testsuite>
 		<testsuite name="Model tests">
 			<file>lib/ModuleTest.php</file>
 		</testsuite>

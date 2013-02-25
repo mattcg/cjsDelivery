@@ -23,7 +23,7 @@ try {
 
 	$reporterror($e, $reporterror);
 	
-	exit(1);
+	exit($e->getCode());
 }
 
 if (!$clr->inDebugMode()) {

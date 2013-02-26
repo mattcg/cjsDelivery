@@ -18,28 +18,34 @@ class FileDependencyResolverTest extends PHPUnit_Framework_TestCase {
 		return new cjsDelivery\FileDependencyResolver($identifiermanager);
 	}
 
-	public function testGetModuleContents() {
+	public function testGetModuleContentsAcceptsRelativePath() {
 		$resolver = $this->getResolver();
-		$realpath = CJSD_TESTMODS_DIR . '/apple/index';
-		$this->assertEquals("// Apple\n", $resolver->getModuleContents($realpath));
+		$filepath = './modules/apple/index';
+		$this->assertEquals("// Apple\n", $resolver->getModuleContents($filepath));
 	}
 
-	public function testAddModuleWithRelativePath() {
+	public function testGetModuleContentsAcceptsTopLevelPath() {
+		$resolver = $this->getResolver();
+		$tlipath = CJSD_TESTMODS_DIR . '/apple/index';
+		$this->assertEquals("// Apple\n", $resolver->getModuleContents($tlipath));
+	}
+
+	public function testAddModuleAcceptsRelativePath() {
 		$resolver = $this->getResolver();
 		$filepath = './modules/apple/index';
 		$this->assertEquals('index', $resolver->addModule($filepath));
 	}
 
-	public function testAddModuleWithRealPath() {
+	public function testAddModuleAcceptsTopLevelPath() {
 		$resolver = $this->getResolver();
-		$realpath = CJSD_TESTMODS_DIR . '/apple/index';
-		$this->assertEquals('index', $resolver->addModule($realpath));
+		$tlipath = CJSD_TESTMODS_DIR . '/apple/index';
+		$this->assertEquals('index', $resolver->addModule($tlipath));
 	}
 
 	public function testHasModule() {
 		$resolver = $this->getResolver();
-		$realpath = CJSD_TESTMODS_DIR . '/apple/index';
-		$resolver->addModule($realpath);
-		$this->assertTrue($resolver->hasModule($realpath));
+		$tlipath = CJSD_TESTMODS_DIR . '/apple/index';
+		$resolver->addModule($tlipath);
+		$this->assertTrue($resolver->hasModule($tlipath));
 	}
 }

@@ -53,14 +53,14 @@ class FileIdentifierManager implements IdentifierManager {
 
 	/**
 	 * @see IdentifierManager::getFlattenedIdentifier()
-	 * @param string $realpath The canonicalized absolute pathname of the module
+	 * @param string $tlipath The canonicalized absolute pathname of the module, excluding any extension
 	 */
-	public function getFlattenedIdentifier($realpath) {
-		if (!isset($this->modules[$realpath])) {
-			throw new Exception("Unknown module '$realpath'", Exception::UNKNOWN_MODULE);
+	public function getFlattenedIdentifier($tlipath) {
+		if (!isset($this->modules[$tlipath])) {
+			throw new Exception("Unknown module '$tlipath'", Exception::UNKNOWN_MODULE);
 		}
 
-		return $this->identifiergenerator->generateFlattenedIdentifier($realpath);
+		return $this->identifiergenerator->generateFlattenedIdentifier($tlipath);
 	}
 
 
@@ -145,12 +145,12 @@ class FileIdentifierManager implements IdentifierManager {
 	 */
 	private function findFile($filepath) {
 
-		// First try with appended extension
+		// First try with appended extension, as this is more likely
 		$filepathwithext = $this->addExtensionIfMissing($filepath);
 		$realpath = realpath($filepathwithext);
 		if ($realpath !== false and is_file($realpath)) {
 			if ($filepathwithext === $filepath) {
-				trigger_error('Module identifiers may not have file-name extensions like ".js" (found "' . basename($filepath) . '").', E_USER_NOTICE);
+				trigger_error('Module identifiers may not have file-name extensions like ".' . self::EXT_JS . '" (found "' . basename($filepath) . '").', E_USER_NOTICE);
 			}
 
 			return $realpath;
@@ -171,7 +171,7 @@ class FileIdentifierManager implements IdentifierManager {
 	/**
 	 * @see IdentifierManager::getTopLevelIdentifier()
 	 * @param string $filepath Path to the module file, absolute (but not necessarily canonicalized) or relative to includes path
-	 * @return string The canonicalized absolute pathname of the module
+	 * @return string The canonicalized absolute pathname of the module, excluding any extension
 	 */
 	public function getTopLevelIdentifier($filepath) {
 		if (isset($this->tlicache[$filepath])) {
@@ -181,34 +181,43 @@ class FileIdentifierManager implements IdentifierManager {
 		// If the path is not absolute or relative, check the includes directory
 		if ($filepath[0] !== '/' and $filepath[0] !== '.') {
 			$realpath = $this->findFileInIncludes($filepath);
-			if ($realpath !== false) {
-				$this->tlicache[$filepath] = $realpath;
-				return $realpath;
-			}
 		} else {
 			$realpath = $this->findFile($filepath);
-			if ($realpath !== false) {
-				$this->tlicache[$filepath] = $realpath;
-				return $realpath;
-			}
 		}
 
-		throw new Exception("Module not found at '$filepath'", Exception::MODULE_NOT_FOUND);
+		if ($realpath === false) {
+			throw new Exception("Module not found at '$filepath'", Exception::MODULE_NOT_FOUND);
+		}
+
+		$tlipath = $this->stripExtensionIfPresent($realpath);
+		$this->tlicache[$filepath] = $tlipath;
+		return $tlipath;
 	}
 
 
 	/**
 	 * @see IdentifierManager::addIdentifier()
 	 * @param string $filepath Path to the module file
-	 * @return string The canonicalized absolute pathname of the module
+	 * @return string The canonicalized absolute pathname of the module, excluding any extension
 	 */
 	public function addIdentifier($filepath) {
-		$realpath = $this->getTopLevelIdentifier($filepath);
-		if (!isset($this->modules[$realpath])) {
-			$this->modules[$realpath] = true;
+		$tli = $this->getTopLevelIdentifier($filepath);
+		if (!isset($this->modules[$tli])) {
+			$this->modules[$tli] = true;
 	 	}
 
-		return $realpath;
+		return $tli;
+	}
+
+
+	/**
+	 * Strip the standard JavaScript file extension if present
+	 *
+	 * @param string $filepath
+	 * @returns string The path with any file extension removed
+	 */
+	private function stripExtensionIfPresent($filepath) {
+		return preg_replace('/\.' . self::EXT_JS . '$/', '', $filepath);
 	}
 
 

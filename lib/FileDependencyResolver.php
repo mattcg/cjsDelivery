@@ -18,6 +18,7 @@ require_once 'processHooks.php';
 
 class FileDependencyResolver implements \hookManager\Client, DependencyResolver {
 
+	const EXT_JS = 'js';
 	const REQUIRE_PREG = '/require\((\'|")(.*?)\1\)/';
 
 	private $modules = array();
@@ -54,10 +55,11 @@ class FileDependencyResolver implements \hookManager\Client, DependencyResolver 
 	 * Get the raw contents from a module file
 	 *
 	 * @throws Exception If the module file is unreadable
-	 * @param string $realpath The resolved path to the module file
+	 * @param string $tlipath The canonicalized absolute pathname of the module, excluding any extension
 	 * @return string Raw module code
 	 */
-	public function getModuleContents($realpath) {
+	public function getModuleContents($tlipath) {
+		$realpath = $this->getSystemPathForTopLevelIdentifier($this->identifiermanager->getTopLevelIdentifier($tlipath));
 		$code = @file_get_contents($realpath, false);
 		if ($code === false) {
 			throw new Exception("Unable to read '$realpath'", Exception::UNABLE_TO_READ);
@@ -69,10 +71,10 @@ class FileDependencyResolver implements \hookManager\Client, DependencyResolver 
 
 	/**
 	 * @see DependencyResolver::hasModule
-	 * @param string $realpath Absolute path to the module file
+	 * @param string $tlipath The canonicalized absolute pathname of the module, excluding any extension
 	 */
-	public function hasModule($realpath) {
-		return isset($this->modules[$realpath]);
+	public function hasModule($tlipath) {
+		return isset($this->modules[$tlipath]);
 	}
 
 
@@ -81,48 +83,48 @@ class FileDependencyResolver implements \hookManager\Client, DependencyResolver 
 	 * @param string $filepath Path to the module file
 	 */
 	public function addModule($filepath) {
-		$realpath = $this->identifiermanager->addIdentifier($filepath);
+		$tlipath = $this->identifiermanager->addIdentifier($filepath);
 
 		// Check if the module has already been added
-		if ($this->hasModule($realpath)) {
-			return $this->identifiermanager->getFlattenedIdentifier($realpath);
+		if ($this->hasModule($tlipath)) {
+			return $this->identifiermanager->getFlattenedIdentifier($tlipath);
 		}
 
-		$code = $this->resolveDependencies($realpath);
-		$identifier = $this->addModuleToList($realpath, $code);
+		$code = $this->resolveDependencies($tlipath);
+		$identifier = $this->addModuleToList($tlipath, $code);
 
 		return $identifier;
 	}
 
 
 	/**
-	 * @param string $realpath Canonicalized path to the module file
+	 * @param string $tlipath The canonicalized absolute pathname of the module, excluding any extension
 	 * @param string $code Code extracted from the module file
 	 * @return string Unique (but not canonicalized) identifier for the module
 	 */
-	private function addModuleToList($realpath, &$code) {
-		$identifier = $this->identifiermanager->getFlattenedIdentifier($realpath);
+	private function addModuleToList($tlipath, &$code) {
+		$identifier = $this->identifiermanager->getFlattenedIdentifier($tlipath);
 
 		$module = new Module($code);
-		$module->setModificationTime(filemtime($realpath));
+		$module->setModificationTime(filemtime($this->getSystemPathForTopLevelIdentifier($tlipath)));
 		$module->setUniqueIdentifier($identifier);
 
-		$this->modules[$realpath] = $module;
+		$this->modules[$tlipath] = $module;
 		return $identifier;
 	}
 
 
 	/**
 	 * @see DependencyResolver::resolveDependencies
-	 * @param string $realpath Canonicalized path to the module file
+	 * @param string $tlipath The canonicalized absolute pathname of the module, excluding any extension
 	 */
-	public function resolveDependencies($realpath) {
+	public function resolveDependencies($tlipath) {
 		$queue = array();
 
 		try {
-			$code = $this->queueDependencies($realpath, $queue);
+			$code = $this->queueDependencies($tlipath, $queue);
 		} catch (Exception $e) {
-			throw new Exception("Could not resolve dependencies in '$realpath'", Exception::UNABLE_TO_RESOLVE, $e);
+			throw new Exception("Could not resolve dependencies in '$tlipath'", Exception::UNABLE_TO_RESOLVE, $e);
 		}
 
 		try {
@@ -142,14 +144,14 @@ class FileDependencyResolver implements \hookManager\Client, DependencyResolver 
 	/**
 	 * Look for required module identifiers and add them to the given queue.
 	 *
-	 * @param string $realpath Canonicalized path to the module file
+	 * @param string $tlipath The canonicalized absolute pathname of the module, excluding any extension
 	 * @param array $queue Queue of identifiers to resolve
 	 * @return string The code with resolved dependencies
 	 */
-	private function queueDependencies($realpath, &$queue) {
+	private function queueDependencies($tlipath, &$queue) {
 		$that = $this;
-		$code = $this->getModuleContents($realpath);
-		$relativetodir = dirname($realpath);
+		$code = $this->getModuleContents($tlipath);
+		$relativetodir = dirname($tlipath);
 
 		// Allow plugins to process modules before resolving as dependencies could be removed/added
 		if ($this->hookmanager) {
@@ -168,16 +170,25 @@ class FileDependencyResolver implements \hookManager\Client, DependencyResolver 
 			try {
 
 				// Add the module and get the new identifier
-				$realpath = $identifiermanager->addIdentifier($filepath);
-				if (!in_array($realpath, $queue) and !$that->hasModule($realpath)) {
-					$queue[] = $realpath;
+				$tlipath = $identifiermanager->addIdentifier($filepath);
+				if (!in_array($tlipath, $queue) and !$that->hasModule($tlipath)) {
+					$queue[] = $tlipath;
 				}
-				$newidentifier = $identifiermanager->getFlattenedIdentifier($realpath);
+				$newidentifier = $identifiermanager->getFlattenedIdentifier($tlipath);
 			} catch (Exception $e)  {
 				throw new Exception("Could not resolve dependency '$filepath'", Exception::UNABLE_TO_RESOLVE, $e);
 			}
 
 			return "require('$newidentifier')";
 		}, $code);
+	}
+
+
+	/**
+	 * @param string $tlipath The canonicalized absolute pathname of the module, excluding any extension
+	 * @returns string The system path to the module file
+	 */
+	private function getSystemPathForTopLevelIdentifier($tlipath) {
+		return $tlipath . '.' . self::EXT_JS;
 	}
 }

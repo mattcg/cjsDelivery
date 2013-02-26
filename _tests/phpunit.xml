@@ -33,6 +33,9 @@
 		<testsuite name="Identifier manager tests">
 			<file>lib/FileIdentifierManagerTest.php</file>
 		</testsuite>
+		<testsuite name="Dependency resolver tests">
+			<file>lib/FileDependencyResolverTest.php</file>
+		</testsuite>
 		<testsuite name="Model tests">
 			<file>lib/ModuleTest.php</file>
 		</testsuite>

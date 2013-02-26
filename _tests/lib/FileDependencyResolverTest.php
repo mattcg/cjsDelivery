@@ -20,7 +20,7 @@ class FileDependencyResolverTest extends PHPUnit_Framework_TestCase {
 
 	public function testGetModuleContents() {
 		$resolver = $this->getResolver();
-		$realpath = CJSD_TESTMODS_DIR . '/apple/index.js';
+		$realpath = CJSD_TESTMODS_DIR . '/apple/index';
 		$this->assertEquals("// Apple\n", $resolver->getModuleContents($realpath));
 	}
 

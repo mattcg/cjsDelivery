@@ -145,7 +145,7 @@ class FileIdentifierManager implements IdentifierManager {
 	 */
 	private function findFile($filepath) {
 
-		// First try with appended extension, as this is more likely
+		// Is the path to a file?
 		$filepathwithext = $this->addExtensionIfMissing($filepath);
 		$realpath = realpath($filepathwithext);
 		if ($realpath !== false and is_file($realpath)) {
@@ -156,6 +156,7 @@ class FileIdentifierManager implements IdentifierManager {
 			return $realpath;
 		}
 
+		// If the path to a directory?
 		$realpath = realpath($filepath);
 		if ($realpath !== false and is_dir($realpath)) {
 			$realpath = $this->findFileInDirectory($realpath);

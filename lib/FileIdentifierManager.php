@@ -16,10 +16,10 @@ class FileIdentifierManager implements IdentifierManager {
 
 	private $identifiergenerator;
 
-	private $modules = array();
 	private $includes = null;
 
-	private $tlicache = array();
+	private $resolvedidentifiers = array();
+	private $modules = array();
 
 	public function __construct(IdentifierGenerator $identifiergenerator) {
 		$this->setIdentifierGenerator($identifiergenerator);
@@ -175,8 +175,8 @@ class FileIdentifierManager implements IdentifierManager {
 	 * @return string The canonicalized absolute pathname of the module, excluding any extension
 	 */
 	public function getTopLevelIdentifier($identifier) {
-		if (isset($this->tlicache[$identifier])) {
-			return $this->tlicache[$identifier];
+		if (isset($this->resolvedidentifiers[$identifier])) {
+			return $this->resolvedidentifiers[$identifier];
 		}
 
 		// If the path is not absolute or relative, check the includes directory
@@ -191,7 +191,7 @@ class FileIdentifierManager implements IdentifierManager {
 		}
 
 		$toplevelidentifier = $this->stripExtensionIfPresent($realpath);
-		$this->tlicache[$identifier] = $toplevelidentifier;
+		$this->resolvedidentifiers[$identifier] = $toplevelidentifier;
 		return $toplevelidentifier;
 	}
 

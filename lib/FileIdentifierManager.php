@@ -156,7 +156,7 @@ class FileIdentifierManager implements IdentifierManager {
 			return $realpath;
 		}
 
-		// If the path to a directory?
+		// Is the path to a directory?
 		$realpath = realpath($filepath);
 		if ($realpath !== false and is_dir($realpath)) {
 			$realpath = $this->findFileInDirectory($realpath);

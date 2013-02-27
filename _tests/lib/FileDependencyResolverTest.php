@@ -30,6 +30,18 @@ class FileDependencyResolverTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals('index', $resolver->addModule($tlipath));
 	}
 
+
+	/**
+	 * @expectedException PHPUnit_Framework_Error_Notice
+	 */
+	public function testAddModuleTriggersNoticeIfIdentifierContainsExtension() {
+		$toplevelidentifier = CJSD_TESTMODS_DIR . '/apple/index.js';
+		$this->assertFileExists($toplevelidentifier);
+
+		$resolver = $this->getResolver();
+		$this->assertEquals('index', $resolver->addModule($toplevelidentifier));
+	}
+
 	public function testHasModule() {
 		$resolver = $this->getResolver();
 		$tlipath = CJSD_TESTMODS_DIR . '/apple/index';

@@ -22,7 +22,12 @@ class FileIdentifierManagerTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testNoticeTriggeredIfIdentifierContainsExtension() {
 		$identifiermanager = $this->getManager();
-		$identifiermanager->getTopLevelIdentifier(CJSD_TESTMODS_DIR . '/main.js');
+		$identifier = CJSD_TESTMODS_DIR . '/main.js';
+
+		// Assert that the file exists and is readable
+		$this->assertFileExists($identifier);
+		$this->assertTrue(is_readable($identifier));
+		$identifiermanager->getTopLevelIdentifier($identifier);
 	}
 
 
@@ -32,7 +37,12 @@ class FileIdentifierManagerTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testExceptionThrownIfTopLevelIdentifierIsUnknown() {
 		$identifiermanager = $this->getManager();
-		$identifiermanager->getFlattenedIdentifier(CJSD_TESTMODS_DIR . '/main');
+		$identifier = CJSD_TESTMODS_DIR . '/main';
+
+		// Assert that the file exists and is readable
+		$this->assertFileExists($identifier . '.js');
+		$this->assertTrue(is_readable($identifier . '.js'));
+		$identifiermanager->getFlattenedIdentifier($identifier);
 	}
 
 
@@ -42,59 +52,69 @@ class FileIdentifierManagerTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testExceptionThrownIfFileIsNonexistent() {
 		$identifiermanager = $this->getManager();
-		$identifiermanager->getTopLevelIdentifier('./nonexistent');
+		$identifier = './nonexistent';
+
+		$this->assertFileNotExists($identifier . '.js');
+		$identifiermanager->getTopLevelIdentifier($identifier);
 	}
 
 	public function testGetTopLevelIdentifierDoesNotReturnPathWithExtension() {
-		$path = CJSD_TESTMODS_DIR . '/main';
+		$identifier = CJSD_TESTMODS_DIR . '/main';
 
 		// Assert that the file actually has an extension
-		$this->assertFalse(is_file($path));
-		$this->assertTrue(is_file($path . '.js'));
+		$this->assertFileNotExists($identifier);
+		$this->assertFileExists($identifier . '.js');
 
 		$identifiermanager = $this->getManager();
-		$this->assertStringEndsWith('main', $identifiermanager->getTopLevelIdentifier($path));
+		$this->assertStringEndsWith('main', $identifiermanager->getTopLevelIdentifier($identifier));
 	}
 
 	public function testFileWithExactPathIsFound() {
-		$path = CJSD_TESTMODS_DIR . '/main';
+		$identifier = CJSD_TESTMODS_DIR . '/main';
+		$this->assertFileExists($identifier . '.js');
 
 		$identifiermanager = $this->getManager();
-		$this->assertEquals($path, $identifiermanager->getTopLevelIdentifier($path));
+		$this->assertEquals($identifier, $identifiermanager->getTopLevelIdentifier($identifier));
 	}
 
 	public function testIndexJsFileIsFound() {
-		$path = CJSD_TESTMODS_DIR . '/apple';
+		$identifier = CJSD_TESTMODS_DIR . '/apple';
+		$this->assertFileExists($identifier . '/index.js');
 
 		$identifiermanager = $this->getManager();
-		$this->assertEquals($path . '/index', $identifiermanager->getTopLevelIdentifier($path));
+		$this->assertEquals($identifier . '/index', $identifiermanager->getTopLevelIdentifier($identifier));
 	}
 
 	public function testFileWithSameNameAsContainingDirectoryIsFound() {
-		$path = CJSD_TESTMODS_DIR . '/banana';
+		$identifier = CJSD_TESTMODS_DIR . '/banana';
+		$this->assertFileExists($identifier . '/banana.js');
 
 		$identifiermanager = $this->getManager();
-		$this->assertEquals($path . '/banana', $identifiermanager->getTopLevelIdentifier($path));
+		$this->assertEquals($identifier . '/banana', $identifiermanager->getTopLevelIdentifier($identifier));
 	}
 
 	public function testOnlyFileInDirectoryIsFound() {
-		$path = CJSD_TESTMODS_DIR . '/strawberry';
+		$identifier = CJSD_TESTMODS_DIR . '/strawberry';
+		$this->assertFileExists($identifier . '/main.js');
 
 		$identifiermanager = $this->getManager();
-		$this->assertEquals($path . '/main', $identifiermanager->getTopLevelIdentifier($path));
+		$this->assertEquals($identifier . '/main', $identifiermanager->getTopLevelIdentifier($identifier));
 	}
 
 	public function testFileSpecifiedInPackageJsonIsFound() {
-		$path = CJSD_TESTMODS_DIR . '/grapefruit';
+		$identifier = CJSD_TESTMODS_DIR . '/grapefruit';
+		$this->assertFileExists($identifier . '/lib/grapefruit.js');
 
 		$identifiermanager = $this->getManager();
-		$this->assertEquals($path . '/lib/grapefruit', $identifiermanager->getTopLevelIdentifier($path));
+		$this->assertEquals($identifier . '/lib/grapefruit', $identifiermanager->getTopLevelIdentifier($identifier));
 	}
 
 	public function testIndexJsFileIsChosenOverFileWithSameNameAsDir() {
-		$path = CJSD_TESTMODS_DIR . '/quince';
+		$identifier = CJSD_TESTMODS_DIR . '/quince';
+		$this->assertFileExists($identifier . '/index.js');
+		$this->assertFileExists($identifier . '/quince.js');
 
 		$identifiermanager = $this->getManager();
-		$this->assertEquals($path . '/index', $identifiermanager->getTopLevelIdentifier($path));
+		$this->assertEquals($identifier . '/index', $identifiermanager->getTopLevelIdentifier($identifier));
 	}
 }

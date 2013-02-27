@@ -59,4 +59,16 @@ class FileDependencyResolverTest extends PHPUnit_Framework_TestCase {
 
 		$this->assertFalse($resolver->hasModule($toplevelidentifier));
 	}
+
+	public function testRelativeDependenciesAreResolved() {
+		$toplevelidentifier = CJSD_TESTMODS_DIR . '/pear/index';
+		$this->assertFileExists($toplevelidentifier . '.js');
+		$this->assertEquals("require('./pips');\nrequire('./stalk');\n", file_get_contents($toplevelidentifier . '.js'));
+
+		$resolver = $this->getResolver();
+		$resolver->addModule($toplevelidentifier);
+		$this->assertTrue($resolver->hasModule($toplevelidentifier));
+		$this->assertTrue($resolver->hasModule(CJSD_TESTMODS_DIR . '/pear/pips'));
+		$this->assertTrue($resolver->hasModule(CJSD_TESTMODS_DIR . '/pear/stalk'));
+	}
 }

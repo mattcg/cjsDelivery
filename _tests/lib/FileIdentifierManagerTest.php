@@ -81,6 +81,9 @@ class FileIdentifierManagerTest extends PHPUnit_Framework_TestCase {
 
 		$identifiermanager = $this->getManager();
 		$this->assertStringEndsWith('main', $identifiermanager->getTopLevelIdentifier($identifier));
+
+		// Even if the passed identifier has an extension...
+		$this->assertStringEndsWith('main', @$identifiermanager->getTopLevelIdentifier($identifier . '.js'));
 	}
 
 	public function testFileWithExactPathIsFound() {

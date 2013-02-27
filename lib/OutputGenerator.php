@@ -40,9 +40,10 @@ class OutputGenerator implements \hookManager\Client {
 	 * @param Module[] $modules List of modules from which to build output
 	 * @param string $main Identifier of the main module
 	 * @param string $globals Raw JavaScript included just outside module scope
+	 * @param string $exportrequire Name of variable to export the require function as
 	 * @return string Complete output
 	 */
-	public function buildOutput(array $modules, $main = '', &$globals = '') {
+	public function buildOutput(array $modules, $main = '', &$globals = '', $exportrequire = '') {
 		if (empty($modules)) {
 			throw new Exception('Nothing to build', Exception::NOTHING_TO_BUILD);
 		}
@@ -62,7 +63,7 @@ class OutputGenerator implements \hookManager\Client {
 			$concat .= $this->renderer->renderModule($module);
 		}
 
-		$output = $this->renderer->renderOutput($concat, $main, $globals);
+		$output = $this->renderer->renderOutput($concat, $main, $globals, $exportrequire);
 
 		// Run hooks with the fully built output
 		if ($this->hookmanager) {

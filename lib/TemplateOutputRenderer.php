@@ -31,28 +31,36 @@ MODULE;
 	/**
 	 * @see OutputRenderer::renderOutput
 	 */
-	public function renderOutput(&$output, $main = '', &$globals = '') {
+	public function renderOutput(&$output, $main = '', &$globals = '', $exportrequire = '') {
 		if ($main) {
 			$main = "require('$main');";
 		}
 
+		if ($exportrequire and preg_match('/^[a-z]+$/i', $exportrequire)) {
+			$exportrequire = "var $exportrequire = ";
+			$returnrequire = 'return require;';
+		} else {
+			$returnrequire = '';
+		}
+
 		return <<<OUTPUT
-(function(modules) {
-var require = function(identifier) {
-	var module, exports, closure;
-	if (!modules[identifier].hasOwnProperty('exports')) {
-		exports = {};
-		module = {id: identifier, exports: exports};
-		closure = modules[identifier];
-		modules[identifier] = module;
-		closure.call(module, require, exports, module);
-	}
-	return modules[identifier].exports;
-};
+$exportrequire(function(modules) {
+	var require = function(identifier) {
+		var module, exports, closure;
+		if (!modules[identifier].hasOwnProperty('exports')) {
+			exports = {};
+			module = {id: identifier, exports: exports};
+			closure = modules[identifier];
+			modules[identifier] = module;
+			closure.call(module, require, exports, module);
+		}
+		return modules[identifier].exports;
+	};
 
 $output
 $globals
 $main
+$returnrequire
 }({}));
 
 OUTPUT;

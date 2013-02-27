@@ -25,7 +25,8 @@ interface OutputRenderer {
 	 * @param string $output Concatenated module code
 	 * @param string $main Identifier of the main module
 	 * @param string $globals Raw JavaScript included just outside module scope
+	 * @param string $exportrequire Name of variable to export the require function as
 	 * @return string
 	 */
-	public function renderOutput(&$output, $main = '', &$globals = '');
+	public function renderOutput(&$output, $main = '', &$globals = '', $exportrequire = '');
 }

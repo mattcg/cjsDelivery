@@ -19,14 +19,18 @@ class FileDependencyResolverTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function testAddModuleAcceptsRelativePath() {
-		$resolver = $this->getResolver();
 		$identifier = './modules/apple/index';
+		$this->assertFileExists($identifier . '.js');
+
+		$resolver = $this->getResolver();
 		$this->assertEquals('index', $resolver->addModule($identifier));
 	}
 
 	public function testAddModuleAcceptsTopLevelPath() {
-		$resolver = $this->getResolver();
 		$toplevelidentifier = CJSD_TESTMODS_DIR . '/apple/index';
+		$this->assertFileExists($toplevelidentifier . '.js');
+
+		$resolver = $this->getResolver();
 		$this->assertEquals('index', $resolver->addModule($toplevelidentifier));
 	}
 
@@ -43,8 +47,9 @@ class FileDependencyResolverTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function testHasModule() {
-		$resolver = $this->getResolver();
 		$toplevelidentifier = CJSD_TESTMODS_DIR . '/apple/index';
+
+		$resolver = $this->getResolver();
 		$resolver->addModule($toplevelidentifier);
 		$this->assertTrue($resolver->hasModule($toplevelidentifier));
 	}

@@ -135,6 +135,7 @@ class FileIdentifierManagerTest extends PHPUnit_Framework_TestCase {
 	public function testOnlyFileInDirectoryIsFound() {
 		$identifier = CJSD_TESTMODS_DIR . '/strawberry';
 		$this->assertFileExists($identifier . '/main.js');
+		$this->assertEquals(1, count(glob($identifier . '/*.js')));
 
 		$identifiermanager = $this->getManager();
 		$this->assertEquals($identifier . '/main', $identifiermanager->getTopLevelIdentifier($identifier));

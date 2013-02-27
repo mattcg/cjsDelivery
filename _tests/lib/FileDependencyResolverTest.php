@@ -18,18 +18,6 @@ class FileDependencyResolverTest extends PHPUnit_Framework_TestCase {
 		return new cjsDelivery\FileDependencyResolver($identifiermanager);
 	}
 
-	public function testGetModuleContentsAcceptsRelativePath() {
-		$resolver = $this->getResolver();
-		$filepath = './modules/apple/index';
-		$this->assertEquals("// Apple\n", $resolver->getModuleContents($filepath));
-	}
-
-	public function testGetModuleContentsAcceptsTopLevelPath() {
-		$resolver = $this->getResolver();
-		$tlipath = CJSD_TESTMODS_DIR . '/apple/index';
-		$this->assertEquals("// Apple\n", $resolver->getModuleContents($tlipath));
-	}
-
 	public function testAddModuleAcceptsRelativePath() {
 		$resolver = $this->getResolver();
 		$filepath = './modules/apple/index';

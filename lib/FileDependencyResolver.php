@@ -52,24 +52,6 @@ class FileDependencyResolver implements \hookManager\Client, DependencyResolver 
 
 
 	/**
-	 * Get the raw contents from a module file
-	 *
-	 * @throws Exception If the module file is unreadable
-	 * @param string $tlipath The canonicalized absolute pathname of the module, excluding any extension
-	 * @return string Raw module code
-	 */
-	public function getModuleContents($tlipath) {
-		$realpath = $this->getSystemPathForTopLevelIdentifier($this->identifiermanager->getTopLevelIdentifier($tlipath));
-		$code = @file_get_contents($realpath, false);
-		if ($code === false) {
-			throw new Exception("Unable to read '$realpath'", Exception::UNABLE_TO_READ);
-		}
-
-		return $code;
-	}
-
-
-	/**
 	 * @see DependencyResolver::hasModule
 	 * @param string $tlipath The canonicalized absolute pathname of the module, excluding any extension
 	 */
@@ -142,6 +124,24 @@ class FileDependencyResolver implements \hookManager\Client, DependencyResolver 
 
 
 	/**
+	 * Get the raw contents from a module file
+	 *
+	 * @throws Exception If the module file is unreadable
+	 * @param string $tlipath The canonicalized absolute pathname of the module, excluding any extension
+	 * @return string Raw module code
+	 */
+	private function getFileContents($tlipath) {
+		$realpath = $this->getSystemPathForTopLevelIdentifier($tlipath);
+		$code = @file_get_contents($realpath, false);
+		if ($code === false) {
+			throw new Exception("Unable to read '$realpath'", Exception::UNABLE_TO_READ);
+		}
+
+		return $code;
+	}
+
+
+	/**
 	 * Look for required module identifiers and add them to the given queue.
 	 *
 	 * @param string $tlipath The canonicalized absolute pathname of the module, excluding any extension
@@ -150,7 +150,7 @@ class FileDependencyResolver implements \hookManager\Client, DependencyResolver 
 	 */
 	private function queueDependencies($tlipath, &$queue) {
 		$that = $this;
-		$code = $this->getModuleContents($tlipath);
+		$code = $this->getFileContents($tlipath);
 		$relativetodir = dirname($tlipath);
 
 		// Allow plugins to process modules before resolving as dependencies could be removed/added

@@ -25,16 +25,6 @@ interface DependencyResolver {
 
 
 	/**
-	 * Get the raw contents from a module
-	 *
-	 * @throws Exception If the module is unreadable
-	 * @param string $toplevelidentifier The top level identifier of the module
-	 * @return string Raw module code
-	 */
-	public function getModuleContents($toplevelidentifier);
-
-
-	/**
 	 * Check whether a module has been added.
 	 *
 	 * @param string $toplevelidentifier The top level identifier of the module

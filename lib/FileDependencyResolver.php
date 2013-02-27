@@ -88,7 +88,7 @@ class FileDependencyResolver implements \hookManager\Client, DependencyResolver 
 		$identifier = $this->identifiermanager->getFlattenedIdentifier($toplevelidentifier);
 
 		$module = new Module($code);
-		$module->setModificationTime(filemtime($this->getSystemPathForTopLevelIdentifier($toplevelidentifier)));
+		$module->setModificationTime(filemtime($this->getFilePathForTopLevelIdentifier($toplevelidentifier)));
 		$module->setUniqueIdentifier($identifier);
 
 		$this->modules[$toplevelidentifier] = $module;
@@ -131,7 +131,7 @@ class FileDependencyResolver implements \hookManager\Client, DependencyResolver 
 	 * @return string Raw module code
 	 */
 	private function getFileContents($toplevelidentifier) {
-		$realpath = $this->getSystemPathForTopLevelIdentifier($toplevelidentifier);
+		$realpath = $this->getFilePathForTopLevelIdentifier($toplevelidentifier);
 		$code = @file_get_contents($realpath, false);
 		if ($code === false) {
 			throw new Exception("Unable to read '$realpath'", Exception::UNABLE_TO_READ);
@@ -188,7 +188,7 @@ class FileDependencyResolver implements \hookManager\Client, DependencyResolver 
 	 * @param string $toplevelidentifier The canonicalized absolute pathname of the module, excluding any extension
 	 * @returns string The system path to the module file
 	 */
-	private function getSystemPathForTopLevelIdentifier($toplevelidentifier) {
+	private function getFilePathForTopLevelIdentifier($toplevelidentifier) {
 		return $toplevelidentifier . '.' . self::EXT_JS;
 	}
 }

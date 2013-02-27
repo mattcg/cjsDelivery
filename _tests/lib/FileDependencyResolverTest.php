@@ -48,9 +48,15 @@ class FileDependencyResolverTest extends PHPUnit_Framework_TestCase {
 
 	public function testHasModule() {
 		$toplevelidentifier = CJSD_TESTMODS_DIR . '/apple/index';
+		$this->assertFileExists($toplevelidentifier . '.js');
 
 		$resolver = $this->getResolver();
 		$resolver->addModule($toplevelidentifier);
 		$this->assertTrue($resolver->hasModule($toplevelidentifier));
+
+		$toplevelidentifier = CJSD_TESTMODS_DIR . '/nonexistent';
+		$this->assertFileNotExists($toplevelidentifier . '.js');
+
+		$this->assertFalse($resolver->hasModule($toplevelidentifier));
 	}
 }

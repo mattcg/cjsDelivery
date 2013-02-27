@@ -169,8 +169,8 @@ class FileIdentifierManagerTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function testIncludesAreFound() {
-		$identifier = 'modules/main';
-		$this->assertFileExists($identifier . '.js');
+		$identifier = 'main';
+		$this->assertFileExists('modules/' . $identifier . '.js');
 
 		$identifiermanager = $this->getManager();
 		$identifiermanager->setIncludes(array(CJSD_TESTMODS_DIR));

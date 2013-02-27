@@ -94,10 +94,10 @@ class FileIdentifierManagerTest extends PHPUnit_Framework_TestCase {
 		$this->assertFileExists($identifier . '.js');
 
 		$identifiermanager = $this->getManager();
-		$this->assertEquals($identifier . '.js', $identifiermanager->addIdentifier($identifier));
+		$this->assertEquals($identifier, $identifiermanager->addIdentifier($identifier));
 
 		// Even if the passed identifier has an extension...
-		$this->assertEquals($identifier . '.js', @$identifiermanager->getTopLevelIdentifier($identifier . '.js'));
+		$this->assertEquals($identifier, @$identifiermanager->getTopLevelIdentifier($identifier . '.js'));
 	}
 
 	public function testFileWithExactPathIsFound() {

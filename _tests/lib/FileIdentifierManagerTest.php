@@ -20,7 +20,21 @@ class FileIdentifierManagerTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * @expectedException PHPUnit_Framework_Error_Notice
 	 */
-	public function testNoticeTriggeredIfIdentifierContainsExtension() {
+	public function testNoticeTriggeredByAddIdentifierIfIdentifierContainsExtension() {
+		$identifiermanager = $this->getManager();
+		$identifier = CJSD_TESTMODS_DIR . '/main.js';
+
+		// Assert that the file exists and is readable
+		$this->assertFileExists($identifier);
+		$this->assertTrue(is_readable($identifier));
+		$identifiermanager->addIdentifier($identifier);
+	}
+
+
+	/**
+	 * @expectedException PHPUnit_Framework_Error_Notice
+	 */
+	public function testNoticeTriggeredByGetTopLevelIdentifierIfIdentifierContainsExtension() {
 		$identifiermanager = $this->getManager();
 		$identifier = CJSD_TESTMODS_DIR . '/main.js';
 

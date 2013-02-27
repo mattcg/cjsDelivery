@@ -190,7 +190,7 @@ class FileIdentifierManager implements IdentifierManager {
 			throw new Exception("Module not found at '$identifier'", Exception::MODULE_NOT_FOUND);
 		}
 
-		$toplevelidentifier = $this->stripExtensionIfPresent($realpath);
+		$toplevelidentifier = $this->stripExtension($realpath);
 		$this->resolvedidentifiers[$identifier] = $toplevelidentifier;
 		return $toplevelidentifier;
 	}
@@ -217,7 +217,7 @@ class FileIdentifierManager implements IdentifierManager {
 	 * @param string $identifier
 	 * @returns string The path with any file extension removed
 	 */
-	private function stripExtensionIfPresent($identifier) {
+	private function stripExtension($identifier) {
 		return preg_replace('/\.' . self::EXT_JS . '$/', '', $identifier);
 	}
 

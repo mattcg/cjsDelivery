@@ -72,6 +72,14 @@ class FileIdentifierManagerTest extends PHPUnit_Framework_TestCase {
 		$identifiermanager->getTopLevelIdentifier($identifier);
 	}
 
+	public function testGetTopLevelIdentifierReturnsTopLevelIdentifier() {
+		$identifier = CJSD_TESTMODS_DIR . '/main';
+		$this->assertFileExists($identifier . '.js');
+
+		$identifiermanager = $this->getManager();
+		$this->assertEquals($identifier, $identifiermanager->getTopLevelIdentifier($identifier));
+	}
+
 	public function testGetTopLevelIdentifierDoesNotReturnPathWithExtension() {
 		$identifier = CJSD_TESTMODS_DIR . '/main';
 

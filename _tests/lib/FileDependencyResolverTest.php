@@ -71,4 +71,19 @@ class FileDependencyResolverTest extends PHPUnit_Framework_TestCase {
 		$this->assertTrue($resolver->hasModule(CJSD_TESTMODS_DIR . '/pear/pips'));
 		$this->assertTrue($resolver->hasModule(CJSD_TESTMODS_DIR . '/pear/stalk'));
 	}
+
+	public function testDependenciesWithinIncludesAreResolved() {
+		$identifier = 'pear/index';
+		$this->assertFileExists('modules/' . $identifier . '.js');
+
+		$resolver = $this->getResolver();
+
+		$manager = $resolver->getIdentifierManager();
+		$manager->setIncludes(array(CJSD_TESTMODS_DIR));
+
+		$resolver->addModule($identifier);
+		$this->assertTrue($resolver->hasModule(CJSD_TESTMODS_DIR . '/' . $identifier));
+		$this->assertTrue($resolver->hasModule(CJSD_TESTMODS_DIR . '/pear/pips'));
+		$this->assertTrue($resolver->hasModule(CJSD_TESTMODS_DIR . '/pear/stalk'));
+	}
 }

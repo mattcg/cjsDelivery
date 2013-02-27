@@ -156,4 +156,24 @@ class FileIdentifierManagerTest extends PHPUnit_Framework_TestCase {
 		$identifiermanager = $this->getManager();
 		$this->assertEquals($identifier . '/index', $identifiermanager->getTopLevelIdentifier($identifier));
 	}
+
+
+	/**
+	 * @expectedException cjsDelivery\Exception
+	 * @expectedExceptionCode 1
+	 */
+	public function testExceptionThrownForAbsolutePathWithNoIncludesSpecified() {
+		$identifier = 'modules/main';
+		$this->assertFileExists($identifier . '.js');
+		$this->getManager()->addIdentifier($identifier);
+	}
+
+	public function testIncludesAreFound() {
+		$identifier = 'modules/main';
+		$this->assertFileExists($identifier . '.js');
+
+		$identifiermanager = $this->getManager();
+		$identifiermanager->setIncludes(array(CJSD_TESTMODS_DIR));
+		$this->assertEquals(CJSD_TESTMODS_DIR . '/' . $identifier, $identifiermanager->addIdentifier($identifier));
+	}
 }

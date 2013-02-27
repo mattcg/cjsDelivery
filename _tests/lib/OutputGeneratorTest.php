@@ -19,7 +19,7 @@ class OutputRendererDouble implements cjsDelivery\OutputRenderer {
 		return $module->getCode();
 	}
 
-	public function renderOutput(&$output, $main = '', &$globals = '') {
+	public function renderOutput(&$output, $main = '', &$globals = '', $exportrequire = '') {
 		$output = array($output, $main, $globals);
 		$this->output = $output;
 		return $output;

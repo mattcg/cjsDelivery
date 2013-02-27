@@ -85,9 +85,10 @@ class Delivery extends \hookManager\Pluggable {
 	 *
 	 * @throws Exception If the module is not found
 	 *
+	 * @param string $exportrequire Name of variable to export the require function as
 	 * @return string Complete output
 	 */
-	public function getOutput() {
+	public function getOutput($exportrequire = '') {
 		$identifiermanager = $this->dependencyresolver->getIdentifierManager();
 		$mainmodule = '';
 		if ($this->mainmodule) {
@@ -105,7 +106,7 @@ class Delivery extends \hookManager\Pluggable {
 		}
 
 		$allmodules = $this->dependencyresolver->getAllDependencies();
-		return $this->outputgenerator->buildOutput($allmodules, $mainmodule, $globalscode);
+		return $this->outputgenerator->buildOutput($allmodules, $mainmodule, $globalscode, $exportrequire);
 	}
 
 

@@ -70,6 +70,11 @@ class FileDependencyResolverTest extends PHPUnit_Framework_TestCase {
 		$this->assertTrue($resolver->hasModule($toplevelidentifier));
 		$this->assertTrue($resolver->hasModule(CJSD_TESTMODS_DIR . '/pear/pips'));
 		$this->assertTrue($resolver->hasModule(CJSD_TESTMODS_DIR . '/pear/stalk'));
+
+		$dependencies = $resolver->getAllDependencies();
+		$this->assertEquals("require('pips');\nrequire('stalk');\n", $dependencies[$toplevelidentifier]->getCode());
+		$this->assertEquals("// Pips\n", $dependencies[CJSD_TESTMODS_DIR . '/pear/pips']->getCode());
+		$this->assertEquals("// Stalk\n", $dependencies[CJSD_TESTMODS_DIR . '/pear/stalk']->getCode());
 	}
 
 	public function testDependenciesWithinIncludesAreResolved() {
@@ -85,5 +90,10 @@ class FileDependencyResolverTest extends PHPUnit_Framework_TestCase {
 		$this->assertTrue($resolver->hasModule(CJSD_TESTMODS_DIR . '/' . $identifier));
 		$this->assertTrue($resolver->hasModule(CJSD_TESTMODS_DIR . '/pear/pips'));
 		$this->assertTrue($resolver->hasModule(CJSD_TESTMODS_DIR . '/pear/stalk'));
+
+		$dependencies = $resolver->getAllDependencies();
+		$this->assertEquals("require('pips');\nrequire('stalk');\n", $dependencies[CJSD_TESTMODS_DIR . '/' . $identifier]->getCode());
+		$this->assertEquals("// Pips\n", $dependencies[CJSD_TESTMODS_DIR . '/pear/pips']->getCode());
+		$this->assertEquals("// Stalk\n", $dependencies[CJSD_TESTMODS_DIR . '/pear/stalk']->getCode());
 	}
 }

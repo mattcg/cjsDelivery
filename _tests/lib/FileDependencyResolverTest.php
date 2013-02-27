@@ -20,14 +20,14 @@ class FileDependencyResolverTest extends PHPUnit_Framework_TestCase {
 
 	public function testAddModuleAcceptsRelativePath() {
 		$resolver = $this->getResolver();
-		$filepath = './modules/apple/index';
-		$this->assertEquals('index', $resolver->addModule($filepath));
+		$identifier = './modules/apple/index';
+		$this->assertEquals('index', $resolver->addModule($identifier));
 	}
 
 	public function testAddModuleAcceptsTopLevelPath() {
 		$resolver = $this->getResolver();
-		$tlipath = CJSD_TESTMODS_DIR . '/apple/index';
-		$this->assertEquals('index', $resolver->addModule($tlipath));
+		$toplevelidentifier = CJSD_TESTMODS_DIR . '/apple/index';
+		$this->assertEquals('index', $resolver->addModule($toplevelidentifier));
 	}
 
 
@@ -44,8 +44,8 @@ class FileDependencyResolverTest extends PHPUnit_Framework_TestCase {
 
 	public function testHasModule() {
 		$resolver = $this->getResolver();
-		$tlipath = CJSD_TESTMODS_DIR . '/apple/index';
-		$resolver->addModule($tlipath);
-		$this->assertTrue($resolver->hasModule($tlipath));
+		$toplevelidentifier = CJSD_TESTMODS_DIR . '/apple/index';
+		$resolver->addModule($toplevelidentifier);
+		$this->assertTrue($resolver->hasModule($toplevelidentifier));
 	}
 }

@@ -19,10 +19,12 @@ class TemplateOutputRenderer implements OutputRenderer {
 		$identifier = $module->getUniqueIdentifier();
 		$code = $module->getCode();
 		return <<<MODULE
-			modules['$identifier'] = function(require, exports, module, modules) {
-				$code
-			};
+modules['$identifier'] = function(require, exports, module, modules) {
+$code
+};
+
 MODULE;
+
 	}
 
 
@@ -35,23 +37,25 @@ MODULE;
 		}
 
 		return <<<OUTPUT
-			(function(modules) {
-				var require = function(identifier) {
-					var module, exports, closure;
-					if (!modules[identifier].hasOwnProperty('exports')) {
-						exports = {};
-						module = {id: identifier, exports: exports};
-						closure = modules[identifier];
-						modules[identifier] = module;
-						closure.call(module, require, exports, module);
-					}
-					return modules[identifier].exports;
-				};
+(function(modules) {
+var require = function(identifier) {
+	var module, exports, closure;
+	if (!modules[identifier].hasOwnProperty('exports')) {
+		exports = {};
+		module = {id: identifier, exports: exports};
+		closure = modules[identifier];
+		modules[identifier] = module;
+		closure.call(module, require, exports, module);
+	}
+	return modules[identifier].exports;
+};
 
-				$output
-				$globals
-				$main
-			}({}));
+$output
+$globals
+$main
+}({}));
+
 OUTPUT;
+
 	}
 }

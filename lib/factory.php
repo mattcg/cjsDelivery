@@ -7,8 +7,6 @@
 
 namespace cjsDelivery;
 
-require_once 'external/hookManager/hookManager.php';
-
 require_once 'Delivery.php';
 require_once 'MinIdentifierGenerator.php';
 require_once 'FlatIdentifierGenerator.php';
@@ -18,7 +16,7 @@ require_once 'OutputGenerator.php';
 require_once 'TemplateOutputRenderer.php';
 
 function create($minifyidentifiers = false, array $includes = null, array $globals = null) {
-	$hookmanager = \hookManager\create();
+	$signal = require __DIR__ . '/../vendor/aura/signal/scripts/instance.php';
 
 	if ($minifyidentifiers) {
 		$identifiergenerator = new MinIdentifierGenerator();
@@ -31,13 +29,13 @@ function create($minifyidentifiers = false, array $includes = null, array $globa
 	}
 
 	$dependencyresolver = new FileDependencyResolver($identifiermanager);
-	$dependencyresolver->setHookManager($hookmanager);
+	$dependencyresolver->setSignalManager($signal);
 
 	$outputgenerator = new OutputGenerator(new TemplateOutputRenderer());
-	$outputgenerator->setHookManager($hookmanager);
+	$outputgenerator->setSignalManager($signal);
 
 	$delivery = new Delivery();
-	$delivery->setHookManager($hookmanager);
+	$delivery->setSignalManager($signal);
 	$delivery->setOutputGenerator($outputgenerator);
 	$delivery->setDependencyResolver($dependencyresolver);
 

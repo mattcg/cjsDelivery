@@ -7,8 +7,8 @@
 
 namespace cjsDelivery;
 
-require 'factory.php';
-require 'plugins/pragmaManager/PragmaManager.php';
+require_once 'factory.php';
+require_once 'PragmaManager.php';
 
 class CommandLineRunner {
 	const LONGOPT_MINI = 'minify_identifiers';
@@ -104,7 +104,7 @@ class CommandLineRunner {
 		$delivery = create($minifyidentifiers, $includes, $globals);
 
 		if (isset($options[self::OPT_PRAGMA])) {
-			$pragmamanager = new PragmaManager();
+			$pragmamanager = new PragmaManager($delivery->getSignalManager(), $delivery->getDependencyResolver());
 			if (isset($options[self::LONGOPT_PFMT])) {
 				$pfmt = $options[self::LONGOPT_PFMT];
 				$this->maybeDebugOut('Setting pragma format "'.$pfmt.'"...');
@@ -112,7 +112,6 @@ class CommandLineRunner {
 			}
 
 			$this->maybeDebugOut('Registering the pragmaManager plugin');
-			$delivery->plugin($pragmamanager);
 
 			$poptions =& $options[self::OPT_PRAGMA];
 			if (is_array($poptions)) {

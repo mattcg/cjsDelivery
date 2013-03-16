@@ -9,15 +9,14 @@
 
 namespace cjsDelivery;
 
-require_once __DIR__ . '/../../external/hookManager/lib/Plugin.php';
-require_once __DIR__ . '/../../external/hookManager/lib/Client.php';
+require_once 'processHooks.php';
 
-require_once __DIR__ . '/../../processHooks.php';
-
-class PragmaManager implements \hookManager\Plugin {
+class PragmaManager {
 
 	private $pragmas = array();
 	private $pragmaformat;
+
+	protected $signal;
 
 
 	/**
@@ -32,17 +31,13 @@ class PragmaManager implements \hookManager\Plugin {
 	const DEFAULT_PFMT = '/\/\/ ifdef (?<pragma>[A-Z_]+)\n(.*?)\n\/\/ endif \1/';
 
 
-	/**
-	 * Register the plugin on a cjsDelivery class instance
-	 *
-	 * @param cjsDelivery $delivery
-	 */
-	public function register(\hookManager\Client $delivery) {
-		$hookmanager = $delivery->getHookManager();
+	public function __construct(\Aura\Signal\Manager $signal, DependencyResolver $dependencyresolver) {
+		$this->signal = $signal;
 
 		$that = $this;
-		$hookmanager->hook(processHooks\PROCESS_MODULE, function(&$code) use ($that) {
+		$signal->handler($dependencyresolver, processHooks\PROCESS_MODULE, function($code) use ($that) {
 			$that->processPragmas($code);
+			return $code;
 		});
 	}
 
@@ -57,6 +52,7 @@ class PragmaManager implements \hookManager\Plugin {
 		if (!$pattern) {
 			$pattern = self::DEFAULT_PFMT;
 		}
+
 		$that = $this;
 		$code = preg_replace_callback($pattern, function($match) use ($that) {
 			if ($that->checkPragma($match['pragma'])) {

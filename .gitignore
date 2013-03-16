@@ -1,2 +1,4 @@
 .DS_Store
-build
+composer.lock
+build/
+vendor/

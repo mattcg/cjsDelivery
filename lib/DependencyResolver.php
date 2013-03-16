@@ -17,6 +17,10 @@ interface DependencyResolver {
 	 */
 	public function __construct(IdentifierManager $identifiermanager);
 
+	public function setSignalManager(\Aura\Signal\Manager $signal);
+
+	public function getSignalManager();
+
 
 	/**
 	 * @returns IdentifierManager

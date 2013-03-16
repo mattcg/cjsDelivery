@@ -7,12 +7,10 @@
 
 namespace cjsDelivery;
 
-require_once 'external/hookManager/lib/Pluggable.php';
-
 require_once 'OutputGenerator.php';
 require_once 'DependencyResolver.php';
 
-class Delivery extends \hookManager\Pluggable {
+class Delivery {
 
 	private $outputgenerator = null;
 	private $dependencyresolver = null;
@@ -21,12 +19,26 @@ class Delivery extends \hookManager\Pluggable {
 
 	private $mainmodule;
 
+	protected $signal = null;
+
 	public function setOutputGenerator(OutputGenerator $generator) {
 		$this->outputgenerator = $generator;
 	}
 
 	public function setDependencyResolver(DependencyResolver $resolver) {
 		$this->dependencyresolver = $resolver;
+	}
+
+	public function getDependencyResolver() {
+		return $this->dependencyresolver;
+	}
+
+	public function setSignalManager(\Aura\Signal\Manager $signal) {
+		$this->signal = $signal;
+	}
+
+	public function getSignalManager() {
+		return $this->signal;
 	}
 
 

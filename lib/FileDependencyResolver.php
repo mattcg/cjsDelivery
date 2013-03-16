@@ -7,35 +7,33 @@
 
 namespace cjsDelivery;
 
-require_once 'external/hookManager/lib/Client.php';
-require_once 'external/hookManager/lib/Manager.php';
-
 require_once 'Exception.php';
 require_once 'DependencyResolver.php';
 require_once 'IdentifierManager.php';
 require_once 'Module.php';
 require_once 'processHooks.php';
 
-class FileDependencyResolver implements \hookManager\Client, DependencyResolver {
+class FileDependencyResolver implements DependencyResolver {
 
 	const EXT_JS = 'js';
 	const REQUIRE_PREG = '/require\((\'|")(.*?)\1\)/';
 
 	private $modules = array();
 
-	private $identifiermanager = null;
-	private $hookmanager = null;
+	private $identifiermanager;
+
+	protected $signal = null;
 
 	public function __construct(IdentifierManager $identifiermanager) {
 		$this->identifiermanager = $identifiermanager;
 	}
 
-	public function setHookManager(\hookManager\Manager $hookmanager) {
-		$this->hookmanager = $hookmanager;
+	public function setSignalManager(\Aura\Signal\Manager $signal) {
+		$this->signal = $signal;
 	}
 
-	public function getHookManager() {
-		return $this->hookmanager;
+	public function getSignalManager() {
+		return $this->signal;
 	}
 
 	public function getIdentifierManager() {
@@ -154,8 +152,11 @@ class FileDependencyResolver implements \hookManager\Client, DependencyResolver 
 		$relativetodir = dirname($toplevelidentifier);
 
 		// Allow plugins to process modules before resolving as dependencies could be removed/added
-		if ($this->hookmanager) {
-			$this->hookmanager->run(processHooks\PROCESS_MODULE, $code);
+		if ($this->signal) {
+			$result = $this->signal->send($this, processHooks\PROCESS_MODULE, $code)->getLast();
+			if ($result) {
+				$code = $result->value;
+			}
 		}
 
 		return preg_replace_callback(self::REQUIRE_PREG, function($match) use ($that, &$queue, $relativetodir) {

@@ -7,28 +7,26 @@
 
 namespace cjsDelivery;
 
-require_once 'external/hookManager/lib/Client.php';
-require_once 'external/hookManager/lib/Manager.php';
-
 require_once 'Exception.php';
 require_once 'OutputRenderer.php';
 require_once 'processHooks.php';
 
-class OutputGenerator implements \hookManager\Client {
+class OutputGenerator {
 
-	private $hookmanager = null;
-	private $renderer    = null;
+	private $renderer = null;
+
+	protected $signal = null;
 
 	public function __construct(OutputRenderer $renderer) {
 		$this->renderer = $renderer;
 	}
 
-	public function setHookManager(\hookManager\Manager $hookmanager) {
-		$this->hookmanager = $hookmanager;
+	public function setSignalManager(\Aura\Signal\Manager $signal) {
+		$this->signal = $signal;
 	}
 
-	public function getHookManager() {
-		return $this->hookmanager;
+	public function getSignalManager() {
+		return $this->signal;
 	}
 
 
@@ -50,10 +48,10 @@ class OutputGenerator implements \hookManager\Client {
 
 		// If output is created by the hook callbacks, return it
 		$output = '';
-		if ($this->hookmanager) {
-			$this->hookmanager->run(processHooks\BUILD_OUTPUT, $output);
-			if ($output) {
-				return $output;
+		if ($this->signal) {
+			$result = $this->signal->send($this, processHooks\BUILD_OUTPUT, $output)->getLast();
+			if ($result and $result->value) {
+				return $result->value;
 			}
 		}
 
@@ -66,8 +64,8 @@ class OutputGenerator implements \hookManager\Client {
 		$output = $this->renderer->renderOutput($concat, $main, $globals, $exportrequire);
 
 		// Run hooks with the fully built output
-		if ($this->hookmanager) {
-			$this->hookmanager->run(processHooks\OUTPUT_READY, $output);
+		if ($this->signal) {
+			$this->signal->send($this, processHooks\OUTPUT_READY, $output);
 		}
 
 		return $output;

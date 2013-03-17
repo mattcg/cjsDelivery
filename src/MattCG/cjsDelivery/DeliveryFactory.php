@@ -9,17 +9,52 @@ namespace MattCG\cjsDelivery;
 
 class DeliveryFactory {
 
-	public static function create($minifyidentifiers = false, array $includes = null, array $globals = null) {
-		$signal = require __DIR__ . '/../vendor/aura/signal/scripts/instance.php';
-	
-		if ($minifyidentifiers) {
+	const OPT_MINIFY = 'minifyIdentifiers';
+	const OPT_SIGNALS = 'sendSignals';
+	const OPT_GLOBALS = 'globals';
+	const OPT_INCLUDES = 'includes';
+
+	public static function getDefaultOptions() {
+		return array(
+			self::OPT_MINIFY => false,
+			self::OPT_SIGNALS => false,
+			self::OPT_GLOBALS => null,
+			self::OPT_INCLUDES => null
+		);
+	}
+
+	public static function getSignalManagerInstance() {
+		return require __DIR__ . '/../vendor/aura/signal/scripts/instance.php';
+	}
+
+	public static function create(array $options = array()) {
+		$options = array_merge(self::getDefaultOptions(), $options);
+
+		$delivery = new Delivery();
+
+		// Add a signal manager?
+		if ($options[self::OPT_SIGNALS]) {
+			$signalmanager = self::getSignalManagerInstance();
+			$delivery->setSignalManager($signalmanager);
+		}
+
+		// Minify identifiers?
+		if ($options[self::OPT_MINIFY]) {
 			$identifiergenerator = new MinIdentifierGenerator();
 		} else {
 			$identifiergenerator = new FlatIdentifierGenerator();
 		}
+
 		$identifiermanager = new FileIdentifierManager($identifiergenerator);
-		if ($includes) {
-			$identifiermanager->setIncludes($includes);
+
+		// Search include directories?
+		if ($options[self::OPT_INCLUDES]) {
+			$identifiermanager->setIncludes($options[self::OPT_INCLUDES]);
+		}
+
+		// Add global JavaScript?
+		if ($options[self::OPT_GLOBALS]) {
+			$delivery->setGlobals($options[self::OPT_GLOBALS]);
 		}
 	
 		$dependencyresolver = new FileDependencyResolver($identifiermanager);
@@ -27,16 +62,10 @@ class DeliveryFactory {
 	
 		$outputgenerator = new OutputGenerator(new TemplateOutputRenderer());
 		$outputgenerator->setSignalManager($signal);
-	
-		$delivery = new Delivery();
-		$delivery->setSignalManager($signal);
+		
 		$delivery->setOutputGenerator($outputgenerator);
 		$delivery->setDependencyResolver($dependencyresolver);
-	
-		if ($globals) {
-			$delivery->setGlobals($globals);
-		}
-	
+
 		return $delivery;
 	}
 }

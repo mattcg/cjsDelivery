@@ -58,17 +58,17 @@ class DeliveryFactory {
 		if ($options[self::OPT_GLOBALS]) {
 			$delivery->setGlobals($options[self::OPT_GLOBALS]);
 		}
-	
+
 		$dependencyresolver = new FileDependencyResolver($identifiermanager);
 		if ($signalmanager) {
 			$dependencyresolver->setSignalManager($signalmanager);
 		}
-	
+
 		$outputgenerator = new OutputGenerator(new TemplateOutputRenderer());
 		if ($signalmanager) {
 			$outputgenerator->setSignalManager($signalmanager);
 		}
-		
+
 		$delivery->setOutputGenerator($outputgenerator);
 		$delivery->setDependencyResolver($dependencyresolver);
 

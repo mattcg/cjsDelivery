@@ -7,7 +7,7 @@
 
 namespace MattCG\cjsDelivery;
 
-interface IdentifierGenerator {
+interface IdentifierGeneratorInterface {
 
 
 	/**

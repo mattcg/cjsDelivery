@@ -22,7 +22,7 @@ class Delivery {
 		$this->outputgenerator = $generator;
 	}
 
-	public function setDependencyResolver(DependencyResolver $resolver) {
+	public function setDependencyResolver(DependencyResolverInterface $resolver) {
 		$this->dependencyresolver = $resolver;
 	}
 

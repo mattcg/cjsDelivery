@@ -7,13 +7,13 @@
 
 namespace MattCG\cjsDelivery;
 
-class FlatIdentifierGenerator implements IdentifierGenerator {
+class FlatIdentifierGenerator implements IdentifierGeneratorInterface {
 	private $modules = array();
 	private $counts = array();
 
 
 	/**
-	 * @see IdentifierGenerator::generateFlattenedIdentifier
+	 * @see IdentifierGeneratorInterface::generateFlattenedIdentifier
 	 */
 	public function generateFlattenedIdentifier($toplevelidentifier)  {
 		if (!isset($this->modules[$toplevelidentifier])) {

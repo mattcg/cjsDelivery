@@ -7,7 +7,7 @@
 
 namespace MattCG\cjsDelivery;
 
-class FileIdentifierManager implements IdentifierManager {
+class FileIdentifierManager implements IdentifierManagerInterface {
 	const EXT_JS = 'js';
 
 	private $identifiergenerator;
@@ -17,11 +17,11 @@ class FileIdentifierManager implements IdentifierManager {
 	private $resolvedidentifiers = array();
 	private $modules = array();
 
-	public function __construct(IdentifierGenerator $identifiergenerator) {
+	public function __construct(IdentifierGeneratorInterface $identifiergenerator) {
 		$this->setIdentifierGenerator($identifiergenerator);
 	}
 
-	public function setIdentifierGenerator(IdentifierGenerator $identifiergenerator) {
+	public function setIdentifierGenerator(IdentifierGeneratorInterface $identifiergenerator) {
 		$this->identifiergenerator = $identifiergenerator;
 	}
 
@@ -33,7 +33,7 @@ class FileIdentifierManager implements IdentifierManager {
 	/**
 	 * Set the list of file include directories to use when searching for module files.
 	 *
-	 * @see IdentifierManager::setIncludes()
+	 * @see IdentifierManagerInterface::setIncludes()
 	 * @param array $includes
 	 */
 	public function setIncludes(array $includes = null) {
@@ -48,7 +48,7 @@ class FileIdentifierManager implements IdentifierManager {
 
 
 	/**
-	 * @see IdentifierManager::getFlattenedIdentifier()
+	 * @see IdentifierManagerInterface::getFlattenedIdentifier()
 	 * @param string $toplevelidentifier The canonicalized absolute pathname of the module, excluding any extension
 	 */
 	public function getFlattenedIdentifier($toplevelidentifier) {
@@ -166,7 +166,7 @@ class FileIdentifierManager implements IdentifierManager {
 
 
 	/**
-	 * @see IdentifierManager::getTopLevelIdentifier()
+	 * @see IdentifierManagerInterface::getTopLevelIdentifier()
 	 * @param string $identifier Path to the module file, absolute (but not necessarily canonicalized) or relative to includes path
 	 * @return string The canonicalized absolute pathname of the module, excluding any extension
 	 */
@@ -193,7 +193,7 @@ class FileIdentifierManager implements IdentifierManager {
 
 
 	/**
-	 * @see IdentifierManager::addIdentifier()
+	 * @see IdentifierManagerInterface::addIdentifier()
 	 * @param string $identifier Path to the module file
 	 * @return string The canonicalized absolute pathname of the module, excluding any extension
 	 */

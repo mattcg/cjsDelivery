@@ -13,7 +13,7 @@ class OutputGenerator {
 
 	protected $signal = null;
 
-	public function __construct(OutputRenderer $renderer) {
+	public function __construct(OutputRendererInterface $renderer) {
 		$this->renderer = $renderer;
 	}
 

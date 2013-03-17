@@ -7,7 +7,7 @@
 
 namespace MattCG\cjsDelivery;
 
-interface OutputRenderer {
+interface OutputRendererInterface {
 
 
 	/**

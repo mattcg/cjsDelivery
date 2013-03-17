@@ -7,7 +7,7 @@
 
 namespace MattCG\cjsDelivery;
 
-class MinIdentifierGenerator implements IdentifierGenerator {
+class MinIdentifierGenerator implements IdentifierGeneratorInterface {
 	private $minified = array();
 	private $minifyposition = 65, $minifyiteration = 0;
 
@@ -15,7 +15,7 @@ class MinIdentifierGenerator implements IdentifierGenerator {
 	/**
 	 * Get a minified version of a top level identifier
 	 *
-	 * @see IdentifierGenerator::generateFlattenedIdentifier
+	 * @see IdentifierGeneratorInterface::generateFlattenedIdentifier
 	 */
 	public function generateFlattenedIdentifier($toplevelidentifier) {
 		if (isset($this->minified[$toplevelidentifier])) {

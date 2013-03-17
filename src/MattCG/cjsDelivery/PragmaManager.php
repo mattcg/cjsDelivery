@@ -29,7 +29,7 @@ class PragmaManager {
 	const DEFAULT_PFMT = '/\/\/ ifdef (?<pragma>[A-Z_]+)\n(.*?)\n\/\/ endif \1/';
 
 
-	public function __construct(\Aura\Signal\Manager $signal, DependencyResolver $dependencyresolver) {
+	public function __construct(\Aura\Signal\Manager $signal, DependencyResolverInterface $dependencyresolver) {
 		$this->signal = $signal;
 
 		$that = $this;

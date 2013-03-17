@@ -4,7 +4,7 @@
  * @copyright Copyright (c) 2013, Matthew Caruana Galizia
  */
 
-class OutputRendererDouble implements MattCG\cjsDelivery\OutputRenderer {
+class OutputRendererDouble implements MattCG\cjsDelivery\OutputRendererInterface {
 
 	public $modules = array(), $output = null;
 

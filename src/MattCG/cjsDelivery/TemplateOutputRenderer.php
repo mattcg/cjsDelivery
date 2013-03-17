@@ -7,7 +7,7 @@
 
 namespace MattCG\cjsDelivery;
 
-class TemplateOutputRenderer implements OutputRenderer {
+class TemplateOutputRenderer implements OutputRendererInterface {
 
 
 	/**
@@ -27,7 +27,7 @@ MODULE;
 
 
 	/**
-	 * @see OutputRenderer::renderOutput
+	 * @see OutputRendererInterface::renderOutput
 	 */
 	public function renderOutput(&$output, $main = '', &$globals = '', $exportrequire = '') {
 		if ($main) {

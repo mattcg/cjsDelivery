@@ -7,10 +7,10 @@
 
 namespace MattCG\cjsDelivery;
 
-interface IdentifierManager {
+interface IdentifierManagerInterface {
 
-	public function __construct(IdentifierGenerator $identifiergenerator);
-	public function setIdentifierGenerator(IdentifierGenerator $identifiergenerator);
+	public function __construct(IdentifierGeneratorInterface $identifiergenerator);
+	public function setIdentifierGenerator(IdentifierGeneratorInterface $identifiergenerator);
 	public function getIdentifierGenerator();
 
 	/**

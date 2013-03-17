@@ -7,7 +7,7 @@
 
 namespace MattCG\cjsDelivery;
 
-class FileDependencyResolver implements DependencyResolver {
+class FileDependencyResolver implements DependencyResolverInterface {
 
 	const EXT_JS = 'js';
 	const REQUIRE_PREG = '/require\((\'|")(.*?)\1\)/';
@@ -18,7 +18,7 @@ class FileDependencyResolver implements DependencyResolver {
 
 	protected $signal = null;
 
-	public function __construct(IdentifierManager $identifiermanager) {
+	public function __construct(IdentifierManagerInterface $identifiermanager) {
 		$this->identifiermanager = $identifiermanager;
 	}
 
@@ -36,7 +36,7 @@ class FileDependencyResolver implements DependencyResolver {
 
 
 	/**
-	 * @see DependencyResolver::getAllDependencies
+	 * @see DependencyResolverInterface::getAllDependencies
 	 */
 	public function getAllDependencies() {
 		return $this->modules;
@@ -44,7 +44,7 @@ class FileDependencyResolver implements DependencyResolver {
 
 
 	/**
-	 * @see DependencyResolver::hasModule
+	 * @see DependencyResolverInterface::hasModule
 	 * @param string $toplevelidentifier The canonicalized absolute pathname of the module, excluding any extension
 	 */
 	public function hasModule($toplevelidentifier) {
@@ -53,7 +53,7 @@ class FileDependencyResolver implements DependencyResolver {
 
 
 	/**
-	 * @see DependencyResolver::addModule
+	 * @see DependencyResolverInterface::addModule
 	 * @param string $identifier Path to the module file
 	 */
 	public function addModule($identifier) {
@@ -89,7 +89,7 @@ class FileDependencyResolver implements DependencyResolver {
 
 
 	/**
-	 * @see DependencyResolver::resolveDependencies
+	 * @see DependencyResolverInterface::resolveDependencies
 	 * @param string $toplevelidentifier The canonicalized absolute pathname of the module, excluding any extension
 	 */
 	public function resolveDependencies($toplevelidentifier) {

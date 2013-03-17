@@ -165,7 +165,7 @@ class CommandLineRunner {
 			$hyphens = $long ? '--' : '-';
 			$indent = str_repeat(' ', 5);
 			foreach ($opts as $opt => &$help) {
-				echo "\033[1m", $indent, $hyphens, $opt, "\033[0m", PHP_EOL, $indent, chunk_split($help, 76, PHP_EOL . $indent), PHP_EOL;
+				echo "\033[1m", $indent, $hyphens, $opt, "\033[0m", PHP_EOL, $indent, wordwrap($help, 76, PHP_EOL . $indent), PHP_EOL, PHP_EOL;
 			}
 		};
 
@@ -180,7 +180,7 @@ class CommandLineRunner {
 		$out(array(
 			self::LONGOPT_MAIN => 'Specify the main "bootstrap" module that will be automatically required at the end of the output. A module specified using this option will be added automatically so it doesn\'t need to be specified using -' . self::OPT_MODULE . '.',
 			self::LONGOPT_INCL => 'Specify the include path as a colon-separated list.',
-			self::LONGOPT_PFMT => 'Specify the pragma format. Defaults to ' . PragmaManager::DEFAULT_PFMT . '.',
+			self::LONGOPT_PFMT => 'Specify the pragma format. Defaults to "' . PragmaManager::DEFAULT_PFMT . '".',
 			self::LONGOPT_MINI => 'Use tiny identifiers in output.',
 			self::LONGOUT_OUTP => 'Output to file.'
 		), true);

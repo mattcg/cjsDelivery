@@ -7,7 +7,7 @@
 class FileIdentifierManagerTest extends PHPUnit_Framework_TestCase {
 
 	private function getManager() {
-		return new cjsDelivery\FileIdentifierManager(new cjsDelivery\FlatIdentifierGenerator());
+		return new MattCG\cjsDelivery\FileIdentifierManager(new MattCG\cjsDelivery\FlatIdentifierGenerator());
 	}
 
 
@@ -40,7 +40,7 @@ class FileIdentifierManagerTest extends PHPUnit_Framework_TestCase {
 
 
 	/**
-	 * @expectedException cjsDelivery\Exception
+	 * @expectedException MattCG\cjsDelivery\Exception
 	 * @expectedExceptionCode 2
 	 */
 	public function testExceptionThrownIfTopLevelIdentifierIsUnknown() {
@@ -55,7 +55,7 @@ class FileIdentifierManagerTest extends PHPUnit_Framework_TestCase {
 
 
 	/**
-	 * @expectedException cjsDelivery\Exception
+	 * @expectedException MattCG\cjsDelivery\Exception
 	 * @expectedExceptionCode 1
 	 */
 	public function testExceptionThrownIfFileIsNonexistent() {
@@ -154,7 +154,7 @@ class FileIdentifierManagerTest extends PHPUnit_Framework_TestCase {
 
 
 	/**
-	 * @expectedException cjsDelivery\Exception
+	 * @expectedException MattCG\cjsDelivery\Exception
 	 * @expectedExceptionCode 1
 	 */
 	public function testExceptionThrownForAbsolutePathWithNoIncludesSpecified() {

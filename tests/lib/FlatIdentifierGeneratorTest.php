@@ -9,13 +9,13 @@
 class FlatIdentifierGeneratorTest extends PHPUnit_Framework_TestCase {
 
 	public function testPathNameIsFlattened() {
-		$generator = new cjsDelivery\FlatIdentifierGenerator();
+		$generator = new MattCG\cjsDelivery\FlatIdentifierGenerator();
 		$flatidentifier = $generator->generateFlattenedIdentifier('/path/to/mymodule');
 		$this->assertEquals('mymodule', $flatidentifier);
 	}
 
 	public function testPathNameFlatteningIsIdempotent() {
-		$generator = new cjsDelivery\FlatIdentifierGenerator();
+		$generator = new MattCG\cjsDelivery\FlatIdentifierGenerator();
 		$flatidentifier = $generator->generateFlattenedIdentifier('/path/to/mymodule');
 		$this->assertEquals('mymodule', $flatidentifier);
 
@@ -25,13 +25,13 @@ class FlatIdentifierGeneratorTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function testFlattenedIdentifierDoesNotIncludeExtension() {
-		$generator = new cjsDelivery\FlatIdentifierGenerator();
+		$generator = new MattCG\cjsDelivery\FlatIdentifierGenerator();
 		$flatidentifier = $generator->generateFlattenedIdentifier('/path/to/mymodule.js');
 		$this->assertEquals('mymodule', $flatidentifier);
 	}
 
 	public function testFlattenedIdentifierCollisionsAreHandled() {
-		$generator = new cjsDelivery\FlatIdentifierGenerator();
+		$generator = new MattCG\cjsDelivery\FlatIdentifierGenerator();
 		$flatidentifier = $generator->generateFlattenedIdentifier('/path/to/mymodule');
 		$this->assertEquals('mymodule', $flatidentifier);
 		$flatidentifier = $generator->generateFlattenedIdentifier('/other/path/to/mymodule');

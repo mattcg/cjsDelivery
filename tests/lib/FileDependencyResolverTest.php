@@ -7,8 +7,8 @@
 class FileDependencyResolverTest extends PHPUnit_Framework_TestCase {
 
 	private function getResolver() {
-		$identifiermanager = new cjsDelivery\FileIdentifierManager(new cjsDelivery\FlatIdentifierGenerator());
-		return new cjsDelivery\FileDependencyResolver($identifiermanager);
+		$identifiermanager = new MattCG\cjsDelivery\FileIdentifierManager(new MattCG\cjsDelivery\FlatIdentifierGenerator());
+		return new MattCG\cjsDelivery\FileDependencyResolver($identifiermanager);
 	}
 
 	public function testAddModuleAcceptsRelativePath() {

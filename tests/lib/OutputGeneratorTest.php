@@ -4,7 +4,7 @@
  * @copyright Copyright (c) 2013, Matthew Caruana Galizia
  */
 
-class OutputRendererDouble implements cjsDelivery\OutputRenderer {
+class OutputRendererDouble implements MattCG\cjsDelivery\OutputRenderer {
 
 	public $modules = array(), $output = null;
 
@@ -24,19 +24,19 @@ class OutputGeneratorTest extends PHPUnit_Framework_TestCase {
 
 	public function testOutputIsBuilt() {
 		$renderer = new OutputRendererDouble();
-		$generator = new cjsDelivery\OutputGenerator($renderer);
+		$generator = new MattCG\cjsDelivery\OutputGenerator($renderer);
 
 		$main = 'main';
 		$globals = 'globals';
 
 		$moduleAcode = 'alert("A");';
-		$moduleA = new cjsDelivery\Module($moduleAcode);
+		$moduleA = new MattCG\cjsDelivery\Module($moduleAcode);
 
 		$moduleBcode = 'alert("A");';
-		$moduleB = new cjsDelivery\Module($moduleBcode);
+		$moduleB = new MattCG\cjsDelivery\Module($moduleBcode);
 
 		$moduleCcode = 'alert("A");';
-		$moduleC = new cjsDelivery\Module($moduleCcode);
+		$moduleC = new MattCG\cjsDelivery\Module($moduleCcode);
 
 		$generator->buildOutput(array($moduleA, $moduleB, $moduleC), $main, $globals);
 

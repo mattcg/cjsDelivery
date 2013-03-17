@@ -20,8 +20,19 @@ class CommandLineRunner {
 	const OPT_GLOBAL = 'g';
 	const OPT_HELP   = 'h';
 
-	private $debugmode = false;
 	private $debugfunc = null;
+
+	private $optdebug = false;
+	private $opthelp = false;
+	private $optmodules = null;
+	private $optmainmodule = null;
+	private $optincludes = null;
+	private $optglobals = null;
+	private $optminifyidentifiers = false;
+	private $optoutput = null;
+	private $optpragmafmt = null;
+	private $optparsepragmas = false;
+	private $optpragmas = null;
 
 	public function getOptions() {
 		return self::OPT_MODULE.':'.self::OPT_GLOBAL.':'.self::OPT_PRAGMA.'::'.self::OPT_DEBUG.self::OPT_HELP;
@@ -31,14 +42,119 @@ class CommandLineRunner {
 		return array(self::LONGOPT_MINI, self::LONGOPT_MAIN.'::', self::LONGOPT_INCL.'::', self::LONGOPT_PFMT.'::', self::LONGOUT_OUTP.'::');
 	}
 
-	public function inDebugMode() {
-		return $this->debugmode;
+	public function getDebugMode() {
+		return $this->optdebug;
 	}
 
-	private function maybeDebugOut($message) {
-		if ($this->debugmode) {
+	public function setDebugFunction(\Closure $debugfunc = null) {
+		$this->debugfunc = $debugfunc;
+	}
+
+	private function debugOut($message) {
+		if ($this->optdebug and $this->debugfunc) {
 			call_user_func($this->debugfunc, $message);
 		}
+	}
+
+	public function setOptions(array $options) {
+		if (isset($options[self::OPT_HELP])) {
+			$this->opthelp = true;
+		}
+
+		if (isset($options[self::OPT_DEBUG])) {
+			$this->optdebug = true;
+		}
+
+		if (!empty($options[self::OPT_MODULE])) {
+			$this->optmodules = (array) $options[self::OPT_MODULE];
+		}
+
+		if (!empty($options[self::LONGOPT_MAIN])) {
+			$this->optmainmodule = $options[self::LONGOPT_MAIN];
+		}
+
+		if (!empty($options[self::LONGOPT_INCL])) {
+			$this->optincludes = explode(':', $options[self::LONGOPT_INCL]);
+		}
+
+		if (!empty($options[self::OPT_GLOBAL])) {
+			$this->optglobals = (array) $options[self::OPT_GLOBAL];
+		}
+
+		if (isset($options[self::LONGOPT_MINI])) {
+			$this->optminifyidentifiers = true;
+		}
+
+		if (isset($options[self::LONGOUT_OUTP])) {
+			$this->optoutput = $options[self::LONGOUT_OUTP];
+		}
+
+		if (isset($options[self::OPT_PRAGMA])) {
+			$this->optparsepragmas = true;
+
+			if (!empty($options[self::LONGOPT_PFMT])) {
+				$this->optpragmafmt = $options[self::LONGOPT_PFMT];
+			}
+
+			if (!empty($options[self::OPT_PRAGMA])) {
+				$this->optpragmas = (array) $options[self::OPT_PRAGMA];
+			}
+		}
+	}
+
+	private function getDeliveryInstance() {
+		return DeliveryFactory::create(array(
+			DeliveryFactory::OPT_MINIFY => $this->optminifyidentifiers,
+			DeliveryFactory::OPT_SIGNALS => $this->optparsepragmas,
+			DeliveryFactory::OPT_GLOBALS => $this->optglobals,
+			DeliveryFactory::OPT_INCLUDES => $this->optincludes
+		));
+	}
+
+	public function run() {
+		if ($this->opthelp) {
+			$this->outputHelp();
+			return;
+		}
+
+		if (empty($this->optmodules) and !$this->optmainmodule) {
+			throw new Exception('No module specified. Use -' . self::OPT_HELP . ' for help.', Exception::NOTHING_TO_BUILD);
+		}
+
+		$delivery = $this->getDeliveryInstance();
+
+		if ($this->optparsepragmas) {
+			$pragmamanager = new PragmaManager($delivery->getSignalManager(), $delivery->getDependencyResolver());
+			if ($this->optpragmafmt) {
+				$this->debugOut('Setting pragma format "' . $this->optpragmafmt . '"...');
+				$pragmamanager->setPragmaFormat($this->optpragmafmt);
+			}
+
+			if ($this->optpragmas) {
+				$this->debugOut('Setting pragmas: '.implode(',', $this->optpragmas));
+				$pragmamanager->setPragmas($this->optpragmas);
+			}
+		}
+
+		if ($this->optmodules) {
+			foreach($this->optmodules as &$optmodule) {
+				$this->debugOut('Adding module "' . $optmodule . '"');
+				$delivery->addModule($optmodule);
+			}
+		}
+
+		if ($this->optmainmodule) {
+			$this->debugOut('Setting main module "' . $this->optmainmodule . '"');
+			$delivery->addModule($this->optmainmodule);
+			$delivery->setMainModule($this->optmainmodule);
+		}
+
+		if ($this->optoutput) {
+			file_put_contents($this->optoutput, $delivery->getOutput());
+			return;
+		}
+
+		return $delivery->getOutput();
 	}
 
 	private function outputHelp() {
@@ -68,81 +184,5 @@ class CommandLineRunner {
 			self::LONGOPT_MINI => 'Use tiny identifiers in output.',
 			self::LONGOUT_OUTP => 'Output to file.'
 		), true);
-	}
-
-	public function run(array $options, \Closure $debugfunc) {
-		if (isset($options[self::OPT_HELP])) {
-			$this->outputHelp();
-			return;
-		}
-
-		if (empty($options[self::OPT_MODULE]) and empty($options[self::LONGOPT_MAIN])) {
-			throw new Exception('No module specified. Use -' . self::OPT_HELP . ' for help.', Exception::NOTHING_TO_BUILD);
-		}
-
-		if (isset($options[self::OPT_DEBUG])) {
-			$this->debugmode = true;
-			$this->debugfunc = $debugfunc;
-		}
-
-		$includes = null;
-		if (isset($options[self::LONGOPT_INCL])) {
-			$includes = explode(':', $options[self::LONGOPT_INCL]);
-		}
-
-		$globals = null;
-		if (isset($options[self::OPT_GLOBAL])) {
-			$globals = (array) $options[self::OPT_GLOBAL];
-			$this->maybeDebugOut('Adding globals "'.implode(', ', $globals).'"');
-		}
-
-		$minifyidentifiers = isset($options[self::LONGOPT_MINI]);
-		$this->maybeDebugOut('Setting identifier minification: '.($minifyidentifiers ? 'true' : 'false'));
-		$delivery = DeliveryFactory::create($minifyidentifiers, $includes, $globals);
-
-		if (isset($options[self::OPT_PRAGMA])) {
-			$pragmamanager = new PragmaManager($delivery->getSignalManager(), $delivery->getDependencyResolver());
-			if (isset($options[self::LONGOPT_PFMT])) {
-				$pfmt = $options[self::LONGOPT_PFMT];
-				$this->maybeDebugOut('Setting pragma format "'.$pfmt.'"...');
-				$pragmamanager->setPragmaFormat($pfmt);
-			}
-
-			$this->maybeDebugOut('Registering the pragmaManager plugin');
-
-			$poptions =& $options[self::OPT_PRAGMA];
-			if (is_array($poptions)) {
-				$this->maybeDebugOut('Setting pragmas: '.implode(',', $poptions));
-				$pragmamanager->setPragmas($poptions);
-			} else if (is_string($poptions)) {
-				$this->maybeDebugOut('Setting pragma '.$poptions);
-				$pragmamanager->setPragma($poptions);
-			}
-		}
-
-		if (!empty($options[self::LONGOPT_MAIN])) {
-			$mainmodule = $options[self::LONGOPT_MAIN];
-			$this->maybeDebugOut('Setting main module "'.$mainmodule.'"');
-			$delivery->addModule($mainmodule);
-			$delivery->setMainModule($mainmodule);
-		}
-
-		$moptions =& $options[self::OPT_MODULE];
-		if (is_array($moptions)) {
-			foreach($moptions as &$module) {
-				$this->maybeDebugOut('Adding module "'.$module.'"');
-				$delivery->addModule($module);
-			}
-		} else if ($moptions) {
-			$this->maybeDebugOut('Adding module "'.$moptions.'"');
-			$delivery->addModule($moptions);
-		}
-
-		if (isset($options[self::LONGOUT_OUTP])) {
-			file_put_contents($options[self::LONGOUT_OUTP], $delivery->getOutput());
-			return;
-		}
-
-		return $delivery->getOutput();
 	}
 }

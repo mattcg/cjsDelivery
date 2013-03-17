@@ -4,13 +4,17 @@
 require_once __DIR__ . '/../cjsDelivery.php';
 
 $clr = new MattCG\cjsDelivery\CommandLineRunner();
-$options = getopt($clr->getOptions(), $clr->getLongOptions());
-$debugfunc = function($message) {
-	echo $message, '...', PHP_EOL;
-};
+
+$clr->setOptions(getopt($clr->getOptions(), $clr->getLongOptions()));
+
+if ($clr->getDebugMode()) {
+	$clr->setDebugFunction(function($message) {
+		echo $message, '...', PHP_EOL;
+	});
+}
 
 try {
-	$output = $clr->run($options, $debugfunc);
+	$output = $clr->run();
 } catch (MattCG\cjsDelivery\Exception $e) {
 
 	$reporterror = function($e, $reporterror) {
@@ -25,7 +29,7 @@ try {
 	exit($e->getCode());
 }
 
-if (!$clr->inDebugMode()) {
+if (!$clr->getDebugMode()) {
 	if ($output) {
 		echo $output, PHP_EOL;
 	}

@@ -36,6 +36,8 @@ class DeliveryFactory {
 		if ($options[self::OPT_SIGNALS]) {
 			$signalmanager = self::getSignalManagerInstance();
 			$delivery->setSignalManager($signalmanager);
+		} else {
+			$signalmanager = null;
 		}
 
 		// Minify identifiers?
@@ -58,10 +60,14 @@ class DeliveryFactory {
 		}
 	
 		$dependencyresolver = new FileDependencyResolver($identifiermanager);
-		$dependencyresolver->setSignalManager($signal);
+		if ($signalmanager) {
+			$dependencyresolver->setSignalManager($signalmanager);
+		}
 	
 		$outputgenerator = new OutputGenerator(new TemplateOutputRenderer());
-		$outputgenerator->setSignalManager($signal);
+		if ($signalmanager) {
+			$outputgenerator->setSignalManager($signalmanager);
+		}
 		
 		$delivery->setOutputGenerator($outputgenerator);
 		$delivery->setDependencyResolver($dependencyresolver);

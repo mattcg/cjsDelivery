@@ -5,11 +5,7 @@
  * @package cjsDelivery
  */
 
-namespace cjsDelivery;
-
-require_once 'Exception.php';
-require_once 'IdentifierManager.php';
-require_once 'IdentifierGenerator.php';
+namespace MattCG\cjsDelivery;
 
 class FileIdentifierManager implements IdentifierManager {
 	const EXT_JS = 'js';

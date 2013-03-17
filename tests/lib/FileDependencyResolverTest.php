@@ -4,13 +4,6 @@
  * @copyright Copyright (c) 2013, Matthew Caruana Galizia
  */
 
-// Class under test
-require_once CJSD_LIB_DIR . '/FileDependencyResolver.php';
-
-// Dependencies of the class under test
-require_once CJSD_LIB_DIR . '/FileIdentifierManager.php';
-require_once CJSD_LIB_DIR . '/FlatIdentifierGenerator.php';
-
 class FileDependencyResolverTest extends PHPUnit_Framework_TestCase {
 
 	private function getResolver() {

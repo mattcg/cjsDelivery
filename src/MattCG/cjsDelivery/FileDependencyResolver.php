@@ -5,13 +5,7 @@
  * @package cjsDelivery
  */
 
-namespace cjsDelivery;
-
-require_once 'Exception.php';
-require_once 'DependencyResolver.php';
-require_once 'IdentifierManager.php';
-require_once 'Module.php';
-require_once 'processHooks.php';
+namespace MattCG\cjsDelivery;
 
 class FileDependencyResolver implements DependencyResolver {
 

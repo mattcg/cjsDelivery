@@ -5,10 +5,7 @@
  * @package cjsDelivery
  */
 
-namespace cjsDelivery;
-
-require_once 'factory.php';
-require_once 'PragmaManager.php';
+namespace MattCG\cjsDelivery;
 
 class CommandLineRunner {
 	const LONGOPT_MINI = 'minify_identifiers';

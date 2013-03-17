@@ -5,9 +5,7 @@
  * @package cjsDelivery
  */
 
-namespace cjsDelivery;
-
-require_once 'OutputRenderer.php';
+namespace MattCG\cjsDelivery;
 
 class TemplateOutputRenderer implements OutputRenderer {
 

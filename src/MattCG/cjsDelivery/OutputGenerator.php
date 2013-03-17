@@ -5,11 +5,7 @@
  * @package cjsDelivery
  */
 
-namespace cjsDelivery;
-
-require_once 'Exception.php';
-require_once 'OutputRenderer.php';
-require_once 'processHooks.php';
+namespace MattCG\cjsDelivery;
 
 class OutputGenerator {
 

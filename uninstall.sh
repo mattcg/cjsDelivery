@@ -1,19 +1,19 @@
 #!/bin/sh
 
-CJSDELIVERY_PREFIX="/usr/local"
-CJSDELIVERY_INSTALL="$CJSDELIVERY_PREFIX/lib/cjsdelivery"
-CJSDELIVERY_BIN="$CJSDELIVERY_PREFIX/bin/delivery"
+INSTALL_PREFIX="/usr/local"
+INSTALL_DIR="$INSTALL_PREFIX/lib/cjsdelivery"
+INSTALL_BIN="$INSTALL_PREFIX/bin/delivery"
 
-echo "Removing:"
+echo "Removing: $INSTALL_BIN"
 
-echo "$CJSDELIVERY_INSTALL"
-if [ -d "$CJSDELIVERY_INSTALL" ]; then
-	rm -rf "$CJSDELIVERY_INSTALL"
+if [ -L "$INSTALL_BIN" ]; then
+	rm -f "$INSTALL_BIN"
 fi
 
-echo "$CJSDELIVERY_BIN"
-if [ -L "$CJSDELIVERY_BIN" ]; then
-	rm -f "$CJSDELIVERY_BIN"
+echo "Removing: $INSTALL_DIR"
+
+if [ -d "$INSTALL_DIR" ]; then
+	rm -rf "$INSTALL_DIR"
 fi
 
 echo "Uninstall done."

@@ -5,10 +5,7 @@
  * @package cjsDelivery
  */
 
-namespace cjsDelivery;
-
-require_once 'OutputGenerator.php';
-require_once 'DependencyResolver.php';
+namespace MattCG\cjsDelivery;
 
 class Delivery {
 

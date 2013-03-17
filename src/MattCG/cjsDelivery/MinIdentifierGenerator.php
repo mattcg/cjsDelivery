@@ -5,9 +5,7 @@
  * @package cjsDelivery
  */
 
-namespace cjsDelivery;
-
-require_once 'IdentifierGenerator.php';
+namespace MattCG\cjsDelivery;
 
 class MinIdentifierGenerator implements IdentifierGenerator {
 	private $minified = array();

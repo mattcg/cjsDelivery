@@ -7,9 +7,7 @@
  * @package cjsDelivery
  */
 
-namespace cjsDelivery;
-
-require_once 'processHooks.php';
+namespace MattCG\cjsDelivery;
 
 class PragmaManager {
 

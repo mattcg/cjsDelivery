@@ -1,33 +1,55 @@
 #!/bin/sh
 
-CJSDELIVERY_PREFIX="/usr/local"
-CJSDELIVERY_INSTALL="$CJSDELIVERY_PREFIX/lib/cjsdelivery"
-CJSDELIVERY_CHECKOUT=`dirname $0`
+INSTALL_PREFIX="/usr/local"
+INSTALL_DIR="$INSTALL_PREFIX/lib/cjsdelivery"
+INSTALL_BIN="$INSTALL_PREFIX/bin/delivery"
 
 # Stop on first error
 set -e
 
-echo "This script will install:"
-echo "$CJSDELIVERY_PREFIX/bin/delivery"
-echo "$CJSDELIVERY_INSTALL"
-
-if [ -d "$CJSDELIVERY_INSTALL" ]; then
-	echo "Old version found at install path."
-	"$CJSDELIVERY_CHECKOUT/uninstall.sh"
+# Check whether PHP is up to date
+if php -r "exit((int)version_compare(PHP_VERSION, '5.4.0', '>='));"; then
+	echo "Your PHP version is out of date. Please upgrade to at least version 5.4.0."
+	exit 1
 fi
-mkdir "$CJSDELIVERY_INSTALL"
 
-echo "Copying:"
+# Get the real path to the checkout directory
+pushd `dirname $0` > /dev/null
+CHECKOUT_DIR=`pwd`
+popd > /dev/null
 
-echo "$CJSDELIVERY_INSTALL/bin"
-cp -R "$CJSDELIVERY_CHECKOUT/bin" "$CJSDELIVERY_INSTALL/bin"
+# Install dependencies using composer
+if command -v composer >/dev/null 2>&1; then
+	echo "Found composer. Updating dependencies."
+	composer update --prefer-dist --working-dir "$CHECKOUT_DIR" --quiet
+else
+	echo "Could not find composer. Downloading."
+	curl "http://getcomposer.org/composer.phar" --silent --output "$CHECKOUT_DIR/composer.phar"
+	echo "Download complete. Updating dependencies."
+	php "$CHECKOUT_DIR/composer.phar" -- update --prefer-dist --working-dir "$CHECKOUT_DIR" --quiet
+fi
 
-echo "$CJSDELIVERY_INSTALL/lib"
-cp -R "$CJSDELIVERY_CHECKOUT/lib" "$CJSDELIVERY_INSTALL/lib"
+echo "This script will install:"
+echo "$INSTALL_BIN"
+echo "$INSTALL_DIR"
 
-echo "Linking:"
+# Uninstall any old version
+if [ -d "$INSTALL_DIR" ]; then
+	echo "Old version found at install path."
+	"$CHECKOUT_DIR/uninstall.sh"
+fi
+mkdir "$INSTALL_DIR"
 
-echo "$CJSDELIVERY_PREFIX/bin/delivery => $CJSDELIVERY_INSTALL/bin/delivery"
-ln -si "$CJSDELIVERY_INSTALL/bin/delivery" "$CJSDELIVERY_PREFIX/bin/delivery"
+# Install the necessary parts of the checkout to /usr/local/lib
+echo "Installing: $INSTALL_DIR"
+cp -R "$CHECKOUT_DIR/bin" "$INSTALL_DIR/bin"
+cp -R "$CHECKOUT_DIR/src" "$INSTALL_DIR/src"
+cp -R "$CHECKOUT_DIR/vendor" "$INSTALL_DIR/vendor"
+cp "$CHECKOUT_DIR/cjsDelivery.php" "$INSTALL_DIR/cjsDelivery.php"
+cp "$CHECKOUT_DIR/uninstall.sh" "$INSTALL_DIR/uninstall.sh"
+
+# Link to the delivery binary from /usr/local/bin
+echo "Linking: $INSTALL_BIN => $INSTALL_DIR/bin/delivery"
+ln -si "$INSTALL_DIR/bin/delivery" "$INSTALL_BIN"
 
 echo "Install done."

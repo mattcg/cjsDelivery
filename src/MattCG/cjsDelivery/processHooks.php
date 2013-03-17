@@ -5,7 +5,7 @@
  * @package cjsDelivery
  */
 
-namespace cjsDelivery\processHooks;
+namespace MattCG\cjsDelivery\processHooks;
 
 const PROCESS_MODULE = 'process_module';
 const BUILD_OUTPUT   = 'build_output';

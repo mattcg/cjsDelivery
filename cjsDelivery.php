@@ -9,4 +9,4 @@
  * @package cjsDelivery
  */
 
-require 'lib/factory.php';
+require_once __DIR__ . '/vendor/autoload.php';

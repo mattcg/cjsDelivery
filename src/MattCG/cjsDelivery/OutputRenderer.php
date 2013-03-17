@@ -5,7 +5,7 @@
  * @package cjsDelivery
  */
 
-namespace cjsDelivery;
+namespace MattCG\cjsDelivery;
 
 interface OutputRenderer {
 

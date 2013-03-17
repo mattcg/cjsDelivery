@@ -6,9 +6,6 @@
  * @copyright Copyright (c) 2013, Matthew Caruana Galizia
  */
 
-// Class under test
-require_once CJSD_LIB_DIR . '/MinIdentifierGenerator.php';
-
 class MinIdentifierGeneratorTest extends PHPUnit_Framework_TestCase {
 
 	public function testIdentifierIsMinified() {

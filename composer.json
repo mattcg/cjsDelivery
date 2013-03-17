@@ -16,5 +16,10 @@
 		"php": ">=5.4.0",
 		"aura/signal": "1.0.*"
 	},
+	"autoload": {
+		"psr-0": {
+			"MattCG\\cjsDelivery": "src/"
+		}
+	},
 	"bin": ["bin/delivery"]
 }

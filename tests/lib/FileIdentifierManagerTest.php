@@ -4,12 +4,6 @@
  * @copyright Copyright (c) 2013, Matthew Caruana Galizia
  */
 
-// Class under test
-require_once CJSD_LIB_DIR . '/FileIdentifierManager.php';
-
-// Dependencies of the class under test
-require_once CJSD_LIB_DIR . '/FlatIdentifierGenerator.php';
-
 class FileIdentifierManagerTest extends PHPUnit_Framework_TestCase {
 
 	private function getManager() {

@@ -5,15 +5,7 @@
  * @package cjsDelivery
  */
 
-namespace cjsDelivery;
-
-require_once 'Delivery.php';
-require_once 'MinIdentifierGenerator.php';
-require_once 'FlatIdentifierGenerator.php';
-require_once 'FileIdentifierManager.php';
-require_once 'FileDependencyResolver.php';
-require_once 'OutputGenerator.php';
-require_once 'TemplateOutputRenderer.php';
+namespace MattCG\cjsDelivery;
 
 function create($minifyidentifiers = false, array $includes = null, array $globals = null) {
 	$signal = require __DIR__ . '/../vendor/aura/signal/scripts/instance.php';

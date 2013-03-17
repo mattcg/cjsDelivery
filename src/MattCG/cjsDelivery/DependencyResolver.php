@@ -5,9 +5,7 @@
  * @package cjsDelivery
  */
 
-namespace cjsDelivery;
-
-require_once 'IdentifierManager.php';
+namespace MattCG\cjsDelivery;
 
 interface DependencyResolver {
 

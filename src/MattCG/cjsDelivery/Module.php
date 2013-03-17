@@ -5,9 +5,7 @@
  * @package cjsDelivery
  */
 
-namespace cjsDelivery;
-
-require_once 'Exception.php';
+namespace MattCG\cjsDelivery;
 
 class Module {
 	private $code, $uniqueidentifier = null, $modificationtime = null;

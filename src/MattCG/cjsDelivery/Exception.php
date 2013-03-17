@@ -5,7 +5,7 @@
  * @package cjsDelivery
  */
 
-namespace cjsDelivery;
+namespace MattCG\cjsDelivery;
 
 class Exception extends \Exception {
 	const MODULE_NOT_FOUND  = 1;

@@ -98,7 +98,7 @@ class CommandLineRunner {
 
 		$minifyidentifiers = isset($options[self::LONGOPT_MINI]);
 		$this->maybeDebugOut('Setting identifier minification: '.($minifyidentifiers ? 'true' : 'false'));
-		$delivery = create($minifyidentifiers, $includes, $globals);
+		$delivery = DeliveryFactory::create($minifyidentifiers, $includes, $globals);
 
 		if (isset($options[self::OPT_PRAGMA])) {
 			$pragmamanager = new PragmaManager($delivery->getSignalManager(), $delivery->getDependencyResolver());

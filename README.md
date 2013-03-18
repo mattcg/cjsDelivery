@@ -26,58 +26,72 @@ Install globally by running this one-line command in your bash terminal:
 bash <(curl -s https://raw.github.com/mattcg/cjsdelivery/go)
 ```
 
-### Using composer ###
+### Per-project install using composer ###
 
-Get [composer](http://getcomposer.org/) and install cjsDelivery to your project using:
+Get [composer](http://getcomposer.org/) and install cjsDelivery to your project by adding it as a requirement to `composer.json`.
 
 ```bash
 cd myproject/
-echo -e '{\n\t"minimum-stability": "dev"\n}' > composer.json
-composer require mattcg/cjsdelivery:0.1.0
+touch composer.json
+composer require mattcg/cjsdelivery:0.3.0
 ```
+
+As cjsDelivery is [PSR-0](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md) compatible, composer will automatically generate `vendor/autoload.php`, which you can `require` in your code to have the cjsDelivery classes autoloaded when they're needed.
 
 ## Usage ##
 
-### Executable ###
+### On the command-line ###
 
 The `bin/delivery` executable is provided for command-line use. Run the following example to compiled the bundled example `fruit` application:
 
 ```bash
 delivery --main_module='./examples/fruit/modules/main'
 ```
+For the full list of options, run `delivery -h`.
 
-### PHP API ###
+### From PHP ###
 
-Instances can be created using the provided factory function.
+Instances can be created using the provided factory class.
 
 ```PHP
 use MattCG\cjsDelivery as cjsDelivery;
 
-require '../cjsdelivery/cjsDelivery.php';
+require '/path/to/cjsDelivery.php';
 
-$minifyidentifiers = false;
-$globals  = array('utilities.js', 'globals.js');
 $includes = array('../mycompany/javascript', '../othercompany/modules');
-$delivery = cjsDelivery\DeliveryFactory::create($minifyidentifiers, $includes, $globals);
-
+$delivery = cjsDelivery\DeliveryFactory::create(array('includes' => $includes));
 $delivery->addModule('./path/to/module');
 echo $delivery->getOutput();
 ```
 
-Full PHP API documentation to come.
+The factory method accepts a single parameter, which is a hashmap of options.
 
 ## Features ##
 
 ### Include paths ###
 
-If you have many dependencies in folders external to your project, then it's worth setting an include path to avoid having long, absolute paths in your require statements. If your company's standard modules are in `projects/mycompany/javascript` and your project is in `projects/myproject`, then you can require a standard module using `require('standardmodule')` instead of `require('projects/mycompany/javascript')` by adding the include path `projects/mycompany/javascript`:
+If you have many dependencies in folders external to your project, then it's worth setting an include path to avoid having long, absolute paths in your require statements.
+
+If your company's standard modules are in `/projects/mycompany/javascript` and your project is in `/projects/myproject`, then you can require a standard module using `require('standardmodule')` instead of `require('/projects/mycompany/javascript/standardmodule')` by adding the include path `/projects/mycompany/javascript`.
 
 ```bash
-cd projects/myproject
+cd /projects/myproject
 delivery --main_module='./main' --include='../mycompany/javascript:../othercompany/modules'
 ```
 
 Multiple paths can be specified in a colon-separated list.
+
+In PHP, include directory paths can be passed to the factory method in the options hashmap by setting the value of the `includes` key to an array of paths.
+
+```PHP
+$includes = array('../mycompany/javascript', '../othercompany/modules');
+
+$delivery = cjsDelivery\DeliveryFactory::create(array('includes' => $includes));
+
+$mainmodule = './main';
+$delivery->addModule($mainmodule);
+$delivery->setMainModule($mainmodule);
+```
 
 #### For external components ####
 
@@ -131,6 +145,21 @@ Now try the opposite:
 delivery --main_module='./examples/fruit/modules/main' -p='BANANA'
 ```
 
+In PHP, instantiate a `PragmaManager` and use it to turn pragmas on. By default, all pragmas are off unless explicitly set using `setPragma` or `setPragmas`, but changes can be undone using `unsetPragma`.
+
+```PHP
+$delivery = cjsDelivery\DeliveryFactory::create(array('sendSignals' => true));
+
+$pragmamanager = new PragmaManager($delivery->getSignalManager(), $delivery->getDependencyResolver());
+$pragmamanager->setPragma('BANANA');
+
+$mainmodule = './examples/fruit/modules/main';
+$delivery->addModule($mainmodule);
+$delivery->setMainModule($mainmodule);
+```
+
+The `PragmaManager` uses signals sent by an [Arua.Signal](https://github.com/auraphp/Aura.Signal) signal manager to process code from added modules. The factory class won't create a signal manager unless `sendSignals` is set to `true` in the options hashmap.
+
 ### Minified identifiers ###
 
 By default, cjsDelivery will flatten the module tree internally, rewriting `path/to/module` as `module`, for example. In a production environment it makes sense to use non-mnemonic identifiers to save space. If enabled, cjsDelivery will rewrite `path/to/module` as `A`, `path/to/othermodule` as `B` and so on.
@@ -141,15 +170,37 @@ Try this example:
 delivery --main_module='./examples/fruit/modules/main' --minify_identifiers
 ```
 
+In PHP, set `minifyIdentifiers` to `true` when instantiating using the factory class.
+
+```PHP
+$delivery = cjsDelivery\DeliveryFactory::create(array('minifyIdentifiers' => true));
+
+$mainmodule = './examples/fruit/modules/main';
+$delivery->addModule($mainmodule);
+$delivery->setMainModule($mainmodule);
+```
+
 ### Globals ###
 
-You might have a `globals.js` or `utilities.js` file (or both!) as part of your project, each containing variables or helper functions that you want to have available across all modules. To save you having to `require` these in your other modules, you can compile them in as globals:
+You might have a `globals.js` or `utilities.js` file (or both!) as part of your project, each containing variables or helper functions that you want to have available across all modules. To save you having to `require` these in your other modules, you can compile them in as globals.
 
 ```bash
 delivery --main_module='./examples/globals/main' -g 'examples/globals/utilities' -g 'examples/globals/globals'
 ```
 
 Global files have `require` within their scope and are parsed for dependencies.
+
+In PHP, global file paths can be passed to the factory method in the options hashmap by setting the value of the `globals` key to an array of paths.
+
+```PHP
+$globals = array('examples/globals/utilities', 'examples/globals/globals');
+
+$delivery = cjsDelivery\DeliveryFactory::create(array('globals' => $globals));
+
+$mainmodule = './examples/globals/main';
+$delivery->addModule($mainmodule);
+$delivery->setMainModule($mainmodule);
+```
 
 ## How dependencies are resolved ##
 

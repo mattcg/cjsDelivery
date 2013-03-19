@@ -105,9 +105,11 @@ class CommandLineRunner {
 	private function getDeliveryInstance() {
 		return DeliveryFactory::create(array(
 			DeliveryFactory::OPT_MINI => $this->optminifyidentifiers,
-			DeliveryFactory::OPT_SIGN => $this->optparsepragmas,
 			DeliveryFactory::OPT_GLOB => $this->optglobals,
-			DeliveryFactory::OPT_INCL => $this->optincludes
+			DeliveryFactory::OPT_INCL => $this->optincludes,
+			DeliveryFactory::OPT_PFMT => $this->optpragmafmt,
+			DeliveryFactory::OPT_PRGS => $this->optpragmas,
+			DeliveryFactory::OPT_PPRG => $this->optparsepragmas
 		));
 	}
 
@@ -122,19 +124,6 @@ class CommandLineRunner {
 		}
 
 		$delivery = $this->getDeliveryInstance();
-
-		if ($this->optparsepragmas) {
-			$pragmamanager = new PragmaManager($delivery->getSignalManager(), $delivery->getDependencyResolver());
-			if ($this->optpragmafmt) {
-				$this->debugOut('Setting pragma format "' . $this->optpragmafmt . '"...');
-				$pragmamanager->setPragmaFormat($this->optpragmafmt);
-			}
-
-			if ($this->optpragmas) {
-				$this->debugOut('Setting pragmas: '.implode(',', $this->optpragmas));
-				$pragmamanager->setPragmas($this->optpragmas);
-			}
-		}
 
 		if ($this->optmodules) {
 			foreach($this->optmodules as &$optmodule) {

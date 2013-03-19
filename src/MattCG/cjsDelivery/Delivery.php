@@ -20,6 +20,10 @@ class Delivery extends SignalSender {
 		$this->outputgenerator = $generator;
 	}
 
+	public function getOutputGenerator() {
+		return $this->outputgenerator;
+	}
+
 	public function setDependencyResolver(DependencyResolverInterface $resolver) {
 		$this->dependencyresolver = $resolver;
 	}

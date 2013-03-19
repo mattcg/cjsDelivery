@@ -83,6 +83,12 @@ class Delivery {
 		$this->globals = $identifiers;
 	}
 
+
+	/**
+	 * Get list of modules containing code to include globally, just outside normal module scope.
+	 *
+	 * @return array List of identifiers
+	 */
 	public function getGlobals() {
 		return $this->globals;
 	}

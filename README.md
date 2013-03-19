@@ -221,6 +221,10 @@ The following algorithm is used when resolving the given path to a dependency:
     4. check whether the directory only contains one file and if positive, append to `path` and go to 2.
 4. throw an exception
 
+## Changelog ##
+
+Please see the [closed milestones](https://github.com/mattcg/cjsDelivery/issues/milestones?state=closed).
+
 ## Credits and license ##
 
 cjsDelivery is copyright © 2012 [Matthew Caruana Galizia](http://twitter.com/mcaruanagalizia), licensed under a [Creative Commons Attribution 3.0 Unported (CC BY 3.0)](http://creativecommons.org/licenses/by/3.0/legalcode) license.

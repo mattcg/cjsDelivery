@@ -104,10 +104,10 @@ class CommandLineRunner {
 
 	private function getDeliveryInstance() {
 		return DeliveryFactory::create(array(
-			DeliveryFactory::OPT_MINIFY => $this->optminifyidentifiers,
-			DeliveryFactory::OPT_SIGNALS => $this->optparsepragmas,
-			DeliveryFactory::OPT_GLOBALS => $this->optglobals,
-			DeliveryFactory::OPT_INCLUDES => $this->optincludes
+			DeliveryFactory::OPT_MINI => $this->optminifyidentifiers,
+			DeliveryFactory::OPT_SIGN => $this->optparsepragmas,
+			DeliveryFactory::OPT_GLOB => $this->optglobals,
+			DeliveryFactory::OPT_INCL => $this->optincludes
 		));
 	}
 

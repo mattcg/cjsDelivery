@@ -9,17 +9,17 @@ namespace MattCG\cjsDelivery;
 
 class DeliveryFactory {
 
-	const OPT_MINIFY = 'minifyIdentifiers';
-	const OPT_SIGNALS = 'sendSignals';
-	const OPT_GLOBALS = 'globals';
-	const OPT_INCLUDES = 'includes';
+	const OPT_MINI = 'minifyIdentifiers';
+	const OPT_SIGN = 'sendSignals';
+	const OPT_GLOB = 'globals';
+	const OPT_INCL = 'includes';
 
 	public static function getDefaultOptions() {
 		return array(
-			self::OPT_MINIFY => false,
-			self::OPT_SIGNALS => false,
-			self::OPT_GLOBALS => null,
-			self::OPT_INCLUDES => null
+			self::OPT_MINI => false,
+			self::OPT_SIGN => false,
+			self::OPT_GLOB => null,
+			self::OPT_INCL => null
 		);
 	}
 
@@ -33,7 +33,7 @@ class DeliveryFactory {
 		$delivery = new Delivery();
 
 		// Add a signal manager?
-		if ($options[self::OPT_SIGNALS]) {
+		if ($options[self::OPT_SIGN]) {
 			$signalmanager = self::getSignalManagerInstance();
 			$delivery->setSignalManager($signalmanager);
 		} else {
@@ -41,20 +41,20 @@ class DeliveryFactory {
 		}
 
 		// Minify identifiers?
-		if ($options[self::OPT_MINIFY]) {
+		if ($options[self::OPT_MINI]) {
 			$identifiergenerator = new MinIdentifierGenerator();
 		} else {
 			$identifiergenerator = new FlatIdentifierGenerator();
 		}
 
 		// Search include directories?
-		if ($options[self::OPT_INCLUDES]) {
-			$delivery->setIncludes($options[self::OPT_INCLUDES]);
+		if ($options[self::OPT_INCL]) {
+			$delivery->setIncludes($options[self::OPT_INCL]);
 		}
 
 		// Add global JavaScript?
-		if ($options[self::OPT_GLOBALS]) {
-			$delivery->setGlobals($options[self::OPT_GLOBALS]);
+		if ($options[self::OPT_GLOB]) {
+			$delivery->setGlobals($options[self::OPT_GLOB]);
 		}
 
 		$identifiermanager = new FileIdentifierManager($identifiergenerator);

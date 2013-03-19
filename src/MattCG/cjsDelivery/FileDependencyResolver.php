@@ -53,6 +53,19 @@ class FileDependencyResolver implements DependencyResolverInterface {
 
 
 	/**
+	 * @see DependencyResolverInterface::getModule
+	 * @param string $toplevelidentifier The canonicalized absolute pathname of the module, excluding any extension
+	 */
+	public function getModule($toplevelidentifier) {
+		if (!$this->hasModule($toplevelidentifier)) {
+			throw new Exception("Unknown module '$toplevelidentifier'", Exception::UNKNOWN_MODULE);
+		}
+
+		return $this->modules[$toplevelidentifier];
+	}
+
+
+	/**
 	 * @see DependencyResolverInterface::addModule
 	 * @param string $identifier Path to the module file
 	 */

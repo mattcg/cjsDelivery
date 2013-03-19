@@ -36,6 +36,17 @@ interface DependencyResolverInterface {
 
 
 	/**
+	 * Get a module that has been added.
+	 *
+	 * @throws Exception If the module is not found
+	 *
+	 * @param string $toplevelidentifier The top level identifier of the module
+	 * @returns Module
+	 */
+	public function getModule($toplevelidentifier);
+
+
+	/**
 	 * Add a module. The module code will be parsed for 'require' statements to resolve dependencies.
 	 *
 	 * @param string $identifier Identifier for the module

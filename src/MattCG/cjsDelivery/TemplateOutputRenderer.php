@@ -13,7 +13,7 @@ class TemplateOutputRenderer implements OutputRendererInterface {
 	/**
 	 * @see outputRender::renderModule
 	 */
-	public function renderModule(&$module) {
+	public function renderModule(Module &$module) {
 		$identifier = $module->getUniqueIdentifier();
 		$code = $module->getCode();
 		return <<<MODULE
@@ -29,9 +29,12 @@ MODULE;
 	/**
 	 * @see OutputRendererInterface::renderOutput
 	 */
-	public function renderOutput(&$output, $main = '', &$globals = '', $exportrequire = '') {
-		if ($main) {
-			$main = "require('$main');";
+	public function renderOutput(&$output, Module &$mainmodule = null, &$globalscode = null, $exportrequire = null) {
+		if ($mainmodule) {
+			$mainidentifier = $mainmodule->getUniqueIdentifier();
+			$mainstatement = "require('$mainidentifier');";
+		} else {
+			$mainstatement = '';
 		}
 
 		if ($exportrequire and preg_match('/^[a-z]+$/i', $exportrequire)) {
@@ -39,6 +42,10 @@ MODULE;
 			$returnrequire = 'return require;';
 		} else {
 			$returnrequire = '';
+		}
+
+		if (!$globalscode) {
+			$globalscode = '';
 		}
 
 		return <<<OUTPUT
@@ -56,8 +63,8 @@ $exportrequire(function(modules) {
 	};
 
 $output
-$globals
-$main
+$globalscode
+$mainstatement
 $returnrequire
 }({}));
 

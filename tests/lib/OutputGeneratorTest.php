@@ -4,17 +4,19 @@
  * @copyright Copyright (c) 2013, Matthew Caruana Galizia
  */
 
+use MattCG\cjsDelivery\Module;
+
 class OutputRendererDouble implements MattCG\cjsDelivery\OutputRendererInterface {
 
 	public $modules = array(), $output = null;
 
-	public function renderModule(&$module) {
+	public function renderModule(Module &$module) {
 		$this->modules[] = $module;
 		return $module->getCode();
 	}
 
-	public function renderOutput(&$output, $main = '', &$globals = '', $exportrequire = '') {
-		$output = array($output, $main, $globals);
+	public function renderOutput(&$output, Module &$mainmodule = null, &$globalscode = null, $exportrequire = null) {
+		$output = array($output, $mainmodule->getUniqueIdentifier(), $globalscode);
 		$this->output = $output;
 		return $output;
 	}
@@ -26,24 +28,31 @@ class OutputGeneratorTest extends PHPUnit_Framework_TestCase {
 		$renderer = new OutputRendererDouble();
 		$generator = new MattCG\cjsDelivery\OutputGenerator($renderer);
 
-		$main = 'main';
 		$globals = 'globals';
 
 		$moduleAcode = 'alert("A");';
-		$moduleA = new MattCG\cjsDelivery\Module($moduleAcode);
+		$moduleA = new Module($moduleAcode);
+		$moduleA->setUniqueIdentifier('a');
 
-		$moduleBcode = 'alert("A");';
-		$moduleB = new MattCG\cjsDelivery\Module($moduleBcode);
+		$moduleBcode = 'alert("B");';
+		$moduleB = new Module($moduleBcode);
+		$moduleB->setUniqueIdentifier('b');
 
-		$moduleCcode = 'alert("A");';
-		$moduleC = new MattCG\cjsDelivery\Module($moduleCcode);
+		$moduleCcode = 'alert("C");';
+		$moduleC = new Module($moduleCcode);
+		$moduleC->setUniqueIdentifier('c');
 
-		$generator->buildOutput(array($moduleA, $moduleB, $moduleC), $main, $globals);
+		$main = $moduleA;
+
+		$generator->setModules(array($moduleA, $moduleB, $moduleC));
+		$generator->setMainModule($main);
+		$generator->setGlobalsCode($globals);
+		$generator->buildOutput();
 
 		$this->assertEquals($moduleA, $renderer->modules[0]);
 		$this->assertEquals($moduleB, $renderer->modules[1]);
 		$this->assertEquals($moduleC, $renderer->modules[2]);
 
-		$this->assertEquals(array($moduleAcode.$moduleBcode.$moduleCcode, $main, $globals), $renderer->output);
+		$this->assertEquals(array($moduleAcode.$moduleBcode.$moduleCcode, 'a', $globals), $renderer->output);
 	}
 }

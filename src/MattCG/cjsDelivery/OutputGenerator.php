@@ -10,6 +10,10 @@ namespace MattCG\cjsDelivery;
 class OutputGenerator {
 
 	private $renderer = null;
+	private $mainmodule = null;
+	private $modules = null;
+	private $exportrequire = null;
+	private $globalscode = null;
 
 	protected $signal = null;
 
@@ -27,18 +31,57 @@ class OutputGenerator {
 
 
 	/**
+	 * @param Module $mainmodule Main module that will be require()'d automatically
+	 */
+	public function setMainModule(Module $mainmodule = null) {
+		$this->mainmodule = $mainmodule;
+	}
+
+
+	/**
+	 * @param Module[] $modules List of modules from which to build output
+	 */
+	public function setModules(array $modules = null) {
+		$this->modules = $modules;
+	}
+
+
+	/**
+	 * @param string $exportrequire Name of variable to export the require function as
+	 */
+	public function setExportRequire($exportrequire = null) {
+		$this->exportrequire = $exportrequire;
+	}
+
+
+	/**
+	 * @param string $globals Raw JavaScript included just outside module scope
+	 */
+	public function setGlobalsCode($globalscode = null) {
+		$this->globalscode = $globalscode;
+	}
+
+	/**
+	 * @param string $globals Raw JavaScript included just outside module scope
+	 */
+	public function addGlobalsCode($globalscode) {
+		if ($this->globalscode === null) {
+			$this->globalscode = $globalscode;
+		} else {
+			$this->globalscode .= $globalscode;
+		}
+	}
+
+
+	/**
 	 * Build complete module output, including all added modules and dependencies
 	 *
 	 * @throws Exception If the module is not found
 	 *
-	 * @param Module[] $modules List of modules from which to build output
-	 * @param string $main Identifier of the main module
-	 * @param string $globals Raw JavaScript included just outside module scope
-	 * @param string $exportrequire Name of variable to export the require function as
 	 * @return string Complete output
 	 */
-	public function buildOutput(array $modules, $main = '', &$globals = '', $exportrequire = '') {
-		if (empty($modules)) {
+	public function buildOutput() {
+		if (empty($this->modules)) {
 			throw new Exception('Nothing to build', Exception::NOTHING_TO_BUILD);
 		}
 
@@ -53,11 +96,11 @@ class OutputGenerator {
 
 		// Loop through the modules, render and look for the main module
 		$concat = '';
-		foreach ($modules as $realpath => &$module) {
+		foreach ($this->modules as $realpath => &$module) {
 			$concat .= $this->renderer->renderModule($module);
 		}
 
-		$output = $this->renderer->renderOutput($concat, $main, $globals, $exportrequire);
+		$output = $this->renderer->renderOutput($concat, $this->mainmodule, $this->globalscode, $this->exportrequire);
 
 		// Run hooks with the fully built output
 		if ($this->signal) {

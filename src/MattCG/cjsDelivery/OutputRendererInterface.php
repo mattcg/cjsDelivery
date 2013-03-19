@@ -13,20 +13,20 @@ interface OutputRendererInterface {
 	/**
 	 * Render output-ready code for a given module
 	 *
-	 * @param module $module
+	 * @param Module $module
 	 * @return string
 	 */
-	public function renderModule(&$module);
+	public function renderModule(Module &$module);
 
 
 	/**
 	 * Render all of the output-ready code together
 	 *
 	 * @param string $output Concatenated module code
-	 * @param string $main Identifier of the main module
+	 * @param Module $mainmodule Main module that will be require()'d automatically
 	 * @param string $globals Raw JavaScript included just outside module scope
 	 * @param string $exportrequire Name of variable to export the require function as
 	 * @return string
 	 */
-	public function renderOutput(&$output, $main = '', &$globals = '', $exportrequire = '');
+	public function renderOutput(&$output, Module &$mainmodule = null, &$globalscode = null, $exportrequire = null);
 }

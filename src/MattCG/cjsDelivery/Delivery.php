@@ -93,30 +93,31 @@ class Delivery {
 	 *
 	 * This method is useful for generating a single file that can be loaded in one HTTP request.
 	 *
-	 * @throws Exception If the module is not found
-	 *
 	 * @param string $exportrequire Name of variable to export the require function as
 	 * @return string Complete output
 	 */
-	public function getOutput($exportrequire = '') {
-		$identifiermanager = $this->dependencyresolver->getIdentifierManager();
-		$mainmodule = '';
-		if ($this->mainmodule) {
+	public function getOutput($exportrequire = null) {
+		$dependencyresolver = $this->dependencyresolver;
+		$identifiermanager = $dependencyresolver->getIdentifierManager();
+		$outputgenerator = $this->outputgenerator;
 
-			// Exception should be thrown by getFlattenedIdentifier if main module is not in list
-			$mainmodule = $identifiermanager->getFlattenedIdentifier($this->mainmodule);
+		$outputgenerator->setModules($this->dependencyresolver->getAllDependencies());
+
+		if ($this->mainmodule) {
+			$mainmodule = $dependencyresolver->getModule($this->mainmodule);
+			$outputgenerator->setMainModule($mainmodule);
 		}
 
-		$globalscode = '';
 		if ($this->globals) {
 			foreach ($this->globals as $global) {
 				$global = $identifiermanager->getTopLevelIdentifier($global);
-				$globalscode .= $this->dependencyresolver->resolveDependencies($global);
+				$globalscode = $dependencyresolver->resolveDependencies($global);
+				$outputgenerator->addGlobalsCode($globalscode);
 			}
 		}
 
-		$allmodules = $this->dependencyresolver->getAllDependencies();
-		return $this->outputgenerator->buildOutput($allmodules, $mainmodule, $globalscode, $exportrequire);
+		$outputgenerator->setExportRequire($exportrequire);
+		return $outputgenerator->buildOutput();
 	}
 
 

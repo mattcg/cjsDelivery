@@ -8,15 +8,21 @@ cjsDelivery allows you to deliver [CommonJS-syntax](http://wiki.commonjs.org/wik
 
 The output is designed to have as little overhead over your module code as possible. In all, only 13 short lines of code will be added by the compiler.
 
-Features, in summary:
-
-- `require` dependencies in your code and define APIs on `exports` like you do with node.js on the server
-- compiles all your code, including dependencies, into a single file, ready for delivery to browsers
-- point cjsDelivery at your bootstrap (startup) file to compile the entire application
-- exclude and include sections of code at compile-time using pragmas
-- specify multiple include paths to avoid typing long require statements
-- add your own globals
-- minify module identifiers
+1. [Installation](#installation)
+    1.1. [Per-project install using composer](#per-project-install-using-composer)
+2. [Usage](#usage)
+    2.1. [On the command-line](#on-the-command-line)
+    2.2. [From PHP](#from-php)
+3. [Features](#features)
+    3.1. [Include paths](#include-paths)
+        3.1.1. [For external components](#for-external-components)
+        3.1.2. [For internal components](#for-internal-components)
+    3.2. [Pragmas](#pragmas)
+    3.3. [Minified identifiers](#minified-identifiers)
+    3.4. [Globals](#globals)
+4. [How dependencies are resolved](#how-dependencies-are-resolved)
+5. [Changelog](#changelog)
+6. [Credits and license](#credits-and-license)
 
 ## Installation ##
 

@@ -23,6 +23,14 @@
 		<ini name="memory_limit" value="512M" />
 		<ini name="error_log" value="../build/logs/error.log" />
 	</php>
+	<filter>
+		<blacklist>
+			<directory suffix=".php">vendor</directory>
+		</blacklist>
+		<whitelist processUncoveredFilesFromWhitelist="true">
+			<directory suffix=".php">src</directory>
+		</whitelist>
+	</filter>
 	<testsuites>
 		<testsuite name="Identifier generator tests">
 			<file>lib/FlatIdentifierGeneratorTest.php</file>

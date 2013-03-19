@@ -7,7 +7,7 @@
 
 namespace MattCG\cjsDelivery;
 
-class FileDependencyResolver implements DependencyResolverInterface {
+class FileDependencyResolver extends SignalSender implements DependencyResolverInterface {
 
 	const EXT_JS = 'js';
 	const REQUIRE_PREG = '/require\((\'|")(.*?)\1\)/';
@@ -16,18 +16,8 @@ class FileDependencyResolver implements DependencyResolverInterface {
 
 	private $identifiermanager;
 
-	protected $signal = null;
-
 	public function __construct(IdentifierManagerInterface $identifiermanager) {
 		$this->identifiermanager = $identifiermanager;
-	}
-
-	public function setSignalManager(\Aura\Signal\Manager $signal) {
-		$this->signal = $signal;
-	}
-
-	public function getSignalManager() {
-		return $this->signal;
 	}
 
 	public function getIdentifierManager() {

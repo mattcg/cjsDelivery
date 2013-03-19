@@ -7,17 +7,13 @@
 
 namespace MattCG\cjsDelivery;
 
-interface DependencyResolverInterface {
+interface DependencyResolverInterface extends SignalSenderInterface {
 
 
 	/**
 	 * @param IdentifierManagerInterface $identifiermanager
 	 */
 	public function __construct(IdentifierManagerInterface $identifiermanager);
-
-	public function setSignalManager(\Aura\Signal\Manager $signal);
-
-	public function getSignalManager();
 
 
 	/**

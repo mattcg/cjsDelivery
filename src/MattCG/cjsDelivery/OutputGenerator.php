@@ -7,7 +7,7 @@
 
 namespace MattCG\cjsDelivery;
 
-class OutputGenerator {
+class OutputGenerator extends SignalSender {
 
 	private $renderer = null;
 	private $mainmodule = null;
@@ -15,18 +15,8 @@ class OutputGenerator {
 	private $exportrequire = null;
 	private $globalscode = null;
 
-	protected $signal = null;
-
 	public function __construct(OutputRendererInterface $renderer) {
 		$this->renderer = $renderer;
-	}
-
-	public function setSignalManager(\Aura\Signal\Manager $signal) {
-		$this->signal = $signal;
-	}
-
-	public function getSignalManager() {
-		return $this->signal;
 	}
 
 
@@ -86,9 +76,8 @@ class OutputGenerator {
 		}
 
 		// If output is created by the hook callbacks, return it
-		$output = '';
 		if ($this->signal) {
-			$result = $this->signal->send($this, processHooks\BUILD_OUTPUT, $output)->getLast();
+			$result = $this->signal->send($this, processHooks\BUILD_OUTPUT)->getLast();
 			if ($result and $result->value) {
 				return $result->value;
 			}

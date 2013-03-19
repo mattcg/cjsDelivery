@@ -7,7 +7,7 @@
 
 namespace MattCG\cjsDelivery;
 
-class Delivery {
+class Delivery extends SignalSender {
 
 	private $outputgenerator = null;
 	private $dependencyresolver = null;
@@ -15,8 +15,6 @@ class Delivery {
 	private $globals = null;
 
 	private $mainmodule;
-
-	protected $signal = null;
 
 	public function setOutputGenerator(OutputGenerator $generator) {
 		$this->outputgenerator = $generator;
@@ -28,14 +26,6 @@ class Delivery {
 
 	public function getDependencyResolver() {
 		return $this->dependencyresolver;
-	}
-
-	public function setSignalManager(\Aura\Signal\Manager $signal) {
-		$this->signal = $signal;
-	}
-
-	public function getSignalManager() {
-		return $this->signal;
 	}
 
 

@@ -6,6 +6,8 @@
 
 class FileIdentifierManagerTest extends PHPUnit_Framework_TestCase {
 
+	const JS_SUFFIX = '.js';
+
 	private function getManager() {
 		return new MattCG\cjsDelivery\FileIdentifierManager(new MattCG\cjsDelivery\FlatIdentifierGenerator());
 	}
@@ -48,8 +50,8 @@ class FileIdentifierManagerTest extends PHPUnit_Framework_TestCase {
 		$identifier = CJSD_TESTMODS_DIR . '/main';
 
 		// Assert that the file exists and is readable
-		$this->assertFileExists($identifier . '.js');
-		$this->assertTrue(is_readable($identifier . '.js'));
+		$this->assertFileExists($identifier . self::JS_SUFFIX);
+		$this->assertTrue(is_readable($identifier . self::JS_SUFFIX));
 		$identifiermanager->getFlattenedIdentifier($identifier);
 	}
 
@@ -62,13 +64,13 @@ class FileIdentifierManagerTest extends PHPUnit_Framework_TestCase {
 		$identifiermanager = $this->getManager();
 		$identifier = './nonexistent';
 
-		$this->assertFileNotExists($identifier . '.js');
+		$this->assertFileNotExists($identifier . self::JS_SUFFIX);
 		$identifiermanager->getTopLevelIdentifier($identifier);
 	}
 
 	public function testGetTopLevelIdentifierReturnsTopLevelIdentifier() {
 		$identifier = CJSD_TESTMODS_DIR . '/main';
-		$this->assertFileExists($identifier . '.js');
+		$this->assertFileExists($identifier . self::JS_SUFFIX);
 
 		$identifiermanager = $this->getManager();
 		$this->assertEquals($identifier, $identifiermanager->getTopLevelIdentifier($identifier));
@@ -79,13 +81,13 @@ class FileIdentifierManagerTest extends PHPUnit_Framework_TestCase {
 
 		// Assert that the file actually has an extension
 		$this->assertFileNotExists($identifier);
-		$this->assertFileExists($identifier . '.js');
+		$this->assertFileExists($identifier . self::JS_SUFFIX);
 
 		$identifiermanager = $this->getManager();
 		$this->assertStringEndsWith('main', $identifiermanager->getTopLevelIdentifier($identifier));
 
 		// Even if the passed identifier has an extension...
-		$this->assertStringEndsWith('main', @$identifiermanager->getTopLevelIdentifier($identifier . '.js'));
+		$this->assertStringEndsWith('main', @$identifiermanager->getTopLevelIdentifier($identifier . self::JS_SUFFIX));
 	}
 
 	public function testAddIdentifierReturnsTopLevelIdentifier() {
@@ -93,18 +95,18 @@ class FileIdentifierManagerTest extends PHPUnit_Framework_TestCase {
 
 		// Assert that the file actually has an extension
 		$this->assertFileNotExists($identifier);
-		$this->assertFileExists($identifier . '.js');
+		$this->assertFileExists($identifier . self::JS_SUFFIX);
 
 		$identifiermanager = $this->getManager();
 		$this->assertEquals($identifier, $identifiermanager->addIdentifier($identifier));
 
 		// Even if the passed identifier has an extension...
-		$this->assertEquals($identifier, @$identifiermanager->getTopLevelIdentifier($identifier . '.js'));
+		$this->assertEquals($identifier, @$identifiermanager->getTopLevelIdentifier($identifier . self::JS_SUFFIX));
 	}
 
 	public function testFileWithExactPathIsFound() {
 		$identifier = CJSD_TESTMODS_DIR . '/main';
-		$this->assertFileExists($identifier . '.js');
+		$this->assertFileExists($identifier . self::JS_SUFFIX);
 
 		$identifiermanager = $this->getManager();
 		$this->assertEquals($identifier, $identifiermanager->getTopLevelIdentifier($identifier));
@@ -159,13 +161,13 @@ class FileIdentifierManagerTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testExceptionThrownForAbsolutePathWithNoIncludesSpecified() {
 		$identifier = 'modules/main';
-		$this->assertFileExists($identifier . '.js');
+		$this->assertFileExists($identifier . self::JS_SUFFIX);
 		$this->getManager()->addIdentifier($identifier);
 	}
 
 	public function testIncludesAreFound() {
 		$identifier = 'main';
-		$this->assertFileExists('modules/' . $identifier . '.js');
+		$this->assertFileExists('modules/' . $identifier . self::JS_SUFFIX);
 
 		$identifiermanager = $this->getManager();
 		$identifiermanager->setIncludes(array(CJSD_TESTMODS_DIR));

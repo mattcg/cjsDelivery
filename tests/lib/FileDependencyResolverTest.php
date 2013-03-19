@@ -6,6 +6,8 @@
 
 class FileDependencyResolverTest extends PHPUnit_Framework_TestCase {
 
+	const JS_SUFFIX = '.js';
+
 	private function getResolver() {
 		$identifiermanager = new MattCG\cjsDelivery\FileIdentifierManager(new MattCG\cjsDelivery\FlatIdentifierGenerator());
 		return new MattCG\cjsDelivery\FileDependencyResolver($identifiermanager);
@@ -17,7 +19,7 @@ class FileDependencyResolverTest extends PHPUnit_Framework_TestCase {
 
 	public function testAddModuleAcceptsRelativePath() {
 		$identifier = './modules/apple/index';
-		$this->assertFileExists($identifier . '.js');
+		$this->assertFileExists($identifier . self::JS_SUFFIX);
 
 		$resolver = $this->getResolver();
 		$this->assertEquals('index', $resolver->addModule($identifier));
@@ -25,7 +27,7 @@ class FileDependencyResolverTest extends PHPUnit_Framework_TestCase {
 
 	public function testAddModuleAcceptsTopLevelPath() {
 		$toplevelidentifier = CJSD_TESTMODS_DIR . '/apple/index';
-		$this->assertFileExists($toplevelidentifier . '.js');
+		$this->assertFileExists($toplevelidentifier . self::JS_SUFFIX);
 
 		$resolver = $this->getResolver();
 		$this->assertEquals('index', $resolver->addModule($toplevelidentifier));
@@ -45,21 +47,21 @@ class FileDependencyResolverTest extends PHPUnit_Framework_TestCase {
 
 	public function testHasModule() {
 		$toplevelidentifier = CJSD_TESTMODS_DIR . '/apple/index';
-		$this->assertFileExists($toplevelidentifier . '.js');
+		$this->assertFileExists($toplevelidentifier . self::JS_SUFFIX);
 
 		$resolver = $this->getResolver();
 		$resolver->addModule($toplevelidentifier);
 		$this->assertTrue($resolver->hasModule($toplevelidentifier));
 
 		$toplevelidentifier = CJSD_TESTMODS_DIR . '/nonexistent';
-		$this->assertFileNotExists($toplevelidentifier . '.js');
+		$this->assertFileNotExists($toplevelidentifier . self::JS_SUFFIX);
 
 		$this->assertFalse($resolver->hasModule($toplevelidentifier));
 	}
 
 	public function testRelativeDependenciesAreResolved() {
 		$toplevelidentifier = CJSD_TESTMODS_DIR . '/pear/index';
-		$realpath = $toplevelidentifier . '.js';
+		$realpath = $toplevelidentifier . self::JS_SUFFIX;
 		$this->assertFileExists($realpath);
 		$this->assertEquals("require('./pips');\nrequire('./stalk');\n", $this->getFileContents($realpath));
 
@@ -77,7 +79,7 @@ class FileDependencyResolverTest extends PHPUnit_Framework_TestCase {
 
 	public function testAddModuleAcceptsCode() {
 		$toplevelidentifier = CJSD_TESTMODS_DIR . '/apple/index';
-		$realpath = $toplevelidentifier . '.js';
+		$realpath = $toplevelidentifier . self::JS_SUFFIX;
 		$this->assertFileExists($realpath);
 		$code = $this->getFileContents($realpath);
 
@@ -93,7 +95,7 @@ class FileDependencyResolverTest extends PHPUnit_Framework_TestCase {
 
 	public function testDependenciesWithinIncludesAreResolved() {
 		$identifier = 'pear/index';
-		$this->assertFileExists('modules/' . $identifier . '.js');
+		$this->assertFileExists('modules/' . $identifier . self::JS_SUFFIX);
 
 		$resolver = $this->getResolver();
 

@@ -95,6 +95,26 @@ class Delivery {
 
 
 	/**
+	 * @see IdentifierManagerInterface::setIncludes()
+	 * @param array $includes
+	 */
+	public function setIncludes(array $includes = null) {
+		$identifiermanager = $this->dependencyresolver->getIdentifierManager();
+		$identifiermanager->setIncludes($includes);
+	}
+
+
+	/**
+	 * @see IdentifierManagerInterface::getIncludes()
+	 * @return array $includes
+	 */
+	public function getIncludes() {
+		$identifiermanager = $this->dependencyresolver->getIdentifierManager();
+		return $identifiermanager->getIncludes();
+	}
+
+
+	/**
 	 * Get complete module output, including all added modules and dependencies
 	 *
 	 * This method is useful for generating a single file that can be loaded in one HTTP request.

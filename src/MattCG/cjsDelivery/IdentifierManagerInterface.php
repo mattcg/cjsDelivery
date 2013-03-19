@@ -22,6 +22,14 @@ interface IdentifierManagerInterface {
 
 
 	/**
+	 * Get the list of location stubs to use when searching for module files.
+	 *
+	 * @return array
+	 */
+	public function getIncludes();
+
+
+	/**
 	 * Get the 'resolved' identifier of a module that will actually be used in the JavaScript output
 	 *
 	 * @param string $toplevelidentifier The top level identifier of the module

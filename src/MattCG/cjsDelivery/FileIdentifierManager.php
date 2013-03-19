@@ -48,6 +48,17 @@ class FileIdentifierManager implements IdentifierManagerInterface {
 
 
 	/**
+	 * Get the list of file include directories to use when searching for module files.
+	 *
+	 * @see IdentifierManagerInterface::getIncludes()
+	 * @return array $includes
+	 */
+	public function getIncludes() {
+		return $this->includes;
+	}
+
+
+	/**
 	 * @see IdentifierManagerInterface::getFlattenedIdentifier()
 	 * @param string $toplevelidentifier The canonicalized absolute pathname of the module, excluding any extension
 	 */

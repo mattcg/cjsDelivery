@@ -47,11 +47,9 @@ class DeliveryFactory {
 			$identifiergenerator = new FlatIdentifierGenerator();
 		}
 
-		$identifiermanager = new FileIdentifierManager($identifiergenerator);
-
 		// Search include directories?
 		if ($options[self::OPT_INCLUDES]) {
-			$identifiermanager->setIncludes($options[self::OPT_INCLUDES]);
+			$delivery->setIncludes($options[self::OPT_INCLUDES]);
 		}
 
 		// Add global JavaScript?
@@ -59,6 +57,7 @@ class DeliveryFactory {
 			$delivery->setGlobals($options[self::OPT_GLOBALS]);
 		}
 
+		$identifiermanager = new FileIdentifierManager($identifiergenerator);
 		$dependencyresolver = new FileDependencyResolver($identifiermanager);
 		if ($signalmanager) {
 			$dependencyresolver->setSignalManager($signalmanager);

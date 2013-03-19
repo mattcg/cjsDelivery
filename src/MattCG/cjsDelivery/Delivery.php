@@ -43,9 +43,10 @@ class Delivery {
 	 * Add a module. The module code will be parsed for 'require' statements to resolve dependencies
 	 *
 	 * @param string $identifier Identifier for the module
+	 * @param string $code (optional) Module code
 	 */
-	public function addModule($identifier) {
-		$this->dependencyresolver->addModule($identifier);
+	public function addModule($identifier, $code = null) {
+		$this->dependencyresolver->addModule($identifier, $code);
 	}
 
 

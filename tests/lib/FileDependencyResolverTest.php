@@ -11,6 +11,10 @@ class FileDependencyResolverTest extends PHPUnit_Framework_TestCase {
 		return new MattCG\cjsDelivery\FileDependencyResolver($identifiermanager);
 	}
 
+	private function getFileContents($realpath) {
+		return file_get_contents($realpath, false);
+	}
+
 	public function testAddModuleAcceptsRelativePath() {
 		$identifier = './modules/apple/index';
 		$this->assertFileExists($identifier . '.js');
@@ -55,8 +59,9 @@ class FileDependencyResolverTest extends PHPUnit_Framework_TestCase {
 
 	public function testRelativeDependenciesAreResolved() {
 		$toplevelidentifier = CJSD_TESTMODS_DIR . '/pear/index';
-		$this->assertFileExists($toplevelidentifier . '.js');
-		$this->assertEquals("require('./pips');\nrequire('./stalk');\n", file_get_contents($toplevelidentifier . '.js'));
+		$realpath = $toplevelidentifier . '.js';
+		$this->assertFileExists($realpath);
+		$this->assertEquals("require('./pips');\nrequire('./stalk');\n", $this->getFileContents($realpath));
 
 		$resolver = $this->getResolver();
 		$resolver->addModule($toplevelidentifier);
@@ -68,6 +73,22 @@ class FileDependencyResolverTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals("require('pips');\nrequire('stalk');\n", $dependencies[$toplevelidentifier]->getCode());
 		$this->assertEquals("// Pips\n", $dependencies[CJSD_TESTMODS_DIR . '/pear/pips']->getCode());
 		$this->assertEquals("// Stalk\n", $dependencies[CJSD_TESTMODS_DIR . '/pear/stalk']->getCode());
+	}
+
+	public function testAddModuleAcceptsCode() {
+		$toplevelidentifier = CJSD_TESTMODS_DIR . '/apple/index';
+		$realpath = $toplevelidentifier . '.js';
+		$this->assertFileExists($realpath);
+		$code = $this->getFileContents($realpath);
+
+		// Sneakily inject a dependency on pear into the code
+		$code .= PHP_EOL . "require('../pear/index');";
+
+		$resolver = $this->getResolver();
+		$this->assertEquals('index1', $resolver->addModule($toplevelidentifier, $code));
+		$this->assertTrue($resolver->hasModule(CJSD_TESTMODS_DIR . '/pear/index'));
+		$this->assertTrue($resolver->hasModule(CJSD_TESTMODS_DIR . '/pear/pips'));
+		$this->assertTrue($resolver->hasModule(CJSD_TESTMODS_DIR . '/pear/stalk'));
 	}
 
 	public function testDependenciesWithinIncludesAreResolved() {

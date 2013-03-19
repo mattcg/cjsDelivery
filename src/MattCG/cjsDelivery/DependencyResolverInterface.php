@@ -36,21 +36,23 @@ interface DependencyResolverInterface {
 
 
 	/**
-	 * Add a module. The module code will be parsed for 'require' statements to resolve dependencies
+	 * Add a module. The module code will be parsed for 'require' statements to resolve dependencies.
 	 *
 	 * @param string $identifier Identifier for the module
 	 * @returns string Unique (but not canonicalized) identifier for the module
+	 * @param string $code (optional) Module code
 	 */
-	public function addModule($identifier);
+	public function addModule($identifier, &$code = null);
 
 
 	/**
 	 * Look for require statements in the code of the module with the given identifier and add referenced modules. Allows dependencies in arbitary modules to be resolved without adding the module itself to the final output.
 	 *
 	 * @param string $toplevelidentifier The top level identifier of the module
+	 * @param string $code (optional) Module code
 	 * @return string The code with resolved dependencies
 	 */
-	public function resolveDependencies($toplevelidentifier);
+	public function resolveDependencies($toplevelidentifier, &$code = null);
 
 
 	/**

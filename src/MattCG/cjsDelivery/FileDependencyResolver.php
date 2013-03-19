@@ -56,7 +56,7 @@ class FileDependencyResolver implements DependencyResolverInterface {
 	 * @see DependencyResolverInterface::addModule
 	 * @param string $identifier Path to the module file
 	 */
-	public function addModule($identifier) {
+	public function addModule($identifier, &$code = null) {
 		$toplevelidentifier = $this->identifiermanager->addIdentifier($identifier);
 
 		// Check if the module has already been added
@@ -64,8 +64,8 @@ class FileDependencyResolver implements DependencyResolverInterface {
 			return $this->identifiermanager->getFlattenedIdentifier($toplevelidentifier);
 		}
 
-		$code = $this->resolveDependencies($toplevelidentifier);
-		$identifier = $this->addModuleToList($toplevelidentifier, $code);
+		$resolvedcode = $this->resolveDependencies($toplevelidentifier, $code);
+		$identifier = $this->addModuleToList($toplevelidentifier, $resolvedcode);
 
 		return $identifier;
 	}
@@ -92,26 +92,40 @@ class FileDependencyResolver implements DependencyResolverInterface {
 	 * @see DependencyResolverInterface::resolveDependencies
 	 * @param string $toplevelidentifier The canonicalized absolute pathname of the module, excluding any extension
 	 */
-	public function resolveDependencies($toplevelidentifier) {
+	public function resolveDependencies($toplevelidentifier, &$code = null) {
 		$queue = array();
 
+		if ($code === null) {
+			$code = $this->getFileContents($toplevelidentifier);
+		}
+
 		try {
-			$code = $this->queueDependencies($toplevelidentifier, $queue);
+			$resolvedcode = $this->queueDependencies($toplevelidentifier, $code, $queue);
 		} catch (Exception $e) {
 			throw new Exception("Could not resolve dependencies in '$toplevelidentifier'", Exception::UNABLE_TO_RESOLVE, $e);
 		}
 
+		$this->resolveDependenciesInQueue($queue);
+		return $resolvedcode;
+	}
+
+
+	/**
+	 * Resolve dependencies in the given queue.
+	 *
+	 * @param array $queue Queue of identifiers to add unresolved dependencies to
+	 */
+	private function resolveDependenciesInQueue(&$queue) {
 		try {
 			while (count($queue)) {
-				$dependencyrealpath = array_pop($queue);
-				$dependencycode = $this->queueDependencies($dependencyrealpath, $queue);
-				$this->addModuleToList($dependencyrealpath, $dependencycode);
+				$toplevelidentifier = array_pop($queue);
+				$code = $this->getFileContents($toplevelidentifier);
+				$resolvedcode = $this->queueDependencies($toplevelidentifier, $code, $queue);
+				$this->addModuleToList($toplevelidentifier, $resolvedcode);
 			}
 		} catch (Exception $e) {
-			throw new Exception("Could not resolve dependency in '$dependencyrealpath'", Exception::UNABLE_TO_RESOLVE, $e);
+			throw new Exception("Could not resolve dependency in '$toplevelidentifier'", Exception::UNABLE_TO_RESOLVE, $e);
 		}
-
-		return $code;
 	}
 
 
@@ -137,12 +151,12 @@ class FileDependencyResolver implements DependencyResolverInterface {
 	 * Look for required module identifiers and add them to the given queue.
 	 *
 	 * @param string $toplevelidentifier The canonicalized absolute pathname of the module, excluding any extension
-	 * @param array $queue Queue of identifiers to resolve
+	 * @param string $code Unresolved module code
+	 * @param array $queue Queue of identifiers to add unresolved dependencies to
 	 * @return string The code with resolved dependencies
 	 */
-	private function queueDependencies($toplevelidentifier, &$queue) {
+	private function queueDependencies($toplevelidentifier, &$code, &$queue) {
 		$that = $this;
-		$code = $this->getFileContents($toplevelidentifier);
 		$relativetodir = dirname($toplevelidentifier);
 
 		// Allow plugins to process modules before resolving as dependencies could be removed/added

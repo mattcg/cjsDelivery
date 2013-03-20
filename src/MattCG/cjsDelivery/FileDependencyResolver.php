@@ -164,7 +164,7 @@ class FileDependencyResolver extends SignalSender implements DependencyResolverI
 
 		// Allow plugins to process modules before resolving as dependencies could be removed/added
 		if ($this->signal) {
-			$result = $this->signal->send($this, processHooks\PROCESS_MODULE, $code)->getLast();
+			$result = $this->signal->send($this, SignalSender::PROCESS_MODULE, $code)->getLast();
 			if ($result) {
 				$code = $result->value;
 			}

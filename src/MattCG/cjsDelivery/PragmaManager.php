@@ -33,7 +33,7 @@ class PragmaManager {
 		$this->signal = $signal;
 
 		$that = $this;
-		$signal->handler($dependencyresolver, processHooks\PROCESS_MODULE, function($code) use ($that) {
+		$signal->handler($dependencyresolver, SignalSender::PROCESS_MODULE, function($code) use ($that) {
 			$that->processPragmas($code);
 			return $code;
 		});

@@ -77,7 +77,7 @@ class OutputGenerator extends SignalSender {
 
 		// If output is created by the hook callbacks, return it
 		if ($this->signal) {
-			$result = $this->signal->send($this, processHooks\BUILD_OUTPUT)->getLast();
+			$result = $this->signal->send($this, SignalSender::BUILD_OUTPUT)->getLast();
 			if ($result and $result->value) {
 				return $result->value;
 			}
@@ -93,7 +93,7 @@ class OutputGenerator extends SignalSender {
 
 		// Run hooks with the fully built output
 		if ($this->signal) {
-			$this->signal->send($this, processHooks\OUTPUT_READY, $output);
+			$this->signal->send($this, SignalSender::OUTPUT_READY, $output);
 		}
 
 		return $output;

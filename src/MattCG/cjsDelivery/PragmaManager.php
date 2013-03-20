@@ -34,8 +34,7 @@ class PragmaManager {
 
 		$that = $this;
 		$signal->handler($dependencyresolver, SignalSender::PROCESS_MODULE, function($code) use ($that) {
-			$that->processPragmas($code);
-			return $code;
+			return $that->processPragmas($code);
 		});
 	}
 
@@ -45,14 +44,14 @@ class PragmaManager {
 	 *
 	 * @param string $code The code to process
 	 */
-	public function processPragmas(&$code) {
+	public function processPragmas($code) {
 		$pattern = $this->pragmaformat;
 		if (!$pattern) {
 			$pattern = self::DEFAULT_PFMT;
 		}
 
 		$that = $this;
-		$code = preg_replace_callback($pattern, function($match) use ($that) {
+		return preg_replace_callback($pattern, function($match) use ($that) {
 			if ($that->checkPragma($match['pragma'])) {
 				return $match[0];
 			}

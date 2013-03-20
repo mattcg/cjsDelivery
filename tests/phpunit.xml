@@ -48,5 +48,8 @@
 		<testsuite name="Output tests">
 			<file>lib/OutputGeneratorTest.php</file>
 		</testsuite>
+		<testsuite name="Singal listener tests">
+			<file>lib/PragmaManagerTest.php</file>
+		</testsuite>
 	</testsuites>
 </phpunit>

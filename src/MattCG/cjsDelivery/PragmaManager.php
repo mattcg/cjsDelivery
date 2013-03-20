@@ -70,9 +70,7 @@ class PragmaManager {
 	 * @param string $name The name of the pragma to set
 	 */
 	public function setPragma($name) {
-		if (!in_array($name, $this->pragmas, true)) {
-			$this->pragmas[] = $name;
-		}
+		$this->pragmas[$name] = true;
 	}
 
 
@@ -84,9 +82,8 @@ class PragmaManager {
 	 * @param string $name The name of the pragma to unset
 	 */
 	public function unsetPragma($name) {
-		$offset = array_search($name, $this->pragmas, true);
-		if ($offset !== false) {
-			array_splice($this->pragmas, $offset, 1);
+		if ($this->checkPragma($name)) {
+			unset($this->pragmas[$name]);
 		}
 	}
 
@@ -97,7 +94,7 @@ class PragmaManager {
 	 * @return array
 	 */
 	public function getPragmas() {
-		return $this->pragmas;
+		return array_keys($this->pragmas);
 	}
 
 
@@ -120,7 +117,7 @@ class PragmaManager {
 	 * @return boolean Whether the pragma is set or not
 	 */
 	public function checkPragma($name) {
-		return in_array($name, $this->pragmas, true);
+		return isset($this->pragmas[$name]);
 	}
 
 

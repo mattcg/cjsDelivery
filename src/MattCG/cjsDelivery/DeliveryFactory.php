@@ -30,7 +30,7 @@ class DeliveryFactory {
 	}
 
 	public static function getSignalManagerInstance() {
-		return require __DIR__ . '/../vendor/aura/signal/scripts/instance.php';
+		return require __DIR__ . '/../../../vendor/aura/signal/scripts/instance.php';
 	}
 
 	private static function attachPragmaManager($options, $delivery) {

@@ -85,7 +85,7 @@ class DeliveryFactory {
 
 		$delivery = new Delivery();
 
-		self::attachDependencyResolver($options, $delivery));
+		self::attachDependencyResolver($options, $delivery);
 		self::attachOutputGenerator($delivery);
 
 		// Forcibly add a signal manager? (Will add one anyway if pragmas are enabled.)

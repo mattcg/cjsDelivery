@@ -28,6 +28,8 @@ class PragmaManager {
 	 */
 	const DEFAULT_PFMT = '/\/\/ ifdef (?<pragma>[A-Z_]+)\n(.*?)\n\/\/ endif \1/';
 
+	const MATCH_NAME = 'pragma';
+
 
 	public function __construct(\Aura\Signal\Manager $signal, DependencyResolverInterface $dependencyresolver) {
 		$this->signal = $signal;
@@ -52,7 +54,7 @@ class PragmaManager {
 
 		$that = $this;
 		return preg_replace_callback($pattern, function($match) use ($that) {
-			if ($that->checkPragma($match['pragma'])) {
+			if (isset($match[self::MATCH_NAME]) and $that->checkPragma($match[self::MATCH_NAME])) {
 				return $match[0];
 			}
 

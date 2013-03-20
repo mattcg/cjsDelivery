@@ -108,7 +108,7 @@ class PragmaManager {
 	 * @param array $pragmas
 	 */
 	public function setPragmas(array $pragmas) {
-		foreach ($pragma as $pragmas) {
+		foreach ($pragmas as $pragma) {
 			$this->setPragma($pragma);
 		}
 	}

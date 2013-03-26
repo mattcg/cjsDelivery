@@ -233,6 +233,6 @@ Please see the [closed milestones](https://github.com/mattcg/cjsDelivery/issues/
 
 ## Credits and license ##
 
-cjsDelivery is copyright © 2012 [Matthew Caruana Galizia](http://twitter.com/mcaruanagalizia), licensed under a [Creative Commons Attribution 3.0 Unported (CC BY 3.0)](http://creativecommons.org/licenses/by/3.0/legalcode) license.
+cjsDelivery is copyright © 2012 [Matthew Caruana Galizia](http://twitter.com/mcaruanagalizia), licensed under the MIT license (see LICENSE).
 
 CommonJS is copyright © 2009 - Kevin Dangoor and many CommonJS contributors, licensed under an MIT license.

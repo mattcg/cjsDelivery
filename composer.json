@@ -4,7 +4,7 @@
 	"homepage": "https://github.com/mattcg/cjsdelivery",
 	"description": "Deliver CommonJS-syntax JavaScript modules to clients as a single file.",
 	"keywords": ["commonjs", "javascript", "modules"],
-	"license": "Creative Commons Attribution 3.0 Unported (CC BY 3.0)",
+	"license": "MIT",
 	"authors": [
 		{
 			"name": "Matthew Caruana Galizia",

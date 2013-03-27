@@ -51,5 +51,8 @@
 		<testsuite name="Signal listener tests">
 			<file>src/MattCG/cjsDelivery/PragmaManagerTest.php</file>
 		</testsuite>
+		<testsuite name="Delivery tests">
+			<file>src/MattCG/cjsDelivery/DeliveryTest.php</file>
+		</testsuite>
 	</testsuites>
 </phpunit>

@@ -1,6 +1,6 @@
 # cjsDelivery #
 
-[![Build Status](https://travis-ci.org/mattcg/cjsdelivery.png?branch=master)](https://travis-ci.org/mattcg/cjsdelivery)
+[![Build Status](https://travis-ci.org/mattcg/cjsDelivery.png?branch=master)](https://travis-ci.org/mattcg/cjsDelivery)
 
 ## A CommonJS compiler written in PHP ##
 

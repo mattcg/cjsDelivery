@@ -48,7 +48,7 @@
 		<testsuite name="Output tests">
 			<file>src/MattCG/cjsDelivery/OutputGeneratorTest.php</file>
 		</testsuite>
-		<testsuite name="Singal listener tests">
+		<testsuite name="Signal listener tests">
 			<file>src/MattCG/cjsDelivery/PragmaManagerTest.php</file>
 		</testsuite>
 	</testsuites>

@@ -161,7 +161,7 @@ class Delivery extends SignalSender {
 	/**
 	 * @see DeliveryFactory::create
 	 */
-	public function create(array $options = array()) {
+	public static function create(array $options = array()) {
 		return DeliveryFactory::create($options);
 	}
 }

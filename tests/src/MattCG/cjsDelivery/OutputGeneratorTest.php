@@ -6,21 +6,7 @@
 
 use MattCG\cjsDelivery\Module;
 
-class OutputRendererDouble implements MattCG\cjsDelivery\OutputRendererInterface {
-
-	public $modules = array(), $output = null;
-
-	public function renderModule(Module &$module) {
-		$this->modules[] = $module;
-		return $module->getCode();
-	}
-
-	public function renderOutput(&$output, Module &$mainmodule = null, &$globalscode = null, $exportrequire = null) {
-		$output = array($output, $mainmodule->getUniqueIdentifier(), $globalscode);
-		$this->output = $output;
-		return $output;
-	}
-}
+require_once 'OutputRendererDouble.php';
 
 class OutputGeneratorTest extends PHPUnit_Framework_TestCase {
 

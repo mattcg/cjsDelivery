@@ -1,6 +1,6 @@
 #!/bin/sh
 
-CJSDELIVERY_VER="0.3.0"
+CJSDELIVERY_VER="0.4.1"
 CJSDELIVERY_TMP="/tmp/cjsdelivery"
 CJSDELIVERY_URL="https://github.com/mattcg/cjsdelivery/archive/v$CJSDELIVERY_VER.zip"
 

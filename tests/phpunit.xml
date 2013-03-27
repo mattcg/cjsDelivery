@@ -33,23 +33,23 @@
 	</filter>
 	<testsuites>
 		<testsuite name="Identifier generator tests">
-			<file>lib/FlatIdentifierGeneratorTest.php</file>
-			<file>lib/MinIdentifierGeneratorTest.php</file>
+			<file>src/MattCG/cjsDelivery/FlatIdentifierGeneratorTest.php</file>
+			<file>src/MattCG/cjsDelivery/MinIdentifierGeneratorTest.php</file>
 		</testsuite>
 		<testsuite name="Identifier manager tests">
-			<file>lib/FileIdentifierManagerTest.php</file>
+			<file>src/MattCG/cjsDelivery/FileIdentifierManagerTest.php</file>
 		</testsuite>
 		<testsuite name="Dependency resolver tests">
-			<file>lib/FileDependencyResolverTest.php</file>
+			<file>src/MattCG/cjsDelivery/FileDependencyResolverTest.php</file>
 		</testsuite>
 		<testsuite name="Model tests">
-			<file>lib/ModuleTest.php</file>
+			<file>src/MattCG/cjsDelivery/ModuleTest.php</file>
 		</testsuite>
 		<testsuite name="Output tests">
-			<file>lib/OutputGeneratorTest.php</file>
+			<file>src/MattCG/cjsDelivery/OutputGeneratorTest.php</file>
 		</testsuite>
 		<testsuite name="Singal listener tests">
-			<file>lib/PragmaManagerTest.php</file>
+			<file>src/MattCG/cjsDelivery/PragmaManagerTest.php</file>
 		</testsuite>
 	</testsuites>
 </phpunit>

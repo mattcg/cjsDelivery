@@ -13,7 +13,7 @@ use MattCG\cjsDelivery\FlatIdentifierGenerator;
 class PragmaManagerTest extends PHPUnit_Framework_TestCase {
 
 	private function getSignalManagerInstance() {
-		return require __DIR__ . '/../../vendor/aura/signal/scripts/instance.php';
+		return require __DIR__ . '/../../../../vendor/aura/signal/scripts/instance.php';
 	}
 
 	private function getDependencyResolverInstance() {

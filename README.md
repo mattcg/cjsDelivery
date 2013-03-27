@@ -65,7 +65,7 @@ use MattCG\cjsDelivery as cjsDelivery;
 require '/path/to/cjsDelivery.php';
 
 $includes = array('../mycompany/javascript', '../othercompany/modules');
-$delivery = cjsDelivery\DeliveryFactory::create(array('includes' => $includes));
+$delivery = cjsDelivery\Delivery::create(array('includes' => $includes));
 $delivery->addModule('./path/to/module');
 echo $delivery->getOutput();
 ```
@@ -92,7 +92,7 @@ In PHP, include directory paths can be passed to the factory method in the optio
 ```PHP
 $includes = array('../mycompany/javascript', '../othercompany/modules');
 
-$delivery = cjsDelivery\DeliveryFactory::create(array('includes' => $includes));
+$delivery = cjsDelivery\Delivery::create(array('includes' => $includes));
 
 $mainmodule = './main';
 $delivery->addModule($mainmodule);
@@ -154,7 +154,7 @@ delivery --main_module='./examples/fruit/modules/main' -p='BANANA'
 In PHP, instantiate a `PragmaManager` and use it to turn pragmas on. By default, all pragmas are off unless explicitly set using `setPragma` or `setPragmas`, but changes can be undone using `unsetPragma`.
 
 ```PHP
-$delivery = cjsDelivery\DeliveryFactory::create(array('sendSignals' => true));
+$delivery = cjsDelivery\Delivery::create(array('sendSignals' => true));
 
 $pragmamanager = new PragmaManager($delivery->getSignalManager(), $delivery->getDependencyResolver());
 $pragmamanager->setPragma('BANANA');
@@ -179,7 +179,7 @@ delivery --main_module='./examples/fruit/modules/main' --minify_identifiers
 In PHP, set `minifyIdentifiers` to `true` when instantiating using the factory class.
 
 ```PHP
-$delivery = cjsDelivery\DeliveryFactory::create(array('minifyIdentifiers' => true));
+$delivery = cjsDelivery\Delivery::create(array('minifyIdentifiers' => true));
 
 $mainmodule = './examples/fruit/modules/main';
 $delivery->addModule($mainmodule);
@@ -201,7 +201,7 @@ In PHP, global file paths can be passed to the factory method in the options has
 ```PHP
 $globals = array('examples/globals/utilities', 'examples/globals/globals');
 
-$delivery = cjsDelivery\DeliveryFactory::create(array('globals' => $globals));
+$delivery = cjsDelivery\Delivery::create(array('globals' => $globals));
 
 $mainmodule = './examples/globals/main';
 $delivery->addModule($mainmodule);

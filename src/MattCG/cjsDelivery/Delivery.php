@@ -156,4 +156,12 @@ class Delivery extends SignalSender {
 
 		return $lastmodtime;
 	}
+
+
+	/**
+	 * @see DeliveryFactory::create
+	 */
+	public function create(array $options = array()) {
+		return DeliveryFactory::create($options);
+	}
 }

@@ -39,7 +39,7 @@ Get [composer](http://getcomposer.org/) and install cjsDelivery to your project 
 ```bash
 cd myproject/
 touch composer.json
-composer require mattcg/cjsdelivery:0.3.0
+composer require mattcg/cjsdelivery:0.4.1
 ```
 
 As cjsDelivery is [PSR-0](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md) compatible, composer will automatically generate `vendor/autoload.php`, which you can `require` in your code to have the cjsDelivery classes autoloaded when they're needed.

@@ -13,6 +13,7 @@ The output is designed to have as little overhead over your module code as possi
 2. [Usage](#usage)
     1. [On the command-line](#on-the-command-line)
     2. [From PHP](#from-php)
+    3. [Symfony](#symfony)
 3. [Features](#features)
     1. [Include paths](#include-paths)
         1. [For external components](#for-external-components)
@@ -71,6 +72,10 @@ echo $delivery->getOutput();
 ```
 
 The factory method accepts a single parameter, which is a hashmap of options.
+
+### Symfony ###
+
+Use [cjsDeliveryBundle](https://github.com/mattcg/cjsDeliveryBundle) instead.
 
 ## Features ##
 

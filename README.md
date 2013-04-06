@@ -71,7 +71,15 @@ $delivery->addModule('./path/to/module');
 echo $delivery->getOutput();
 ```
 
-The factory method accepts a single parameter, which is a hashmap of options.
+The factory method accepts a single parameter, which is a hashmap of options:
+
+- `minifyIdentifiers` (boolean, default `false`) to turn on identifier minification
+- `sendSignals` (boolean, default `false`) to force the [signal manager](#signals) to be on
+- `globals` (array) to add [global](#globals) modules
+- `includes` (array) to add [include paths](#include-paths)
+- `parsePragmas` (boolean, default `false`) to enable [pragma parsing](#pragmas)
+- `pragmaFormat` (string) to specify the pragma format 
+- `pragmas` (array) to specify enabled pragmas
 
 ### Symfony ###
 
@@ -169,7 +177,9 @@ $delivery->addModule($mainmodule);
 $delivery->setMainModule($mainmodule);
 ```
 
-The `PragmaManager` uses signals sent by an [Arua.Signal](https://github.com/auraphp/Aura.Signal) signal manager to process code from added modules. The factory class won't create a signal manager unless `sendSignals` is set to `true` in the options hashmap.
+#### Signals ####
+
+The `PragmaManager` uses signals sent by an [Arua.Signal](https://github.com/auraphp/Aura.Signal) signal manager to process code from added modules. Using pragmas will enable the signal manager even if `sendSignals` is set to `false` in the options hashmap.
 
 ### Minified identifiers ###
 

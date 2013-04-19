@@ -189,6 +189,9 @@ class FileIdentifierManager implements IdentifierManagerInterface {
 		// If the path is not absolute or relative, check the includes directory
 		if ($identifier[0] !== '/' and $identifier[0] !== '.') {
 			$realpath = $this->findFileInIncludes($identifier);
+			if ($realpath === false and file_exists('./' . $identifier)) {
+				throw new Exception("Module not found at '$identifier' - perhaps you meant './$identifier'?", Exception::MODULE_NOT_FOUND);
+			}
 		} else {
 			$realpath = $this->findFile($identifier);
 		}

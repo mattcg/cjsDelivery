@@ -13,6 +13,7 @@ class CommandLineRunner {
 	const LONGOPT_PFMT = 'pragma_format';
 	const LONGOPT_INCL = 'include';
 	const LONGOPT_OUTP = 'output';
+	const LONGOPT_VERS = 'version';
 
 	const OPT_MODULE = 'm';
 	const OPT_PRAGMA = 'p';
@@ -33,13 +34,14 @@ class CommandLineRunner {
 	private $optpragmafmt = null;
 	private $optparsepragmas = false;
 	private $optpragmas = null;
+	private $optversion = false;
 
 	public function getOptions() {
 		return self::OPT_MODULE.':'.self::OPT_GLOBAL.':'.self::OPT_PRAGMA.'::'.self::OPT_DEBUG.self::OPT_HELP;
 	}
 
 	public function getLongOptions() {
-		return array(self::LONGOPT_MINI, self::LONGOPT_MAIN.'::', self::LONGOPT_INCL.'::', self::LONGOPT_PFMT.'::', self::LONGOPT_OUTP.'::');
+		return array(self::LONGOPT_MINI, self::LONGOPT_MAIN.'::', self::LONGOPT_INCL.'::', self::LONGOPT_PFMT.'::', self::LONGOPT_OUTP.'::', self::LONGOPT_VERS);
 	}
 
 	public function getDebugMode() {
@@ -81,6 +83,10 @@ class CommandLineRunner {
 			$this->optglobals = (array) $options[self::OPT_GLOBAL];
 		}
 
+		if (isset($options[self::LONGOPT_VERS])) {
+			$this->optversion = true;
+		}
+
 		if (isset($options[self::LONGOPT_MINI])) {
 			$this->optminifyidentifiers = true;
 		}
@@ -116,6 +122,11 @@ class CommandLineRunner {
 	public function run() {
 		if ($this->opthelp) {
 			$this->outputHelp();
+			return;
+		}
+
+		if ($this->optversion) {
+			$this->outputVersion();
 			return;
 		}
 
@@ -171,7 +182,13 @@ class CommandLineRunner {
 			self::LONGOPT_INCL => 'Specify the include path as a colon-separated list.',
 			self::LONGOPT_PFMT => 'Specify the pragma format. Defaults to "' . PragmaManager::DEFAULT_PFMT . '".',
 			self::LONGOPT_MINI => 'Use tiny identifiers in output.',
-			self::LONGOPT_OUTP => 'Output to file.'
+			self::LONGOPT_OUTP => 'Output to file.',
+			self::LONGOPT_VERS => 'Show version.'
 		), true);
+	}
+
+	private function outputVersion() {
+		$composer = json_decode(file_get_contents(__DIR__ . '/../../../composer.json'));
+		echo 'v', $composer->version, PHP_EOL;
 	}
 }

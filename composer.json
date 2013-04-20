@@ -1,6 +1,6 @@
 {
 	"name": "mattcg/cjsdelivery",
-	"version": "0.4.1",
+	"version": "0.4.2",
 	"homepage": "https://github.com/mattcg/cjsdelivery",
 	"description": "Deliver CommonJS-syntax JavaScript modules to clients as a single file.",
 	"keywords": ["commonjs", "javascript", "modules", "compiler"],

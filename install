@@ -1,6 +1,6 @@
 #!/bin/sh
 
-CJSDELIVERY_VER="0.4.1"
+CJSDELIVERY_VER="0.4.2"
 CJSDELIVERY_TMP="/tmp/cjsdelivery"
 CJSDELIVERY_URL="https://github.com/mattcg/cjsdelivery/archive/v$CJSDELIVERY_VER.zip"
 
@@ -8,23 +8,25 @@ CJSDELIVERY_URL="https://github.com/mattcg/cjsdelivery/archive/v$CJSDELIVERY_VER
 set -e
 
 echo "Creating temporary dir:"
-echo "$CJSDELIVERY_TMP"
+echo "\t$CJSDELIVERY_TMP"
 
 mkdir -p "$CJSDELIVERY_TMP"
 
 echo "Downloading:"
-echo "$CJSDELIVERY_URL"
+echo "\t$CJSDELIVERY_URL"
 
 CJSDELIVERY_ZIP="$CJSDELIVERY_TMP/v$CJSDELIVERY_VER.zip"
 CJSDELIVERY_DIR="$CJSDELIVERY_TMP/cjsdelivery-$CJSDELIVERY_VER"
 
-curl "$CJSDELIVERY_URL" -o "$CJSDELIVERY_ZIP" --silent --location
+curl "$CJSDELIVERY_URL" -o "$CJSDELIVERY_ZIP" --progress-bar --location
 unzip -q "$CJSDELIVERY_ZIP" -d "$CJSDELIVERY_TMP/"
 
-"$CJSDELIVERY_DIR/install.sh"
+pushd "$CJSDELIVERY_DIR" > /dev/null 2>&1
+"$CJSDELIVERY_DIR/scripts/install.sh"
+popd > /dev/null 2>&1
 
 echo "Removing:"
-echo "$CJSDELIVERY_TMP"
+echo "\t$CJSDELIVERY_TMP"
 
 rm -rf "$CJSDELIVERY_TMP"
 

@@ -13,43 +13,42 @@ if php -r "exit((int)version_compare(PHP_VERSION, '5.4.0', '>='));"; then
 	exit 1
 fi
 
-# Get the real path to the checkout directory
-pushd `dirname $0` > /dev/null
 CHECKOUT_DIR=`pwd`
-popd > /dev/null
 
 # Install dependencies using composer
 if command -v composer >/dev/null 2>&1; then
 	echo "Found composer. Updating dependencies."
-	composer update --prefer-dist --working-dir "$CHECKOUT_DIR" --quiet
+	composer update --prefer-dist --working-dir "$CHECKOUT_DIR"
 else
 	echo "Could not find composer. Downloading."
-	curl "http://getcomposer.org/composer.phar" --silent --output "$CHECKOUT_DIR/composer.phar"
+	curl "http://getcomposer.org/composer.phar" --progress-bar --output "$CHECKOUT_DIR/composer.phar"
 	echo "Download complete. Updating dependencies."
-	php "$CHECKOUT_DIR/composer.phar" -- update --prefer-dist --working-dir "$CHECKOUT_DIR" --quiet
+	php "$CHECKOUT_DIR/composer.phar" update --prefer-dist --working-dir "$CHECKOUT_DIR"
 fi
 
 echo "This script will install:"
-echo "$INSTALL_BIN"
-echo "$INSTALL_DIR"
+echo "\t$INSTALL_BIN"
+echo "\t$INSTALL_DIR"
 
 # Uninstall any old version
 if [ -d "$INSTALL_DIR" ]; then
 	echo "Old version found at install path."
-	"$CHECKOUT_DIR/uninstall.sh"
+	"$CHECKOUT_DIR/scripts/uninstall.sh"
 fi
 mkdir "$INSTALL_DIR"
 
 # Install the necessary parts of the checkout to /usr/local/lib
-echo "Installing: $INSTALL_DIR"
+echo "Installing:"
+echo "\t$INSTALL_DIR"
 cp -R "$CHECKOUT_DIR/bin" "$INSTALL_DIR/bin"
 cp -R "$CHECKOUT_DIR/src" "$INSTALL_DIR/src"
 cp -R "$CHECKOUT_DIR/vendor" "$INSTALL_DIR/vendor"
 cp "$CHECKOUT_DIR/cjsDelivery.php" "$INSTALL_DIR/cjsDelivery.php"
-cp "$CHECKOUT_DIR/uninstall.sh" "$INSTALL_DIR/uninstall.sh"
+cp "$CHECKOUT_DIR/scripts/uninstall.sh" "$INSTALL_DIR/uninstall.sh"
 
 # Link to the delivery binary from /usr/local/bin
-echo "Linking: $INSTALL_BIN => $INSTALL_DIR/bin/delivery"
+echo "Linking:"
+echo "\t$INSTALL_BIN => $INSTALL_DIR/bin/delivery"
 ln -si "$INSTALL_DIR/bin/delivery" "$INSTALL_BIN"
 
 echo "Install done."

@@ -12,7 +12,7 @@ class CommandLineRunner {
 	const LONGOPT_MAIN = 'main_module';
 	const LONGOPT_PFMT = 'pragma_format';
 	const LONGOPT_INCL = 'include';
-	const LONGOUT_OUTP = 'output';
+	const LONGOPT_OUTP = 'output';
 
 	const OPT_MODULE = 'm';
 	const OPT_PRAGMA = 'p';
@@ -39,7 +39,7 @@ class CommandLineRunner {
 	}
 
 	public function getLongOptions() {
-		return array(self::LONGOPT_MINI, self::LONGOPT_MAIN.'::', self::LONGOPT_INCL.'::', self::LONGOPT_PFMT.'::', self::LONGOUT_OUTP.'::');
+		return array(self::LONGOPT_MINI, self::LONGOPT_MAIN.'::', self::LONGOPT_INCL.'::', self::LONGOPT_PFMT.'::', self::LONGOPT_OUTP.'::');
 	}
 
 	public function getDebugMode() {
@@ -85,8 +85,8 @@ class CommandLineRunner {
 			$this->optminifyidentifiers = true;
 		}
 
-		if (isset($options[self::LONGOUT_OUTP])) {
-			$this->optoutput = $options[self::LONGOUT_OUTP];
+		if (isset($options[self::LONGOPT_OUTP])) {
+			$this->optoutput = $options[self::LONGOPT_OUTP];
 		}
 
 		if (isset($options[self::OPT_PRAGMA])) {
@@ -171,7 +171,7 @@ class CommandLineRunner {
 			self::LONGOPT_INCL => 'Specify the include path as a colon-separated list.',
 			self::LONGOPT_PFMT => 'Specify the pragma format. Defaults to "' . PragmaManager::DEFAULT_PFMT . '".',
 			self::LONGOPT_MINI => 'Use tiny identifiers in output.',
-			self::LONGOUT_OUTP => 'Output to file.'
+			self::LONGOPT_OUTP => 'Output to file.'
 		), true);
 	}
 }

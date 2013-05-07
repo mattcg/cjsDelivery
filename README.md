@@ -30,7 +30,7 @@ The output is designed to have as little overhead over your module code as possi
 Install globally by running this one-line command in your bash terminal:
 
 ```bash
-bash <(curl -s https://raw.github.com/mattcg/cjsdelivery/go)
+bash <(curl -s https://raw.github.com/mattcg/cjsdelivery/go/install)
 ```
 
 ### Per-project install using composer ###

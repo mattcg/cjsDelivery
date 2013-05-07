@@ -27,8 +27,8 @@ install: vendor uninstall
 	fi;
 
 	@echo "This script will install:"
-	@echo "${INSTALL_BIN}"
-	@echo "${INSTALL_DIR}"
+	@echo "  - ${INSTALL_BIN}"
+	@echo "  - ${INSTALL_DIR}"
 
 	@mkdir "${INSTALL_DIR}"
 

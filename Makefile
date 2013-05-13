@@ -15,7 +15,7 @@ vendor: composer.json
 		php composer.phar update --prefer-dist; \
 	fi;
 
-build/logs/phpunit.xml: vendor src/MattCG/cjsDelivery/*.php
+build/logs/phpunit.xml: vendor src/MattCG/cjsDelivery/*.php tests/src/MattCG/cjsDelivery/*.php
 	@cd tests; phpunit -c phpunit.xml
 
 test: build/logs/phpunit.xml

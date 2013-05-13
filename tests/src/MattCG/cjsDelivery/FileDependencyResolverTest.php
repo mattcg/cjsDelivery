@@ -34,6 +34,7 @@ class FileDependencyResolverTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * @expectedException PHPUnit_Framework_Error_Notice
+	 * @expectedExceptionMessage Module identifiers may not have file-name extensions like ".js" (found "index.js").
 	 */
 	public function testAddModuleTriggersNoticeIfIdentifierContainsExtension() {
 		$toplevelidentifier = CJSD_TESTMODS_DIR . '/apple/index.js';
@@ -109,5 +110,19 @@ class FileDependencyResolverTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals("require('pips');\nrequire('stalk');\n", $dependencies[CJSD_TESTMODS_DIR . '/' . $identifier]->getCode());
 		$this->assertEquals("// Pips\n", $dependencies[CJSD_TESTMODS_DIR . '/pear/pips']->getCode());
 		$this->assertEquals("// Stalk\n", $dependencies[CJSD_TESTMODS_DIR . '/pear/stalk']->getCode());
+	}
+
+	public function testJsonFileIsTransformedToModule() {
+		$toplevelidentifier = CJSD_TESTMODS_DIR . '/data';
+		$realpath = $toplevelidentifier . '.json';
+		$this->assertFileExists($realpath);
+		$this->assertEquals("{\n\t\"test\": \"hello\"\n}\n", $this->getFileContents($realpath));
+
+		$resolver = $this->getResolver();
+		$resolver->addModule($toplevelidentifier);
+		$this->assertTrue($resolver->hasModule($toplevelidentifier));
+
+		$module = $resolver->getModule($toplevelidentifier);
+		$this->assertEquals("module.exports = {\n\t\"test\": \"hello\"\n};\n", $module->getCode());
 	}
 }

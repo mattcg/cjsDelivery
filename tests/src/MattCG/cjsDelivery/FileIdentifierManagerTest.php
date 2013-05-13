@@ -27,10 +27,26 @@ class FileIdentifierManagerTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * @expectedException PHPUnit_Framework_Error_Notice
+	 * @expectedExceptionMessage Module identifiers may not have file-name extensions like ".js" (found "main.js").
 	 */
-	public function testNoticeTriggeredByGetTopLevelIdentifierIfIdentifierContainsExtension() {
+	public function testNoticeTriggeredByGetTopLevelIdentifierIfIdentifierContainsJsExtension() {
 		$identifiermanager = $this->getManager();
 		$identifier = CJSD_TESTMODS_DIR . '/main.js';
+
+		// Assert that the file exists and is readable
+		$this->assertFileExists($identifier);
+		$this->assertTrue(is_readable($identifier));
+		$identifiermanager->getTopLevelIdentifier($identifier);
+	}
+
+
+	/**
+	 * @expectedException PHPUnit_Framework_Error_Notice
+	 * @expectedExceptionMessage Module identifiers may not have file-name extensions like ".json" (found "data.json").
+	 */
+	public function testNoticeTriggeredByGetTopLevelIdentifierIfIdentifierContainsJsonExtension() {
+		$identifiermanager = $this->getManager();
+		$identifier = CJSD_TESTMODS_DIR . '/data.json';
 
 		// Assert that the file exists and is readable
 		$this->assertFileExists($identifier);
@@ -172,4 +188,34 @@ class FileIdentifierManagerTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals(CJSD_TESTMODS_DIR . '/' . $identifier, $identifiermanager->addIdentifier($identifier));
 	}
 
+	public function testAddIdentifierHandlesJSON() {
+		$identifier = CJSD_TESTMODS_DIR . '/data';
+		$this->assertFileExists($identifier . '.json');
+
+		$identifiermanager = $this->getManager();
+		$this->assertEquals($identifier, $identifiermanager->addIdentifier($identifier));
+	}
+
+	public function testIsJson() {
+		$identifier = CJSD_TESTMODS_DIR . '/data';
+		$this->assertFileExists($identifier . '.json');
+
+		// Test with relative identifier
+		$identifiermanager = $this->getManager();
+		$this->assertTrue($identifiermanager->isJson($identifier));
+
+		// Test with top level identifier
+		$identifiermanager = $this->getManager();
+		$this->assertTrue($identifiermanager->isJson($identifiermanager->addIdentifier($identifier)));
+	}
+
+	public function testJsExtensionIsPreferredOverJson() {
+		$identifier = CJSD_TESTMODS_DIR . '/strawberry/main';
+		$this->assertFileExists($identifier . '.js');
+		$this->assertFileExists($identifier . '.json');
+
+		$identifiermanager = $this->getManager();
+		$this->assertEquals($identifier, $identifiermanager->addIdentifier($identifier));
+		$this->assertTrue(!$identifiermanager->isJson($identifiermanager->getTopLevelIdentifier($identifier)));
+	}
 }

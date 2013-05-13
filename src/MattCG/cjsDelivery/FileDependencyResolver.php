@@ -59,16 +59,26 @@ class FileDependencyResolver extends SignalSender implements DependencyResolverI
 	 * @param string $identifier Path to the module file
 	 */
 	public function addModule($identifier, &$code = null) {
-		$toplevelidentifier = $this->identifiermanager->addIdentifier($identifier);
+		$identifiermanager = $this->identifiermanager;
+		$toplevelidentifier = $identifiermanager->addIdentifier($identifier);
 
-		// Check if the module has already been added
+		// Check if the module has already been added.
 		if ($this->hasModule($toplevelidentifier)) {
-			return $this->identifiermanager->getFlattenedIdentifier($toplevelidentifier);
+			return $identifiermanager->getFlattenedIdentifier($toplevelidentifier);
 		}
 
-		$resolvedcode = $this->resolveDependencies($toplevelidentifier, $code);
-		$identifier = $this->addModuleToList($toplevelidentifier, $resolvedcode);
+		// Check if the module is a JSON file. JSON files should have no dependences, so their code is already 'resolved'.
+		if ($identifiermanager->isJson($toplevelidentifier)) {
+			if ($code === null) {
+				$code = $this->getFileContents($toplevelidentifier);
+			}
 
+			$resolvedcode = 'module.exports = ' . trim($code) . ';' . PHP_EOL;
+		} else {
+			$resolvedcode = $this->resolveDependencies($toplevelidentifier, $code);
+		}
+
+		$identifier = $this->addModuleToList($toplevelidentifier, $resolvedcode);
 		return $identifier;
 	}
 
@@ -79,10 +89,11 @@ class FileDependencyResolver extends SignalSender implements DependencyResolverI
 	 * @return string Unique (but not canonicalized) identifier for the module
 	 */
 	private function addModuleToList($toplevelidentifier, &$code) {
-		$identifier = $this->identifiermanager->getFlattenedIdentifier($toplevelidentifier);
+		$identifiermanager = $this->identifiermanager;
+		$identifier = $identifiermanager->getFlattenedIdentifier($toplevelidentifier);
 
 		$module = new Module($code);
-		$module->setModificationTime(filemtime($this->getFilePathForTopLevelIdentifier($toplevelidentifier)));
+		$module->setModificationTime(filemtime($identifiermanager->getRealpath($toplevelidentifier)));
 		$module->setUniqueIdentifier($identifier);
 
 		$this->modules[$toplevelidentifier] = $module;
@@ -139,7 +150,7 @@ class FileDependencyResolver extends SignalSender implements DependencyResolverI
 	 * @return string Raw module code
 	 */
 	private function getFileContents($toplevelidentifier) {
-		$realpath = $this->getFilePathForTopLevelIdentifier($toplevelidentifier);
+		$realpath = $this->identifiermanager->getRealpath($toplevelidentifier);
 		$code = @file_get_contents($realpath, false);
 		if ($code === false) {
 			throw new Exception("Unable to read '$realpath'", Exception::UNABLE_TO_READ);
@@ -192,14 +203,5 @@ class FileDependencyResolver extends SignalSender implements DependencyResolverI
 
 			return "require('$newidentifier')";
 		}, $code);
-	}
-
-
-	/**
-	 * @param string $toplevelidentifier The canonicalized absolute pathname of the module, excluding any extension
-	 * @returns string The system path to the module file
-	 */
-	private function getFilePathForTopLevelIdentifier($toplevelidentifier) {
-		return $toplevelidentifier . '.js';
 	}
 }

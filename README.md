@@ -227,7 +227,7 @@ $delivery->setMainModule($mainmodule);
 
 Code is always parsed statically, meaning statements like `require(pathVariable + '/mymodule')` will not be handled. You should use only a string literal as the argument to `require`.
 
-The `.js` extension [may not](http://wiki.commonjs.org/wiki/Modules/1.1.1#Module_Identifiers) be added to module paths in require statements.
+The `.js` or `.json` extensions [may not](http://wiki.commonjs.org/wiki/Modules/1.1.1#Module_Identifiers) be added to module paths in require statements. Doing so will result in an `E_USER_NOTICE` level error being triggered, although the error is not fatal and operation will continue.
 
 The following algorithm is used when resolving the given path to a dependency:
 

@@ -15,6 +15,7 @@ class FileIdentifierManager implements IdentifierManagerInterface {
 
 	private $resolvedidentifiers = array();
 	private $modules = array();
+	private $json = array();
 
 	public function __construct(IdentifierGeneratorInterface $identifiergenerator) {
 		$this->setIdentifierGenerator($identifiergenerator);
@@ -151,7 +152,7 @@ class FileIdentifierManager implements IdentifierManagerInterface {
 	 */
 	private function findFile($identifier) {
 
-		// Is the path to a file?
+		// Is the path to a JS file?
 		$identifierwithext = $this->addExtensionIfMissing($identifier);
 		$realpath = realpath($identifierwithext);
 		if ($realpath !== false and is_file($realpath)) {
@@ -159,6 +160,19 @@ class FileIdentifierManager implements IdentifierManagerInterface {
 				trigger_error('Module identifiers may not have file-name extensions like ".js" (found "' . basename($identifier) . '").', E_USER_NOTICE);
 			}
 
+			return $realpath;
+		}
+
+		// Is the path to a JSON file?
+		$identifierwithext = $this->addExtensionIfMissing($identifier, 'json');
+		$realpath = realpath($identifierwithext);
+		if ($realpath !== false and is_file($realpath)) {
+			if ($identifierwithext === $identifier) {
+				trigger_error('Module identifiers may not have file-name extensions like ".json" (found "' . basename($identifier) . '").', E_USER_NOTICE);
+			}
+
+			$toplevelidentifier = $this->realpathToTopLevelIdentifier($realpath);
+			$this->json[$toplevelidentifier] = true;
 			return $realpath;
 		}
 
@@ -199,9 +213,24 @@ class FileIdentifierManager implements IdentifierManagerInterface {
 			throw new Exception("Module not found at '$identifier'", Exception::MODULE_NOT_FOUND);
 		}
 
-		$toplevelidentifier = $this->stripExtension($realpath);
+		$toplevelidentifier = $this->realpathToTopLevelIdentifier($realpath);
 		$this->resolvedidentifiers[$identifier] = $toplevelidentifier;
+		$this->resolvedidentifiers[$toplevelidentifier] = $toplevelidentifier;
 		return $toplevelidentifier;
+	}
+
+
+	/**
+	 * @see IdentifierManagerInterface::getRealpath
+	 * @param string $identifier Path to the module file
+	 */
+	public function getRealpath($identifier) {
+		$toplevelidentifier = $this->getTopLevelIdentifier($identifier);
+		if ($this->isJson($toplevelidentifier)) {
+			return $this->addExtensionIfMissing($toplevelidentifier, 'json');
+		}
+
+		return $this->addExtensionIfMissing($toplevelidentifier);
 	}
 
 
@@ -221,13 +250,24 @@ class FileIdentifierManager implements IdentifierManagerInterface {
 
 
 	/**
-	 * Strip the standard JavaScript file extension if present
+	 * @see IdentifierManagerInterface::isJson
+	 * @param string $identifier Path to the module file
+	 * @return boolean
+	 */
+	public function isJson($identifier) {
+		$toplevelidentifier = $this->getTopLevelIdentifier($identifier);
+		return isset($this->json[$toplevelidentifier]);
+	}
+
+
+	/**
+	 * Convert a realpath to top-level identifier format (strips the standard JavaScript file extension if present).
 	 *
 	 * @param string $identifier
 	 * @returns string The path with any file extension removed
 	 */
-	private function stripExtension($identifier) {
-		return preg_replace('/\.js$/', '', $identifier);
+	private function realpathToTopLevelIdentifier($identifier) {
+		return preg_replace('/\.(js|json)$/', '', $identifier);
 	}
 
 
@@ -235,11 +275,12 @@ class FileIdentifierManager implements IdentifierManagerInterface {
 	 * Add the standard JavaScript file extension if it's missing
 	 *
 	 * @param string $identifier
+	 * @param string $ext
 	 * @returns string The path with a file extension added if needed
 	 */
-	private function addExtensionIfMissing($identifier) {
-		if ((pathinfo($identifier, PATHINFO_EXTENSION)) !== 'js') {
-			$identifier .= '.js';
+	private function addExtensionIfMissing($identifier, $ext = 'js') {
+		if (pathinfo($identifier, PATHINFO_EXTENSION) !== $ext) {
+			$identifier .= '.' . $ext;
 		}
 
 		return $identifier;

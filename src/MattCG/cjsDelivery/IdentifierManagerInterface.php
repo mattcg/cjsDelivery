@@ -48,11 +48,29 @@ interface IdentifierManagerInterface {
 
 
 	/**
+	 * Get the system path to the module file
+	 *
+	 * @param string $relativeidentifier Relative identifier for the module
+	 * @return string The system path to the module
+	 */
+	public function getRealpath($identifier);
+
+
+	/**
 	 * Add a module by identifier
 	 *
 	 * @param string $identifier Relative or top level identifier for the module
 	 * @return string The top level identifier for the module
 	 */
 	public function addIdentifier($identifier);
+
+
+	/**
+	 * Check whether the given identifier refers to a JSON file or not
+	 *
+	 * @param string $identifier Relative or top level identifier for the module
+	 * @return boolean
+	 */
+	public function isJson($identifier);
 
 }

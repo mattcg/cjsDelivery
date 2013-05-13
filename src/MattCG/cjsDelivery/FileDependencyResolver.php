@@ -9,7 +9,6 @@ namespace MattCG\cjsDelivery;
 
 class FileDependencyResolver extends SignalSender implements DependencyResolverInterface {
 
-	const EXT_JS = 'js';
 	const REQUIRE_PREG = '/require\((\'|")(.*?)\1\)/';
 
 	private $modules = array();
@@ -201,6 +200,6 @@ class FileDependencyResolver extends SignalSender implements DependencyResolverI
 	 * @returns string The system path to the module file
 	 */
 	private function getFilePathForTopLevelIdentifier($toplevelidentifier) {
-		return $toplevelidentifier . '.' . self::EXT_JS;
+		return $toplevelidentifier . '.js';
 	}
 }

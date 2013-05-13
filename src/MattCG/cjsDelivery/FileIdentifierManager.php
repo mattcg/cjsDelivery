@@ -8,7 +8,6 @@
 namespace MattCG\cjsDelivery;
 
 class FileIdentifierManager implements IdentifierManagerInterface {
-	const EXT_JS = 'js';
 
 	private $identifiergenerator;
 
@@ -84,7 +83,7 @@ class FileIdentifierManager implements IdentifierManagerInterface {
 	private function findFileInDirectory($dirpath) {
 
 		// 1) check for index file
-		$realpath = realpath($dirpath . '/index.' . self::EXT_JS);
+		$realpath = realpath($dirpath . '/index.js');
 		if ($realpath !== false and is_file($realpath)) {
 			return $realpath;
 		}
@@ -104,13 +103,13 @@ class FileIdentifierManager implements IdentifierManagerInterface {
 		}
 
 		// 3) check for file with same name as folder
-		$realpath = realpath($dirpath . '/' . basename($dirpath) . '.' . self::EXT_JS);
+		$realpath = realpath($dirpath . '/' . basename($dirpath) . '.js');
 		if ($realpath !== false and is_file($realpath)) {
 			return $realpath;
 		}
 
 		// 4) check for one file
-		$filesindir = glob($dirpath . '/*.' . self::EXT_JS);
+		$filesindir = glob($dirpath . '/*.js');
 		if (count($filesindir) == 1) {
 			$realpath = realpath($filesindir[0]);
 			if ($realpath !== false and is_file($realpath)) {
@@ -157,7 +156,7 @@ class FileIdentifierManager implements IdentifierManagerInterface {
 		$realpath = realpath($identifierwithext);
 		if ($realpath !== false and is_file($realpath)) {
 			if ($identifierwithext === $identifier) {
-				trigger_error('Module identifiers may not have file-name extensions like ".' . self::EXT_JS . '" (found "' . basename($identifier) . '").', E_USER_NOTICE);
+				trigger_error('Module identifiers may not have file-name extensions like ".js" (found "' . basename($identifier) . '").', E_USER_NOTICE);
 			}
 
 			return $realpath;
@@ -228,7 +227,7 @@ class FileIdentifierManager implements IdentifierManagerInterface {
 	 * @returns string The path with any file extension removed
 	 */
 	private function stripExtension($identifier) {
-		return preg_replace('/\.' . self::EXT_JS . '$/', '', $identifier);
+		return preg_replace('/\.js$/', '', $identifier);
 	}
 
 
@@ -239,8 +238,8 @@ class FileIdentifierManager implements IdentifierManagerInterface {
 	 * @returns string The path with a file extension added if needed
 	 */
 	private function addExtensionIfMissing($identifier) {
-		if ((pathinfo($identifier, PATHINFO_EXTENSION)) !== self::EXT_JS) {
-			$identifier .= '.' . self::EXT_JS;
+		if ((pathinfo($identifier, PATHINFO_EXTENSION)) !== 'js') {
+			$identifier .= '.js';
 		}
 
 		return $identifier;

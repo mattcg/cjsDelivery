@@ -244,7 +244,7 @@ The following algorithm is used when resolving the given path to a dependency:
 
 ## Changelog ##
 
-Please see the [closed milestones](https://github.com/mattcg/cjsDelivery/issues/milestones?state=closed).
+Please see the [closed milestones](https://github.com/mattcg/cjsDelivery/issues/milestones?page=1&sort=due_date&state=closed).
 
 ## Credits and license ##
 

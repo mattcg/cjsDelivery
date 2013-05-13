@@ -6,8 +6,6 @@
 
 class FileIdentifierManagerTest extends PHPUnit_Framework_TestCase {
 
-	const JS_SUFFIX = '.js';
-
 	private function getManager() {
 		return new MattCG\cjsDelivery\FileIdentifierManager(new MattCG\cjsDelivery\FlatIdentifierGenerator());
 	}
@@ -50,8 +48,8 @@ class FileIdentifierManagerTest extends PHPUnit_Framework_TestCase {
 		$identifier = CJSD_TESTMODS_DIR . '/main';
 
 		// Assert that the file exists and is readable
-		$this->assertFileExists($identifier . self::JS_SUFFIX);
-		$this->assertTrue(is_readable($identifier . self::JS_SUFFIX));
+		$this->assertFileExists($identifier . '.js');
+		$this->assertTrue(is_readable($identifier . '.js'));
 		$identifiermanager->getFlattenedIdentifier($identifier);
 	}
 
@@ -64,13 +62,13 @@ class FileIdentifierManagerTest extends PHPUnit_Framework_TestCase {
 		$identifiermanager = $this->getManager();
 		$identifier = './nonexistent';
 
-		$this->assertFileNotExists($identifier . self::JS_SUFFIX);
+		$this->assertFileNotExists($identifier . '.js');
 		$identifiermanager->getTopLevelIdentifier($identifier);
 	}
 
 	public function testGetTopLevelIdentifierReturnsTopLevelIdentifier() {
 		$identifier = CJSD_TESTMODS_DIR . '/main';
-		$this->assertFileExists($identifier . self::JS_SUFFIX);
+		$this->assertFileExists($identifier . '.js');
 
 		$identifiermanager = $this->getManager();
 		$this->assertEquals($identifier, $identifiermanager->getTopLevelIdentifier($identifier));
@@ -81,13 +79,13 @@ class FileIdentifierManagerTest extends PHPUnit_Framework_TestCase {
 
 		// Assert that the file actually has an extension
 		$this->assertFileNotExists($identifier);
-		$this->assertFileExists($identifier . self::JS_SUFFIX);
+		$this->assertFileExists($identifier . '.js');
 
 		$identifiermanager = $this->getManager();
 		$this->assertStringEndsWith('main', $identifiermanager->getTopLevelIdentifier($identifier));
 
 		// Even if the passed identifier has an extension...
-		$this->assertStringEndsWith('main', @$identifiermanager->getTopLevelIdentifier($identifier . self::JS_SUFFIX));
+		$this->assertStringEndsWith('main', @$identifiermanager->getTopLevelIdentifier($identifier . '.js'));
 	}
 
 	public function testAddIdentifierReturnsTopLevelIdentifier() {
@@ -95,18 +93,18 @@ class FileIdentifierManagerTest extends PHPUnit_Framework_TestCase {
 
 		// Assert that the file actually has an extension
 		$this->assertFileNotExists($identifier);
-		$this->assertFileExists($identifier . self::JS_SUFFIX);
+		$this->assertFileExists($identifier . '.js');
 
 		$identifiermanager = $this->getManager();
 		$this->assertEquals($identifier, $identifiermanager->addIdentifier($identifier));
 
 		// Even if the passed identifier has an extension...
-		$this->assertEquals($identifier, @$identifiermanager->getTopLevelIdentifier($identifier . self::JS_SUFFIX));
+		$this->assertEquals($identifier, @$identifiermanager->getTopLevelIdentifier($identifier . '.js'));
 	}
 
 	public function testFileWithExactPathIsFound() {
 		$identifier = CJSD_TESTMODS_DIR . '/main';
-		$this->assertFileExists($identifier . self::JS_SUFFIX);
+		$this->assertFileExists($identifier . '.js');
 
 		$identifiermanager = $this->getManager();
 		$this->assertEquals($identifier, $identifiermanager->getTopLevelIdentifier($identifier));
@@ -161,16 +159,17 @@ class FileIdentifierManagerTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testExceptionThrownForAbsolutePathWithNoIncludesSpecified() {
 		$identifier = 'modules/main';
-		$this->assertFileExists($identifier . self::JS_SUFFIX);
+		$this->assertFileExists($identifier . '.js');
 		$this->getManager()->addIdentifier($identifier);
 	}
 
 	public function testIncludesAreFound() {
 		$identifier = 'main';
-		$this->assertFileExists('modules/' . $identifier . self::JS_SUFFIX);
+		$this->assertFileExists('modules/' . $identifier . '.js');
 
 		$identifiermanager = $this->getManager();
 		$identifiermanager->setIncludes(array(CJSD_TESTMODS_DIR));
 		$this->assertEquals(CJSD_TESTMODS_DIR . '/' . $identifier, $identifiermanager->addIdentifier($identifier));
 	}
+
 }

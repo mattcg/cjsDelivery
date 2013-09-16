@@ -1,6 +1,7 @@
 # cjsDelivery #
 
 [![Build Status](https://travis-ci.org/mattcg/cjsDelivery.png?branch=master)](https://travis-ci.org/mattcg/cjsDelivery)
+[![Coverage Status](https://coveralls.io/repos/mattcg/cjsDelivery/badge.png?branch=master)](https://coveralls.io/r/mattcg/cjsDelivery?branch=master)
 
 [![Latest Stable Version](https://poser.pugx.org/mattcg/cjsdelivery/v/stable.png)](https://packagist.org/packages/mattcg/cjsdelivery)
 

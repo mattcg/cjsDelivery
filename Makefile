@@ -17,12 +17,12 @@ composer.phar:
 	@curl "http://getcomposer.org/composer.phar" --progress-bar --output composer.phar
 
 vendor: composer.json $(COMPOSER_DEP)
-	$(COMPOSER_CMD) update --prefer-dist
+	$(COMPOSER_CMD) update --no-dev --prefer-dist
 
-vendor/bin: vendor
+vendor/bin:
 	$(COMPOSER_CMD) update --dev --prefer-dist
 
-build/logs/phpunit.xml: vendor src/MattCG/cjsDelivery/*.php tests/src/MattCG/cjsDelivery/*.php
+build/logs/phpunit.xml: vendor/bin src/MattCG/cjsDelivery/*.php tests/src/MattCG/cjsDelivery/*.php
 	cd tests; ../vendor/bin/phpunit -c phpunit.xml
 
 test: build/logs/phpunit.xml

@@ -4,19 +4,26 @@ INSTALL_PREFIX=/usr/local
 INSTALL_DIR=${INSTALL_PREFIX}/lib/cjsdelivery
 INSTALL_BIN=${INSTALL_PREFIX}/bin/delivery
 
-vendor: composer.json
-	@if command -v composer >/dev/null 2>&1; then \
-		echo "Found composer. Updating dependencies."; \
-		composer update --prefer-dist; \
-	else \
-		echo "Could not find composer. Downloading."; \
-		curl "http://getcomposer.org/composer.phar" --progress-bar --output composer.phar; \
-		echo "Download complete. Updating dependencies."; \
-		php composer.phar update --prefer-dist; \
-	fi;
+SYS_COMPOSER := $(shell command -v composer 2>/dev/null)
+ifdef SYS_COMPOSER
+	COMPOSER_CMD := composer
+else
+	COMPOSER_CMD := php composer.phar
+	COMPOSER_DEP := composer.phar
+endif
+
+composer.phar:
+	@echo "Could not find composer. Downloading."
+	@curl "http://getcomposer.org/composer.phar" --progress-bar --output composer.phar
+
+vendor: composer.json $(COMPOSER_DEP)
+	$(COMPOSER_CMD) update --prefer-dist
+
+vendor/bin: vendor
+	$(COMPOSER_CMD) update --dev --prefer-dist
 
 build/logs/phpunit.xml: vendor src/MattCG/cjsDelivery/*.php tests/src/MattCG/cjsDelivery/*.php
-	@cd tests; phpunit -c phpunit.xml
+	cd tests; ../vendor/bin/phpunit -c phpunit.xml
 
 test: build/logs/phpunit.xml
 

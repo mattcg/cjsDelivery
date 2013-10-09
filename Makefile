@@ -22,10 +22,8 @@ vendor: composer.json $(COMPOSER_DEP)
 vendor/bin:
 	$(COMPOSER_CMD) update --dev --prefer-dist
 
-build/logs/phpunit.xml: vendor/bin src/MattCG/cjsDelivery/*.php tests/src/MattCG/cjsDelivery/*.php
+test: vendor/bin src/MattCG/cjsDelivery/*.php tests/src/MattCG/cjsDelivery/*.php
 	cd tests; ../vendor/bin/phpunit -c phpunit.xml
-
-test: build/logs/phpunit.xml
 
 install: vendor uninstall
 	@php -r "exit((int)version_compare(PHP_VERSION, '${MIN_PHP}', '<'));"; if [ $$? -eq 1 ]; then \
